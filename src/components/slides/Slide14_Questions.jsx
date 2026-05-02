@@ -8,12 +8,15 @@ import MagneticButton from '../effects/MagneticButton'
 import PersonalizedStrategy from '../PersonalizedStrategy'
 import AskQuestion from '../AskQuestion'
 import ROICalculator from '../ROICalculator'
+import QuestionQueue from '../QuestionQueue'
+import AnswerOverlay from '../AnswerOverlay'
 
 export default function Slide13_Questions() {
   const [chatOpen, setChatOpen] = useState(false)
   const [strategyOpen, setStrategyOpen] = useState(false)
   const [askOpen, setAskOpen] = useState(false)
   const [roiOpen, setRoiOpen] = useState(false)
+  const [activeQuestion, setActiveQuestion] = useState(null)
 
   // QR encodes the URL with ?ask=1 so audience scans → lands here → ask modal opens directly
   const qrUrl = typeof window !== 'undefined'
@@ -201,6 +204,24 @@ export default function Slide13_Questions() {
 
       <AskQuestion open={askOpen} onClose={() => setAskOpen(false)} />
       <ROICalculator open={roiOpen} onClose={() => setRoiOpen(false)} />
+
+      {/* Live audience-question queue — bottom-right of slide. Hidden on mobile
+          (mobile users get the AskQuestion modal via the floating FAB instead). */}
+      <div className="hidden lg:block">
+        <QuestionQueue
+          hidden={!!activeQuestion}
+          onAskClaude={(q) => setActiveQuestion(q)}
+        />
+      </div>
+
+      {/* Theater-mode Claude answer — full-viewport takeover when presenter
+          asks Claude to answer a queued question. */}
+      {activeQuestion && (
+        <AnswerOverlay
+          question={activeQuestion}
+          onClose={() => setActiveQuestion(null)}
+        />
+      )}
     </>
   )
 }
@@ -258,6 +279,29 @@ function ClaudeAvatar() {
       <path d="M50 22 L52.4 45.4 L74 50 L52.4 54.6 L50 78 L47.6 54.6 L26 50 L47.6 45.4 Z"
             fill="url(#qcl-spark)" opacity="0.95">
         <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="22s" repeatCount="indefinite" />
+      </path>
+    </svg>
+  )
+}
+
+function ClaudeWordmark({ role }) {
+  return (
+    <div className="flex items-center gap-2">
+      <svg width="18" height="18" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="qcw-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#2997FF" />
+            <stop offset="100%" stopColor="#C064F0" />
+          </linearGradient>
+        </defs>
+        <path d="M11 1 L12 9 L20 11 L12 13 L11 21 L10 13 L2 11 L10 9 Z" fill="url(#qcw-grad)" />
+      </svg>
+      <span className="font-sans uppercase font-bold text-white/65" style={{ fontSize: '11px', letterSpacing: '0.22em' }}>
+        {role || 'LIVE AI · ANTHROPIC'}
+      </span>
+    </div>
+  )
+}tCount="indefinite" />
       </path>
     </svg>
   )

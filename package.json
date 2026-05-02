@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Intro to AI — interactive workshop presentation. Built by Media City Design.",
+  "description": "Intro to AI workshop presentation. Built by Media City Design.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

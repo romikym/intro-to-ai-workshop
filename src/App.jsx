@@ -361,7 +361,7 @@ function DesktopSlideStage({ current, direction, SlideComponent, scale }) {
  */
 function MobileSlideStage({ current, direction, SlideComponent }) {
   return (
-    <div className="absolute inset-0 flex flex-col" style={{ zIndex: 2 }}>
+    <div className="mobile-deck absolute inset-0 flex flex-col" style={{ zIndex: 2 }}>
       <div className="flex-1 overflow-y-auto overflow-x-hidden elegant-scroll" style={{ paddingBottom: '90px' }}>
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
@@ -572,5 +572,8 @@ function MobileSwipeHint() {
     >
       ← Swipe to navigate →
     </motion.div>
+  )
+}
+.div>
   )
 }

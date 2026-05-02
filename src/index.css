@@ -114,6 +114,19 @@
 /* ---------------- 2. BASE ---------------- */
 html, body, #root { height: 100%; width: 100%; margin: 0; padding: 0; }
 
+/* Disable pinch-zoom and double-tap zoom on touch devices.
+   The viewport meta tag handles this on most browsers, but iOS Safari
+   sometimes ignores user-scalable=no — these CSS rules enforce it. */
+html {
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  touch-action: pan-x pan-y;
+  overscroll-behavior: none;
+}
+
 body {
   background:
     radial-gradient(ellipse 80% 60% at 50% 18%, var(--body-glow-1), transparent 60%),
@@ -474,3 +487,94 @@ h1, h2, h3, h4, h5, h6 { overflow: visible; }
 .theme-light .text-white\/85 { color: rgba(var(--text-primary-rgb), 0.92) !important; }
 .theme-light .text-white\/90 { color: rgba(var(--text-primary-rgb), 0.95) !important; }
 .theme-light .text-white\/95 { color: rgba(var(--text-primary-rgb), 1) !important; }
+
+/* ===========================================================================
+   MOBILE RESPONSIVE LAYER
+   The deck designs at 1600x900 with hardcoded inline pixel sizes.
+   On mobile (audience phones), .mobile-deck is set on the wrapper
+   so these overrides scope cleanly without touching slide JSX.
+   =========================================================================== */
+.mobile-deck { font-size: 16px; }
+
+/* Cap inline-styled headline pixel sizes */
+.mobile-deck [style*="font-size: 138px"],
+.mobile-deck [style*="font-size: 124px"],
+.mobile-deck [style*="font-size: 118px"],
+.mobile-deck [style*="font-size: 110px"],
+.mobile-deck [style*="font-size: 104px"],
+.mobile-deck [style*="font-size: 98px"] {
+  font-size: clamp(36px, 11vw, 64px) !important;
+  line-height: 1.05 !important;
+}
+.mobile-deck [style*="font-size: 88px"],
+.mobile-deck [style*="font-size: 84px"],
+.mobile-deck [style*="font-size: 78px"],
+.mobile-deck [style*="font-size: 72px"],
+.mobile-deck [style*="font-size: 70px"] {
+  font-size: clamp(30px, 8vw, 52px) !important;
+  line-height: 1.08 !important;
+}
+.mobile-deck [style*="font-size: 64px"],
+.mobile-deck [style*="font-size: 58px"],
+.mobile-deck [style*="font-size: 54px"],
+.mobile-deck [style*="font-size: 48px"] {
+  font-size: clamp(26px, 6.5vw, 42px) !important;
+  line-height: 1.12 !important;
+}
+.mobile-deck [style*="font-size: 44px"],
+.mobile-deck [style*="font-size: 42px"],
+.mobile-deck [style*="font-size: 40px"],
+.mobile-deck [style*="font-size: 38px"] {
+  font-size: clamp(22px, 5.5vw, 34px) !important;
+  line-height: 1.18 !important;
+}
+.mobile-deck [style*="font-size: 36px"],
+.mobile-deck [style*="font-size: 32px"],
+.mobile-deck [style*="font-size: 30px"],
+.mobile-deck [style*="font-size: 28px"] {
+  font-size: clamp(18px, 4.5vw, 26px) !important;
+  line-height: 1.3 !important;
+}
+.mobile-deck [style*="font-size: 26px"],
+.mobile-deck [style*="font-size: 24px"],
+.mobile-deck [style*="font-size: 22px"] {
+  font-size: clamp(16px, 4vw, 22px) !important;
+  line-height: 1.35 !important;
+}
+
+.mobile-deck [style*="white-space: nowrap"],
+.mobile-deck [style*="whiteSpace: nowrap"] {
+  white-space: normal !important;
+}
+
+.mobile-deck [style*="max-width: 1500px"],
+.mobile-deck [style*="max-width: 1400px"],
+.mobile-deck [style*="max-width: 1300px"],
+.mobile-deck [style*="max-width: 1200px"],
+.mobile-deck [style*="max-width: 1100px"],
+.mobile-deck [style*="max-width: 1000px"] {
+  max-width: 100% !important;
+}
+
+.mobile-deck .slide-canvas,
+.mobile-deck > div > div {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  padding-top: 24px !important;
+  padding-bottom: 32px !important;
+}
+
+.mobile-deck [style*="height: 108px"][style*="width: 108px"],
+.mobile-deck [style*="height: 120px"][style*="width: 120px"],
+.mobile-deck [style*="height: 96px"][style*="width: 96px"] {
+  height: 80px !important;
+  width: 80px !important;
+}
+
+@media (max-width: 640px) {
+  .mobile-deck blockquote { font-size: clamp(18px, 4.5vw, 28px) !important; }
+  .mobile-deck button { min-height: 44px; }
+  .mobile-deck img { max-width: 100%; height: auto; }
+  .mobile-deck svg { max-width: 100%; }
+  body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+}
