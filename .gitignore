@@ -1,1 +1,7 @@
-"node_modules`ndist`n.env`n.netlify" 
+node_modules
+dist
+.env
+.netlify
+.DS_Store
+*.log
+.vite
