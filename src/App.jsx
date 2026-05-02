@@ -581,11 +581,3 @@ function MobileSwipeHint() {
     </motion.div>
   )
 }
-ion={{ delay: 1.5, duration: 0.5 }}
-      onClick={() => setShown(false)}
-      className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 text-xs text-white/70"
-    >
-      ← Swipe to navigate →
-    </motion.div>
-  )
-}
