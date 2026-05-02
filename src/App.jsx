@@ -432,7 +432,7 @@ function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onO
               <ChromeButton onClick={onNotes} aria-label="Toggle notes (S)" active={showNotes}>
                 <FileText className="h-4 w-4" />
               </ChromeButton>
-              <ThemeToggle />
+              {/* ThemeToggle removed — light mode disabled, dark theme only */}
               <ChromeButton onClick={onHide} aria-label="Hide chrome">
                 <EyeOff className="h-4 w-4" />
               </ChromeButton>
@@ -441,7 +441,7 @@ function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onO
               </ChromeButton>
             </>
           )}
-          {isMobile && <ThemeToggle />}
+          {/* Mobile ThemeToggle also removed — dark theme only */}
           <ChromeButton onClick={onNext} aria-label="Next slide" disabled={current === total}>
             <ChevronRight className="h-4 w-4" />
           </ChromeButton>
@@ -575,7 +575,8 @@ function MobileSwipeHint() {
       exit={{ opacity: 0 }}
       transition={{ delay: 1.5, duration: 0.5 }}
       onClick={() => setShown(false)}
-      className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 text-xs text-white/70"
+      className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 te
+xt-xs text-white/70"
     >
       ← Swipe to navigate →
     </motion.div>

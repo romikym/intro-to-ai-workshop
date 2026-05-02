@@ -13,9 +13,9 @@ export default function Slide05_BeyondAI() {
     <SlideFrame>
       <SlideHeader eyebrow="Beyond AI · Back to Basics" title="The Burbank advantage." presenter="jim" />
 
-      <div className="flex flex-col flex-1 min-h-0" style={{ gap: 'var(--sp-5)' }}>
-        {/* Two-column compare — bumped +2pt */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6">
+      <div className="flex flex-col flex-1 min-h-0" style={{ gap: 'var(--sp-8)' }}>
+        {/* Two-column compare — generous breathing room between cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
           <Side
             icon={Bot}
             tone="coral"
@@ -45,16 +45,20 @@ export default function Slide05_BeyondAI() {
           <FactsCarousel />
         </motion.div>
 
-        {/* Closer */}
+        {/* Closer — quote matched to slide 10's closing line size + style */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.7 }}
           className="text-center"
+          style={{ marginTop: 'var(--sp-3)' }}
         >
-          <div className="display-serif text-white/95"
-               style={{ fontSize: '32px', fontStyle: 'italic', lineHeight: 1.1 }}>
-            You cannot automate a handshake.
+          <div
+            className="font-serif text-white/95 italic display-serif"
+            style={{ fontStyle: 'italic', fontSize: '44px', lineHeight: 1.15 }}
+          >
+            You cannot automate a{' '}
+            <span className="gradient-text">handshake.</span>
           </div>
         </motion.div>
       </div>

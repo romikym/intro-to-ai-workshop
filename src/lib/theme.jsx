@@ -9,14 +9,12 @@ const ThemeContext = createContext({
 const STORAGE_KEY = 'intro-ai-theme'
 
 function getInitialTheme() {
-  if (typeof window === 'undefined') return 'dark'
-
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === 'light' || stored === 'dark') return stored
-  } catch {}
-
-  // Default to dark — this is a presentation deck, dark is the showcase mode
+  // Light mode is disabled — always return dark.
+  // Also clear any stale 'light' value previously stored so a returning
+  // visitor doesn't get stuck in light mode after the toggle was removed.
+  if (typeof window !== 'undefined') {
+    try { localStorage.removeItem(STORAGE_KEY) } catch {}
+  }
   return 'dark'
 }
 
@@ -45,9 +43,8 @@ export function ThemeProvider({ children }) {
     }, 500)
   }, [])
 
-  const toggle = useCallback(() => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
-  }, [theme, setTheme])
+  // Toggle is a no-op — light mode is disabled.
+  const toggle = useCallback(() => {}, [])
 
   return (
     <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
