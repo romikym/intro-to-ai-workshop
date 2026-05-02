@@ -242,7 +242,15 @@ function PresenterPill({ p }) {
         </div>
       </div>
       <div className="mt-2 text-[13px] font-semibold text-white leading-tight">{p.firstName}</div>
-      <div className="text-[11px] text-white/55 leading-tight">{p.company}</div>
+      <div className="text-[11px] text-white/55 leading-tight mb-2">{p.role}</div>
+      <div className="h-7 flex items-center justify-center" style={{ width: '120px' }}>
+        <img
+          src={p.logo}
+          alt={p.company}
+          className="max-h-full max-w-full object-contain"
+          style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))' }}
+        />
+      </div>
     </div>
   )
 }
@@ -260,6 +268,9 @@ function SectionWhatAIIs() {
           the next likely word based on patterns from training data.
         </p>
       </Card>
+
+      {/* Live demo: token prediction */}
+      <TokenPredictionDemo />
 
       <Card>
         <div className="text-amber-300 text-[11px] uppercase tracking-[0.25em] font-bold mb-2">
@@ -281,6 +292,63 @@ function SectionWhatAIIs() {
         </p>
       </Card>
     </Section>
+  )
+}
+
+/* ---------- Token Prediction Demo ----------
+   Visual demo of how an LLM predicts the next token.
+   "The cat sat on the ___" with three candidates whose probability bars
+   animate in. Pure CSS keyframes — no JS-driven animation. */
+function TokenPredictionDemo() {
+  const ref = useReveal(0.25)
+  return (
+    <div ref={ref} className="rounded-2xl px-4 py-5 bg-white/4 border border-cyan-500/20 mob-card mob-reveal-child mob-token-demo">
+      <div className="text-cyan-300 text-[10px] uppercase tracking-[0.28em] font-bold mb-3 flex items-center gap-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 mob-pulse-dot" />
+        Live demo · next-token prediction
+      </div>
+      <div className="font-mono text-[15px] text-white/95 mb-4 leading-relaxed">
+        "The cat sat on the&nbsp;
+        <span
+          className="inline-block px-1.5 rounded"
+          style={{
+            background: 'linear-gradient(135deg, rgba(41,151,255,0.25), rgba(192,100,240,0.25))',
+            border: '1px solid rgba(95,182,255,0.4)'
+          }}
+        >
+          ___
+        </span>"
+      </div>
+      <div className="space-y-2">
+        <ProbBar token="mat" pct={42} delay="0.1s" color="#5FB6FF" />
+        <ProbBar token="floor" pct={28} delay="0.25s" color="#C064F0" />
+        <ProbBar token="couch" pct={15} delay="0.4s" color="#F5A623" />
+        <ProbBar token="rug" pct={9} delay="0.55s" color="#00C7BE" />
+      </div>
+      <div className="mt-3 text-[11px] text-white/45 leading-relaxed">
+        It picks the highest-probability word. No understanding — just statistics.
+      </div>
+    </div>
+  )
+}
+
+function ProbBar({ token, pct, delay, color }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="font-mono text-[13px] text-white/85 w-12 shrink-0">"{token}"</div>
+      <div className="flex-1 h-2 rounded-full bg-white/8 overflow-hidden">
+        <div
+          className="h-full rounded-full mob-prob-fill"
+          style={{
+            width: `${pct}%`,
+            background: `linear-gradient(90deg, ${color}80, ${color})`,
+            animationDelay: delay,
+            boxShadow: `0 0 8px ${color}40`
+          }}
+        />
+      </div>
+      <div className="font-mono text-[12px] text-white/65 w-9 text-right tabular-nums">{pct}%</div>
+    </div>
   )
 }
 
@@ -576,6 +644,100 @@ function StickyAskBar({ onAsk, onChat }) {
     function update() {
       // Show after the user has scrolled past the hero
       setShow(window.scrollY > 400)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+
+  if (!show) return null
+
+  return (
+    <div
+      className="fixed left-3 right-3 z-40 transition-all duration-300"
+      style={{
+        bottom: 'calc(12px + env(safe-area-inset-bottom))',
+        opacity: show ? 1 : 0,
+        transform: show ? 'translateY(0)' : 'translateY(8px)'
+      }}
+    >
+      <div
+        className="rounded-2xl p-1.5 flex gap-1.5 backdrop-blur-md"
+        style={{
+          background: 'rgba(7,6,15,0.85)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          boxShadow: '0 12px 32px -10px rgba(0,0,0,0.6)'
+        }}
+      >
+        <button
+          onClick={onAsk}
+          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
+          style={{ background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)' }}
+        >
+          <MessageCircleQuestion className="h-4 w-4" />
+          Ask
+        </button>
+        <button
+          onClick={onChat}
+          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white/95 font-medium text-sm bg-white/5 border border-white/10"
+        >
+          <Sparkles className="h-4 w-4" />
+          Claude
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ---------- Reusable bits ---------- */
+function Section({ eyebrow, title, children }) {
+  const ref = useReveal()
+  return (
+    <section ref={ref} className="px-5 py-10 border-t border-white/8 mob-reveal">
+      <div className="text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 mob-reveal-child">
+        {eyebrow}
+      </div>
+      <h2
+        className="text-white font-bold leading-[1.08] mb-6 mob-reveal-child"
+        style={{
+          fontFamily: '"Inter Tight", system-ui, sans-serif',
+          fontSize: 'clamp(28px, 7.5vw, 40px)',
+          letterSpacing: '-0.02em'
+        }}
+      >
+        {title}
+      </h2>
+      <div className="space-y-3">{children}</div>
+    </section>
+  )
+}
+
+function Card({ children }) {
+  return (
+    <div className="rounded-2xl px-4 py-4 bg-white/4 border border-white/10 mob-card mob-reveal-child">
+      {children}
+    </div>
+  )
+}
+
+function Em({ children }) {
+  return (
+    <em
+      className="not-italic"
+      style={{
+        fontFamily: '"Fraunces", serif',
+        fontStyle: 'italic',
+        background: 'linear-gradient(135deg, #2997FF 0%, #C064F0 100%)',
+        WebkitBackgroundClip: 'text',
+        backgroundClip: 'text',
+        color: 'transparent'
+      }}
+    >
+      {children}
+    </em>
+  )
+}
+ow.scrollY > 400)
     }
     update()
     window.addEventListener('scroll', update, { passive: true })

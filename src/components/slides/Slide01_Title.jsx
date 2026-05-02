@@ -71,14 +71,20 @@ const PRESENTERS = {
     role: 'CEO · Media City Design',
     photo: '/assets/romik.jpg',
     logo: '/assets/mcd-logo.png',
-    photoPos: 'center 25%'
+    photoPos: 'center 25%',
+    logoMaxH: 68,
+    logoMaxW: 300
   },
   jim: {
     name: 'Jim Festante',
     role: 'CEO · Healthe Habits',
     photo: '/assets/jim.jpg',
     logo: '/assets/healthe-logo.png',
-    photoPos: 'center 30%'
+    photoPos: 'center 30%',
+    // Healthe logo is more compact than MCD's wide wordmark — give it
+    // more height so it visually matches the cyan logo's presence.
+    logoMaxH: 96,
+    logoMaxW: 300
   }
 }
 
@@ -117,15 +123,15 @@ function PresenterCard({ presenterId, delay = 0 }) {
         </div>
       </div>
 
-      {/* Logo */}
+      {/* Logo — per-presenter sizing so visual weight matches across brands */}
       <div className="flex items-center justify-center"
-           style={{ height: '68px', width: '300px', marginTop: '14px', overflow: 'visible' }}>
+           style={{ height: '100px', width: '300px', marginTop: '14px', overflow: 'visible' }}>
         <img
           src={p.logo}
           alt=""
           style={{
-            maxHeight: '68px',
-            maxWidth: '300px',
+            maxHeight: `${p.logoMaxH}px`,
+            maxWidth: `${p.logoMaxW}px`,
             width: 'auto',
             height: 'auto',
             objectFit: 'contain',

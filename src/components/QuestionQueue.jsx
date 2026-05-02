@@ -59,7 +59,10 @@ export default function QuestionQueue({ onAskClaude, hidden }) {
       transition={{ delay: 1.6, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="absolute z-30 pointer-events-auto"
       style={{
-        bottom: 'clamp(24px, 4vh, 48px)',
+        // Sit above the slide's bottom safe zone (150px reserved for nav
+        // chrome) plus a small gap so the queue never collides with the
+        // page-nav buttons.
+        bottom: '170px',
         right: 'clamp(24px, 3vw, 40px)',
         width: 'min(420px, 30vw)',
         maxWidth: '420px'
@@ -221,6 +224,10 @@ function formatTimeAgo(timestamp) {
   if (seconds < 30) return 'just now'
   if (seconds < 60) return `${seconds}s ago`
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
+  return new Date(timestamp).toLocaleDateString()
+}
+turn `${Math.floor(seconds / 60)}m ago`
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
   return new Date(timestamp).toLocaleDateString()
 }

@@ -163,7 +163,7 @@ export default function Slide13_Questions() {
               </div>
 
               <QRCode
-                size={240}
+                size={170}
                 value={qrUrl}
                 label="Or take the deck home"
               />

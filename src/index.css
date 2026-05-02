@@ -1220,3 +1220,50 @@ section button:active {
     transform: none !important;
   }
 }
+
+/* ===========================================================================
+   MOBILE DEMO ANIMATIONS — token prediction + atmospheric accents
+   GPU-only (transform + opacity), buttery on phones.
+   =========================================================================== */
+
+/* Token-prediction probability bars: scale-in horizontally */
+@keyframes mobProbFill {
+  0%   { transform: scaleX(0); transform-origin: left center; }
+  100% { transform: scaleX(1); transform-origin: left center; }
+}
+.mob-prob-fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: mobProbFill 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+/* Stagger the probability bars only after the demo card has revealed */
+.mob-token-demo:not(.is-visible) .mob-prob-fill { animation-play-state: paused; }
+
+/* Live demo dot — gentle pulse */
+@keyframes mobPulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.85); }
+}
+.mob-pulse-dot {
+  animation: mobPulseDot 1.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* The demo card gets a subtle ambient glow that breathes */
+@keyframes mobDemoGlow {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(95,182,255,0.0), 0 0 24px rgba(41,151,255,0.0); }
+  50%      { box-shadow: 0 0 0 1px rgba(95,182,255,0.15), 0 0 32px rgba(41,151,255,0.18); }
+}
+.mob-token-demo.is-visible {
+  animation: mobDemoGlow 3.6s ease-in-out infinite;
+}
+
+/* Sticky bar slide-up entry */
+@keyframes mobStickyIn {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.fixed[class*="bottom-"][class*="z-40"] > div {
+  animation: mobStickyIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
