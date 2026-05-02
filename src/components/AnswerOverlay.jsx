@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Sparkles, RotateCcw } from 'lucide-react'
 import { askClaudeStream } from '../lib/chat'
-import { toggleAnswered } from '../lib/qa'
+import { markAnswered } from '../lib/qa'
 
 const SYSTEM_PROMPT = `You are Claude, answering live audience questions at the Burbank Chamber AI workshop.
 
@@ -91,7 +91,8 @@ export default function AnswerOverlay({ question, onClose }) {
   async function handleClose() {
     abortRef.current?.abort()
     if (question?.id) {
-      try { await toggleAnswered(question.id) } catch {}
+      // Idempotent — guarantees the question never reappears in the queue.
+      try { await markAnswered(question.id) } catch {}
     }
     onClose?.()
   }
@@ -276,6 +277,12 @@ export default function AnswerOverlay({ question, onClose }) {
               Live · powered by Anthropic
             </div>
           </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
+   </div>
         </div>
       </motion.div>
     </AnimatePresence>

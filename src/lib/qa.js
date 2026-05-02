@@ -43,6 +43,17 @@ export async function toggleAnswered(id) {
   return res.json()
 }
 
+/**
+ * Idempotent — always sets answered to true, never toggles back.
+ * Use this when handling a question (Ask aloud / Claude answers) so the
+ * card never accidentally re-appears in the live queue.
+ */
+export async function markAnswered(id) {
+  const res = await fetch(`${ENDPOINT}?action=mark-answered&id=${encodeURIComponent(id)}`, { method: 'DELETE' })
+  if (!res.ok) throw new Error(`Mark answered failed (${res.status})`)
+  return res.json()
+}
+
 export async function togglePinned(id) {
   const res = await fetch(`${ENDPOINT}?action=pin&id=${encodeURIComponent(id)}`, { method: 'DELETE' })
   if (!res.ok) throw new Error(`Toggle pin failed (${res.status})`)
@@ -62,6 +73,24 @@ export function createPoller({ intervalMs = 4000, onUpdate, onError }) {
     if (stopped) return
     try {
       const questions = await listQuestions()
+      const ser = JSON.stringify(questions.map(q => [q.id, q.answered, q.pinned]))
+      if (ser !== lastSerialized) {
+        lastSerialized = ser
+        onUpdate?.(questions)
+      }
+    } catch (err) {
+      onError?.(err)
+    } finally {
+      if (!stopped) timer = setTimeout(tick, intervalMs)
+    }
+  }
+
+  return {
+    start() { stopped = false; tick() },
+    stop() { stopped = true; if (timer) clearTimeout(timer) }
+  }
+}
+ await listQuestions()
       const ser = JSON.stringify(questions.map(q => [q.id, q.answered, q.pinned]))
       if (ser !== lastSerialized) {
         lastSerialized = ser

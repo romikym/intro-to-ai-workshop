@@ -1267,3 +1267,27 @@ section button:active {
 .fixed[class*="bottom-"][class*="z-40"] > div {
   animation: mobStickyIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* ===========================================================================
+   SCROLL HYGIENE — desktop = locked, mobile = native
+   =========================================================================== */
+
+/* Desktop: lock body scroll (slides are absolute) */
+@media (min-width: 641px) {
+  html, body { overflow: hidden !important; height: 100% !important; }
+}
+
+/* Mobile: free natural scroll for MobileExperience */
+@media (max-width: 640px) {
+  html, body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    min-height: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  #root {
+    height: auto !important;
+    min-height: 100dvh;
+  }
+}

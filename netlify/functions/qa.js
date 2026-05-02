@@ -89,6 +89,15 @@ export default async (request) => {
       return json({ ok: true }, 200, corsHeaders)
     }
 
+    if (action === 'mark-answered' && id) {
+      // Idempotent: always sets answered to true. Used by the live queue
+      // so a handled question can never reappear.
+      const questions = await loadQuestions(store)
+      const updated = questions.map(q => q.id === id ? { ...q, answered: true } : q)
+      await store.setJSON(KEY, updated)
+      return json({ ok: true }, 200, corsHeaders)
+    }
+
     if (action === 'pin' && id) {
       const questions = await loadQuestions(store)
       const updated = questions.map(q => q.id === id ? { ...q, pinned: !q.pinned } : q)

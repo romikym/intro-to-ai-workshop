@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircleQuestion, Mic, Sparkles, Check } from 'lucide-react'
-import { createPoller, listQuestions, toggleAnswered } from '../lib/qa'
+import { MessageCircleQuestion, Mic, Sparkles, Check, X } from 'lucide-react'
+import { createPoller, listQuestions, markAnswered, deleteQuestion } from '../lib/qa'
 
 /**
  * QuestionQueue — floating panel that lives in the lower-right of slide 11
@@ -46,8 +46,15 @@ export default function QuestionQueue({ onAskClaude, hidden }) {
   })
 
   async function handleMarkAnswered(id) {
-    setQuestions(qs => qs.map(q => q.id === id ? { ...q, answered: !q.answered } : q))
-    try { await toggleAnswered(id) } catch {}
+    // Idempotent — always sets answered to true so the card cannot reappear.
+    setQuestions(qs => qs.map(q => q.id === id ? { ...q, answered: true } : q))
+    try { await markAnswered(id) } catch {}
+  }
+
+  async function handleDelete(id) {
+    // Optimistically drop from local state, then confirm with backend.
+    setQuestions(qs => qs.filter(q => q.id !== id))
+    try { await deleteQuestion(id) } catch {}
   }
 
   if (hidden) return null
@@ -61,11 +68,12 @@ export default function QuestionQueue({ onAskClaude, hidden }) {
       style={{
         // Sit above the slide's bottom safe zone (150px reserved for nav
         // chrome) plus a small gap so the queue never collides with the
-        // page-nav buttons.
+        // page-nav buttons. Expanded width lets the queue use the upper
+        // empty area on slide 11 effectively.
         bottom: '170px',
         right: 'clamp(24px, 3vw, 40px)',
-        width: 'min(420px, 30vw)',
-        maxWidth: '420px'
+        width: 'min(560px, 38vw)',
+        maxWidth: '560px'
       }}
     >
       <div
@@ -137,6 +145,7 @@ export default function QuestionQueue({ onAskClaude, hidden }) {
                           q={q}
                           onAskClaude={() => onAskClaude?.(q)}
                           onMarkAnswered={() => handleMarkAnswered(q.id)}
+                          onDelete={() => handleDelete(q.id)}
                         />
                       ))}
                     </AnimatePresence>
@@ -156,7 +165,7 @@ export default function QuestionQueue({ onAskClaude, hidden }) {
   )
 }
 
-function QueueCard({ q, onAskClaude, onMarkAnswered }) {
+function QueueCard({ q, onAskClaude, onMarkAnswered, onDelete }) {
   const timeAgo = formatTimeAgo(q.submitted)
   return (
     <motion.div
@@ -165,13 +174,22 @@ function QueueCard({ q, onAskClaude, onMarkAnswered }) {
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 30, scale: 0.92, transition: { duration: 0.2 } }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className={`rounded-xl border p-3 ${
+      className={`relative rounded-xl border p-3 ${
         q.pinned
           ? 'bg-gradient-to-br from-accent-cyan/12 to-accent-indigo/10 border-accent-cyan/30'
           : 'bg-white/4 border-white/8'
       }`}
     >
-      <div className="text-[14px] leading-snug text-white/95 mb-2.5 line-clamp-3">
+      {/* Delete (clear) — top-right corner, subtle until hovered */}
+      <button
+        onClick={onDelete}
+        title="Delete question"
+        className="absolute top-2 right-2 h-6 w-6 rounded-md flex items-center justify-center text-white/35 hover:text-red-300 hover:bg-red-500/10 transition"
+      >
+        <X className="h-3.5 w-3.5" />
+      </button>
+
+      <div className="text-[14px] leading-snug text-white/95 mb-2.5 pr-7 line-clamp-3">
         {q.text}
       </div>
 
@@ -198,6 +216,36 @@ function QueueCard({ q, onAskClaude, onMarkAnswered }) {
           onClick={onAskClaude}
           className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[12px] font-bold bg-gradient-to-r from-accent-cyan to-accent-indigo text-white shadow-lg shadow-accent-cyan/30 hover:scale-[1.02] transition"
           title="Have Claude answer this on screen"
+        >
+          <Sparkles className="h-3 w-3" />
+          Claude
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+function EmptyQueueHint() {
+  return (
+    <div className="px-4 py-6 text-center">
+      <div className="text-white/35 text-xs leading-relaxed">
+        Audience questions appear here in real time.
+        <br />
+        <span className="text-white/55">Have them scan the QR.</span>
+      </div>
+    </div>
+  )
+}
+
+function formatTimeAgo(timestamp) {
+  const seconds = Math.floor((Date.now() - timestamp) / 1000)
+  if (seconds < 30) return 'just now'
+  if (seconds < 60) return `${seconds}s ago`
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
+  return new Date(timestamp).toLocaleDateString()
+}
+le="Have Claude answer this on screen"
         >
           <Sparkles className="h-3 w-3" />
           Claude

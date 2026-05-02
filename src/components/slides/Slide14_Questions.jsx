@@ -135,12 +135,16 @@ export default function Slide13_Questions() {
                   photo="/assets/romik.jpg"
                   logo="/assets/mcd-logo.png"
                   photoPos="center 25%"
+                  logoMaxH={36}
+                  logoMaxW={180}
                 />
                 <MiniPresenter
                   name="Jim Festante"
                   photo="/assets/jim.jpg"
                   logo="/assets/healthe-logo.png"
                   photoPos="center 30%"
+                  logoMaxH={56}
+                  logoMaxW={180}
                 />
                 <MiniPresenter
                   name="Claude"
@@ -226,7 +230,10 @@ export default function Slide13_Questions() {
   )
 }
 
-function MiniPresenter({ name, photo, logo, photoPos, isAI, role }) {
+function MiniPresenter({ name, photo, logo, photoPos, isAI, role, logoMaxH = 36, logoMaxW = 180 }) {
+  // Logo container height grows with logoMaxH so taller logos (like Healthe
+  // Habits) get the room they need to match MCD's wider mark visually.
+  const containerH = Math.max(36, logoMaxH)
   return (
     <div className="flex items-center gap-5">
       <div className="relative shrink-0">
@@ -245,12 +252,22 @@ function MiniPresenter({ name, photo, logo, photoPos, isAI, role }) {
       </div>
       <div>
         <div className="display-sans text-2xl text-white leading-tight font-medium">{name}</div>
-        <div className="h-9 mt-2 flex items-center">
+        <div className="mt-2 flex items-center" style={{ height: `${containerH}px` }}>
           {isAI ? (
             <ClaudeWordmark role={role} />
           ) : (
-            <img src={logo} alt="" className="max-h-full max-w-[180px] object-contain"
-                 style={{ filter: 'drop-shadow(0 3px 8px rgba(0,0,0,0.5))' }} />
+            <img
+              src={logo}
+              alt=""
+              className="object-contain"
+              style={{
+                maxHeight: `${logoMaxH}px`,
+                maxWidth: `${logoMaxW}px`,
+                width: 'auto',
+                height: 'auto',
+                filter: 'drop-shadow(0 3px 8px rgba(0,0,0,0.5))'
+              }}
+            />
           )}
         </div>
       </div>
@@ -288,6 +305,21 @@ function ClaudeWordmark({ role }) {
   return (
     <div className="flex items-center gap-2">
       <svg width="18" height="18" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="qcw-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#2997FF" />
+            <stop offset="100%" stopColor="#C064F0" />
+          </linearGradient>
+        </defs>
+        <path d="M11 1 L12 9 L20 11 L12 13 L11 21 L10 13 L2 11 L10 9 Z" fill="url(#qcw-grad)" />
+      </svg>
+      <span className="font-sans uppercase font-bold text-white/65" style={{ fontSize: '11px', letterSpacing: '0.22em' }}>
+        {role || 'LIVE AI · ANTHROPIC'}
+      </span>
+    </div>
+  )
+}
+0 22 22" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="qcw-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#2997FF" />
