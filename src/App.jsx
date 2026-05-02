@@ -574,6 +574,3 @@ function MobileSwipeHint() {
     </motion.div>
   )
 }
-.div>
-  )
-}
