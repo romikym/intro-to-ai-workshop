@@ -1310,3 +1310,24 @@ section button:active {
 .mob-sticky-in {
   animation: mobStickyIn2 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
 }
+
+/* ===========================================================================
+   PRESENTER CONTACT CARD — GPU layer pinning so the open animation is
+   buttery on every device (no layout thrash, no paint storms).
+   =========================================================================== */
+.contact-card-perf {
+  /* Promote to its own compositor layer */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Hint the browser about which props will animate */
+  will-change: transform, opacity;
+}
+
+/* Prefer-reduced-motion users get an instant fade with no transform */
+@media (prefers-reduced-motion: reduce) {
+  .contact-card-perf {
+    transition: opacity 0.15s linear !important;
+    transform: none !important;
+  }
+}

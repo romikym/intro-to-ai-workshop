@@ -53,24 +53,30 @@ export default function PresenterContactCard({ presenter, open, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-          <motion.div
+          {/* Overlay — solid color, no backdrop-filter (it kills FPS during entry) */}
+          <div
             className="absolute inset-0"
-            style={{ background: 'rgba(7,6,15,0.85)', backdropFilter: 'blur(20px)' }}
+            style={{ background: 'rgba(5, 4, 12, 0.78)' }}
             onClick={onClose}
           />
 
           <motion.div
-            className="relative w-full sm:max-w-md max-h-[92vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl border border-white/12"
+            className="relative w-full sm:max-w-md max-h-[92vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl border border-white/12 contact-card-perf"
             style={{
               background: 'linear-gradient(160deg, #0E0C20 0%, #0A0820 100%)',
-              boxShadow: '0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(95,182,255,0.06)'
+              boxShadow: '0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(95,182,255,0.06)',
+              willChange: 'transform, opacity',
+              transform: 'translateZ(0)'
             }}
-            initial={{ y: '100%', opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: '100%', opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 30 }}
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.98 }}
+            transition={{
+              duration: 0.32,
+              ease: [0.22, 1, 0.36, 1]
+            }}
           >
             {/* Photo + accent gradient header */}
             <div className="relative">

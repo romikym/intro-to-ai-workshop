@@ -39,7 +39,7 @@ export const PRESENTERS = {
     contact: {
       phone: '',
       email: 'jim.festante@health-e-habits.org',
-      website: 'www.health-e-habits.org',
+      website: 'health-e-habits.org',
       address: {
         street: '',
         city: 'Burbank',
