@@ -10,6 +10,8 @@ import AskQuestion from '../AskQuestion'
 import ROICalculator from '../ROICalculator'
 import QuestionQueue from '../QuestionQueue'
 import AnswerOverlay from '../AnswerOverlay'
+import PresenterContactCard from '../PresenterContactCard'
+import { PRESENTERS } from '../../lib/presenters'
 
 export default function Slide13_Questions() {
   const [chatOpen, setChatOpen] = useState(false)
@@ -17,6 +19,7 @@ export default function Slide13_Questions() {
   const [askOpen, setAskOpen] = useState(false)
   const [roiOpen, setRoiOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState(null)
+  const [contactPresenter, setContactPresenter] = useState(null)
 
   // QR encodes the URL with ?ask=1 so audience scans → lands here → ask modal opens directly
   const qrUrl = typeof window !== 'undefined'
@@ -137,6 +140,7 @@ export default function Slide13_Questions() {
                   photoPos="center 25%"
                   logoMaxH={36}
                   logoMaxW={180}
+                  onClick={() => setContactPresenter(PRESENTERS.romik)}
                 />
                 <MiniPresenter
                   name="Jim Festante"
@@ -145,6 +149,7 @@ export default function Slide13_Questions() {
                   photoPos="center 30%"
                   logoMaxH={56}
                   logoMaxW={180}
+                  onClick={() => setContactPresenter(PRESENTERS.jim)}
                 />
                 <MiniPresenter
                   name="Claude"
@@ -228,16 +233,27 @@ export default function Slide13_Questions() {
           onClose={() => setActiveQuestion(null)}
         />
       )}
+
+      {/* Presenter contact card — opens when audience clicks Romik or Jim */}
+      <PresenterContactCard
+        presenter={contactPresenter}
+        open={!!contactPresenter}
+        onClose={() => setContactPresenter(null)}
+      />
     </>
   )
 }
 
-function MiniPresenter({ name, photo, logo, photoPos, isAI, role, logoMaxH = 36, logoMaxW = 180 }) {
+function MiniPresenter({ name, photo, logo, photoPos, isAI, role, logoMaxH = 36, logoMaxW = 180, onClick }) {
   // Logo container height grows with logoMaxH so taller logos (like Healthe
   // Habits) get the room they need to match MCD's wider mark visually.
   const containerH = Math.max(36, logoMaxH)
+  const Wrapper = onClick ? 'button' : 'div'
+  const wrapperProps = onClick
+    ? { onClick, className: 'flex items-center gap-5 group cursor-pointer text-left transition hover:scale-[1.02]', title: `Save ${name}'s contact` }
+    : { className: 'flex items-center gap-5' }
   return (
-    <div className="flex items-center gap-5">
+    <Wrapper {...wrapperProps}>
       <div className="relative shrink-0">
         <div className="absolute inset-[-3px] rounded-full bg-gradient-to-br from-accent-cyan to-accent-indigo opacity-90" />
         <div className="absolute inset-[-12px] rounded-full bg-gradient-to-br from-accent-cyan/30 to-accent-indigo/20 blur-2xl" />
@@ -253,7 +269,14 @@ function MiniPresenter({ name, photo, logo, photoPos, isAI, role, logoMaxH = 36,
         )}
       </div>
       <div>
-        <div className="display-sans text-2xl text-white leading-tight font-medium">{name}</div>
+        <div className={`display-sans text-2xl text-white leading-tight font-medium ${onClick ? 'group-hover:text-accent-cyan transition' : ''}`}>
+          {name}
+          {onClick && (
+            <span className="ml-2 inline-block text-[10px] uppercase tracking-[0.18em] text-accent-cyan/70 font-bold align-middle">
+              Save contact
+            </span>
+          )}
+        </div>
         <div className="mt-2 flex items-center" style={{ height: `${containerH}px` }}>
           {isAI ? (
             <ClaudeWordmark role={role} />
@@ -273,7 +296,7 @@ function MiniPresenter({ name, photo, logo, photoPos, isAI, role, logoMaxH = 36,
           )}
         </div>
       </div>
-    </div>
+    </Wrapper>
   )
 }
 

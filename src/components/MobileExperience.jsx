@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { MessageCircleQuestion, MessageCircle, Sparkles, ChevronDown, Cpu, Zap, MessageSquare, Search, Image as ImageIcon, BarChart3 } from 'lucide-react'
 import AskQuestion from './AskQuestion'
 import LiveChat from './LiveChat'
+import PresenterContactCard from './PresenterContactCard'
 import { PRESENTERS } from '../lib/presenters'
 
 /**
@@ -50,6 +51,7 @@ function useReveal(threshold = 0.15) {
 export default function MobileExperience() {
   const [askOpen, setAskOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [contactPresenter, setContactPresenter] = useState(null)
 
   // Auto-open ask modal if URL has ?ask=1 (audience scanned QR)
   useEffect(() => {
@@ -79,7 +81,7 @@ export default function MobileExperience() {
       <SectionWhatAICanDo />
       <SectionStartThisWeek />
       <SectionAskClaude onAsk={() => setAskOpen(true)} onChat={() => setChatOpen(true)} />
-      <ClosingPresenters />
+      <ClosingPresenters onSelect={setContactPresenter} />
       <Footer />
 
       {/* Sticky Ask CTA at bottom */}
@@ -98,6 +100,12 @@ export default function MobileExperience() {
           'How do I write an "AI Philosophy" for my team?'
         ]}
         maxTokens={800}
+      />
+
+      <PresenterContactCard
+        presenter={contactPresenter}
+        open={!!contactPresenter}
+        onClose={() => setContactPresenter(null)}
       />
     </div>
   )
@@ -621,21 +629,28 @@ function SectionAskClaude({ onAsk, onChat }) {
 }
 
 /* ---------- Closing presenters strip ---------- */
-function ClosingPresenters() {
+function ClosingPresenters({ onSelect }) {
   return (
     <section className="px-5 py-10 border-t border-white/8">
-      <div className="text-[10px] uppercase tracking-[0.32em] text-cyan-300 font-bold text-center mb-5">
+      <div className="text-[10px] uppercase tracking-[0.32em] text-cyan-300 font-bold text-center mb-2">
         Presented by
+      </div>
+      <div className="text-center text-white/45 text-[11px] mb-5">
+        Tap a name to save their contact
       </div>
       <div className="space-y-4">
         {[PRESENTERS.romik, PRESENTERS.jim].map(p => (
-          <div key={p.id} className="flex items-center gap-4 px-4 py-3 rounded-2xl bg-white/3 border border-white/8">
+          <button
+            key={p.id}
+            onClick={() => onSelect?.(p)}
+            className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl bg-white/3 border border-white/8 hover:border-accent-cyan/40 hover:bg-white/5 transition text-left"
+          >
             <div className="relative shrink-0">
               <div
                 className="absolute inset-[-2px] rounded-full"
                 style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
               />
-              <div className="relative h-12 w-12 rounded-full overflow-hidden bg-[#0E0C20] ring-1 ring-[#07060F]">
+              <div className="relative h-14 w-14 rounded-full overflow-hidden bg-[#0E0C20] ring-1 ring-[#07060F]">
                 <img
                   src={p.photo}
                   alt={p.name}
@@ -645,10 +660,25 @@ function ClosingPresenters() {
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-white text-[15px] font-semibold leading-tight">{p.name}</div>
-              <div className="text-white/55 text-[12px] leading-tight mt-0.5">{p.role} · {p.company}</div>
+              <div className="text-white text-[16px] font-semibold leading-tight">{p.name}</div>
+              <div className="text-white/55 text-[12px] leading-tight mt-0.5">{p.role} · {p.companyShort}</div>
             </div>
-          </div>
+            <div
+              className="shrink-0 flex items-center justify-center"
+              style={{ height: '36px', width: '88px' }}
+            >
+              <img
+                src={p.logo}
+                alt=""
+                className="object-contain"
+                style={{
+                  maxHeight: p.id === 'jim' ? '36px' : '24px',
+                  maxWidth: '88px',
+                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))'
+                }}
+              />
+            </div>
+          </button>
         ))}
       </div>
     </section>
@@ -713,7 +743,8 @@ function StickyAskBar({ onAsk, onChat }) {
 function Section({ eyebrow, title, children }) {
   const ref = useReveal()
   return (
-    <section ref={ref} className="px-5 py-10 border-t border-white/8 mob-reveal">
+    <section ref={ref} classNam
+e="px-5 py-10 border-t border-white/8 mob-reveal">
       <div className="text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 mob-reveal-child">
         {eyebrow}
       </div>
