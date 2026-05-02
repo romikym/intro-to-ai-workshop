@@ -1093,3 +1093,41 @@ h1, h2, h3, h4, h5, h6 { overflow: visible; }
     margin-top: 0 !important;
   }
 }
+
+/* ===========================================================================
+   MOBILE LAYER 6 — PresenterChip fix
+   The header-stacking rule from Layer 4 (flex-direction: column +
+   align-items: stretch) was making the avatar's gradient-ring (which is
+   absolute-positioned with inset:-2px) stretch to full width, turning
+   the round avatar into a long pill bar. Constrain the chip's children
+   to their natural sizes and keep the chip horizontal.
+   =========================================================================== */
+@media (max-width: 640px) {
+  /* PresenterChip itself stays horizontal — photo on left, name on right */
+  .mobile-deck .flex.items-start.justify-between > .flex.items-center.gap-4,
+  .mobile-deck .flex.items-center.gap-4 {
+    flex-direction: row !important;
+    align-items: center !important;
+    width: auto !important;
+    flex-wrap: nowrap !important;
+  }
+  /* The avatar wrapper must stay round — constrain to the photo size */
+  .mobile-deck .flex.items-center.gap-4 > .relative.shrink-0,
+  .mobile-deck .flex.items-center.gap-5 > .relative.shrink-0,
+  .mobile-deck .flex.items-center > .relative.shrink-0 {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    align-self: center;
+  }
+  /* The h-14 w-14 photo gets a touch smaller so the chip fits on a phone */
+  .mobile-deck .h-14.w-14 {
+    height: 48px !important;
+    width: 48px !important;
+  }
+  /* Text column to the right of the photo: align right (as designed) */
+  .mobile-deck .flex.items-center.gap-4 > .text-right {
+    text-align: right !important;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
