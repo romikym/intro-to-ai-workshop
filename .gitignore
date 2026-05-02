@@ -5,3 +5,7 @@ dist
 .DS_Store
 *.log
 .vite
+
+# Lockfile excluded — npm install on Netlify regenerates a clean one.
+# Local lockfiles often have malformed peer/optional entries that break npm 10.
+package-lock.json
