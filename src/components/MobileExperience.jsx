@@ -190,35 +190,59 @@ function Hero({ onAsk, onChat }) {
         <PresenterPill p={PRESENTERS.jim} />
       </div>
 
-      {/* Primary CTA */}
-      <div className="mt-10 space-y-3 mob-fade-in mob-d-5">
-        <button
-          onClick={onAsk}
-          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-semibold text-white text-base"
-          style={{
-            background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)',
-            boxShadow: '0 10px 30px -10px rgba(41,151,255,0.5)'
-          }}
-        >
-          <MessageCircleQuestion className="h-5 w-5" />
-          Ask a question
-          <span className="ml-1 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-white/20">
-            Live
-          </span>
-        </button>
-        <button
-          onClick={onChat}
-          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl font-medium text-white/90 text-sm border border-white/15 bg-white/5"
-        >
-          <MessageCircle className="h-4 w-4" />
-          Chat with Claude
-        </button>
+      {/* How-to-use card replaces the CTA buttons.
+          The Ask + Claude buttons now live in the persistent sticky bar
+          at the bottom of the screen. */}
+      <div
+        className="mt-10 mob-fade-in mob-d-5 rounded-3xl border border-white/10 px-5 py-5 text-left"
+        style={{
+          background: 'linear-gradient(160deg, rgba(41,151,255,0.08), rgba(192,100,240,0.06))'
+        }}
+      >
+        <div className="text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 text-center">
+          How to use this page
+        </div>
+        <ol className="space-y-3 text-white/85 text-[14px] leading-relaxed">
+          <li className="flex items-start gap-3">
+            <span
+              className="shrink-0 h-7 w-7 rounded-full flex items-center justify-center font-mono text-[12px] font-bold text-white"
+              style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
+            >
+              1
+            </span>
+            <span>
+              <strong className="text-white">Scroll</strong> to see the talk in 5 minutes — what AI is, the major tools, and how to start using it this week.
+            </span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span
+              className="shrink-0 h-7 w-7 rounded-full flex items-center justify-center font-mono text-[12px] font-bold text-white"
+              style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
+            >
+              2
+            </span>
+            <span>
+              Tap the blue <strong className="text-white">Ask</strong> button at the bottom to submit a question — it goes straight to the speakers' screen.
+            </span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span
+              className="shrink-0 h-7 w-7 rounded-full flex items-center justify-center font-mono text-[12px] font-bold text-white"
+              style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
+            >
+              3
+            </span>
+            <span>
+              Tap <strong className="text-white">Claude</strong> at the bottom to chat one-on-one — ask anything, get a real answer.
+            </span>
+          </li>
+        </ol>
       </div>
 
       {/* Scroll cue */}
-      <div className="mt-12 text-white/35 text-[11px] uppercase tracking-[0.3em] font-medium flex flex-col items-center gap-1.5">
+      <div className="mt-10 text-white/45 text-[11px] uppercase tracking-[0.3em] font-medium flex flex-col items-center gap-1.5 mob-fade-in mob-d-5">
         <span>The talk in 5 minutes</span>
-        <ChevronDown className="h-4 w-4" />
+        <ChevronDown className="h-4 w-4 mob-bounce-down" />
       </div>
     </section>
   )
@@ -229,10 +253,11 @@ function PresenterPill({ p }) {
     <div className="flex flex-col items-center">
       <div className="relative">
         <div
-          className="absolute inset-[-3px] rounded-full"
+          className="absolute inset-[-4px] rounded-full"
           style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
         />
-        <div className="relative h-16 w-16 rounded-full overflow-hidden bg-[#0E0C20] ring-2 ring-[#07060F]">
+        <div className="absolute inset-[-14px] rounded-full bg-gradient-to-br from-cyan-400/20 to-violet-500/20 blur-xl" />
+        <div className="relative h-24 w-24 rounded-full overflow-hidden bg-[#0E0C20] ring-2 ring-[#07060F]">
           <img
             src={p.photo}
             alt={p.name}
@@ -241,9 +266,9 @@ function PresenterPill({ p }) {
           />
         </div>
       </div>
-      <div className="mt-2 text-[13px] font-semibold text-white leading-tight">{p.firstName}</div>
-      <div className="text-[11px] text-white/55 leading-tight mb-2">{p.role}</div>
-      <div className="h-7 flex items-center justify-center" style={{ width: '120px' }}>
+      <div className="mt-3 text-[16px] font-semibold text-white leading-tight">{p.firstName}</div>
+      <div className="text-[13px] text-white/65 leading-tight mb-2">{p.role}</div>
+      <div className="h-9 flex items-center justify-center" style={{ width: '150px' }}>
         <img
           src={p.logo}
           alt={p.company}
@@ -569,8 +594,16 @@ function SectionAskClaude({ onAsk, onChat }) {
         </button>
       </div>
 
-      <div className="mt-8 px-4 py-5 rounded-2xl bg-white/3 border border-white/8 text-center">
-        <div className="text-white/85 italic font-serif" style={{ fontFamily: '"Fraunces", serif', fontStyle: 'italic', fontSize: 'clamp(16px, 4.5vw, 20px)', lineHeight: 1.35 }}>
+      <div className="mt-8 px-3 py-5 rounded-2xl bg-white/3 border border-white/8 text-center overflow-hidden">
+        <div
+          className="text-white/85 italic font-serif whitespace-nowrap"
+          style={{
+            fontFamily: '"Fraunces", serif',
+            fontStyle: 'italic',
+            fontSize: 'clamp(11px, 3.2vw, 18px)',
+            lineHeight: 1.35
+          }}
+        >
           AI won't replace you.{' '}
           <span style={{
             background: 'linear-gradient(135deg, #2997FF, #C064F0)',
@@ -636,29 +669,16 @@ function Footer() {
   )
 }
 
-/* ---------- Sticky Ask bar (always-visible CTA) ---------- */
+/* ---------- Sticky Ask bar (always-visible CTA) ----------
+   Now visible from page load — the hero's CTA buttons were removed in
+   favor of instructions, so this bar is the audience's only path to
+   submit a question or chat with Claude. */
 function StickyAskBar({ onAsk, onChat }) {
-  const [show, setShow] = useState(false)
-
-  useEffect(() => {
-    function update() {
-      // Show after the user has scrolled past the hero
-      setShow(window.scrollY > 400)
-    }
-    update()
-    window.addEventListener('scroll', update, { passive: true })
-    return () => window.removeEventListener('scroll', update)
-  }, [])
-
-  if (!show) return null
-
   return (
     <div
-      className="fixed left-3 right-3 z-40 transition-all duration-300"
+      className="fixed left-3 right-3 z-40 mob-sticky-in"
       style={{
-        bottom: 'calc(12px + env(safe-area-inset-bottom))',
-        opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0)' : 'translateY(8px)'
+        bottom: 'calc(12px + env(safe-area-inset-bottom))'
       }}
     >
       <div

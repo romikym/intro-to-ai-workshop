@@ -1291,3 +1291,22 @@ section button:active {
     min-height: 100dvh;
   }
 }
+
+/* Bouncing chevron for the "scroll for more" cue */
+@keyframes mobBounceDown {
+  0%, 100% { transform: translateY(0); opacity: 0.55; }
+  50%      { transform: translateY(4px); opacity: 1; }
+}
+.mob-bounce-down {
+  animation: mobBounceDown 1.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Sticky bottom bar entry (appears on mount) */
+@keyframes mobStickyIn2 {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.mob-sticky-in {
+  animation: mobStickyIn2 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+}
