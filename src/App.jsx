@@ -11,6 +11,7 @@ import AskQuestion from './components/AskQuestion'
 import QASpeakerView from './components/QASpeakerView'
 import ROICalculator from './components/ROICalculator'
 import PromptVault, { PromptVaultFAB } from './components/PromptVault'
+import MobileExperience from './components/MobileExperience'
 
 // Lazy-load slides so initial paint is fast
 const Slide01 = lazy(() => import('./components/slides/Slide01_Title'))
@@ -157,6 +158,12 @@ export default function App() {
   const SlideComponent = SLIDE_COMPONENTS[current - 1]
   const meta = getSlideMeta(current)
   const gridCfg = GRID_CONFIG[current] || { intensity: 0.7, variant: 'focus' }
+
+  // Mobile audience gets a purpose-built scrolling experience instead of
+  // the projection-style slide carousel. Faster, cleaner, native-feeling.
+  if (viewport.isMobile) {
+    return <MobileExperience />
+  }
 
   return (
     <div ref={stageRef} className="relative overflow-hidden" style={{ width: '100vw', height: viewport.isMobile ? '100dvh' : '100vh', background: 'var(--bg-base)' }}>
@@ -567,6 +574,14 @@ function MobileSwipeHint() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ delay: 1.5, duration: 0.5 }}
+      onClick={() => setShown(false)}
+      className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 text-xs text-white/70"
+    >
+      ← Swipe to navigate →
+    </motion.div>
+  )
+}
+ion={{ delay: 1.5, duration: 0.5 }}
       onClick={() => setShown(false)}
       className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 text-xs text-white/70"
     >

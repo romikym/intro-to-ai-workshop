@@ -1,0 +1,671 @@
+import { useState, useEffect, useRef } from 'react'
+import { MessageCircleQuestion, MessageCircle, Sparkles, ChevronDown, Cpu, Zap, MessageSquare, Search, Image as ImageIcon, BarChart3 } from 'lucide-react'
+import AskQuestion from './AskQuestion'
+import LiveChat from './LiveChat'
+import { PRESENTERS } from '../lib/presenters'
+
+/**
+ * useReveal — IntersectionObserver hook that adds an `is-visible` class
+ * once an element enters the viewport. Drives the GPU-only fade-up
+ * animations (transform + opacity only — buttery on mobile).
+ */
+function useReveal(threshold = 0.15) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (typeof IntersectionObserver === 'undefined') {
+      el.classList.add('is-visible')
+      return
+    }
+    const obs = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible')
+          obs.unobserve(e.target)
+        }
+      }
+    }, { threshold, rootMargin: '0px 0px -8% 0px' })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [threshold])
+  return ref
+}
+
+/**
+ * MobileExperience — purpose-built mobile UI for audience phones.
+ *
+ * Replaces the projection-style slide carousel with a single scrolling
+ * page. No TRON grid, no particles, no expensive backdrop-filter blurs,
+ * minimal Framer Motion. Designed to be fast and beautiful on a phone.
+ *
+ * Key surfaces:
+ *   - Hero with workshop title + presenters
+ *   - "What AI Is" quick reframe
+ *   - 6 categories of what AI can do
+ *   - 5 major AI models
+ *   - 5-step "Start This Week" plan
+ *   - Sticky CTA: Ask a question + Chat with Claude
+ */
+export default function MobileExperience() {
+  const [askOpen, setAskOpen] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
+
+  // Auto-open ask modal if URL has ?ask=1 (audience scanned QR)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('ask') === '1') {
+      setAskOpen(true)
+    }
+  }, [])
+
+  return (
+    <div className="relative min-h-[100dvh] w-full text-white overflow-x-hidden">
+      {/* Subtle gradient backdrop — no blur, no animation, no GPU cost */}
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(41,151,255,0.18), transparent 60%), radial-gradient(ellipse 80% 50% at 100% 100%, rgba(192,100,240,0.12), transparent 60%), linear-gradient(180deg, #07060F 0%, #0A0820 100%)'
+        }}
+      />
+
+      <Header />
+      <Hero onAsk={() => setAskOpen(true)} onChat={() => setChatOpen(true)} />
+      <SectionWhatAIIs />
+      <SectionPhilosophy />
+      <SectionModels />
+      <SectionWhatAICanDo />
+      <SectionStartThisWeek />
+      <SectionAskClaude onAsk={() => setAskOpen(true)} onChat={() => setChatOpen(true)} />
+      <ClosingPresenters />
+      <Footer />
+
+      {/* Sticky Ask CTA at bottom */}
+      <StickyAskBar onAsk={() => setAskOpen(true)} onChat={() => setChatOpen(true)} />
+
+      <AskQuestion open={askOpen} onClose={() => setAskOpen(false)} />
+      <LiveChat
+        open={chatOpen}
+        onClose={() => setChatOpen(false)}
+        title="Chat with Claude"
+        subtitle="Ask anything — get a real answer"
+        suggestedPrompts={[
+          'Give me 3 specific ways my small business could use AI this week.',
+          "What's one thing AI is bad at that I should keep doing myself?",
+          'Write a prompt I could use to draft my next email.',
+          'How do I write an "AI Philosophy" for my team?'
+        ]}
+        maxTokens={800}
+      />
+    </div>
+  )
+}
+
+/* ---------- Header ---------- */
+function Header() {
+  return (
+    <header className="sticky top-0 z-30 backdrop-blur-md bg-[rgba(7,6,15,0.7)] border-b border-white/8">
+      <div className="px-5 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div
+            className="h-7 w-7 rounded-md flex items-center justify-center"
+            style={{ background: 'linear-gradient(135deg, #2997FF 0%, #C064F0 100%)' }}
+          >
+            <Sparkles className="h-3.5 w-3.5 text-white" />
+          </div>
+          <div className="leading-none">
+            <div className="text-[10px] uppercase tracking-[0.2em] text-cyan-300/80 font-bold">
+              Burbank Chamber
+            </div>
+            <div className="text-[13px] font-semibold text-white/95 mt-0.5">
+              Intro to AI · 2026
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  )
+}
+
+/* ---------- Hero ---------- */
+function Hero({ onAsk, onChat }) {
+  return (
+    <section className="px-5 pt-10 pb-12 text-center">
+      <div className="text-[11px] uppercase tracking-[0.32em] font-bold text-cyan-300 mb-4 mob-fade-in mob-d-1">
+        Burbank Chamber · 2026
+      </div>
+      <h1
+        className="font-sans font-bold leading-[1.05] text-white mob-fade-in mob-d-2"
+        style={{
+          fontFamily: '"Inter Tight", system-ui, sans-serif',
+          fontSize: 'clamp(40px, 11vw, 60px)',
+          letterSpacing: '-0.03em'
+        }}
+      >
+        Introduction to{' '}
+        <em
+          className="not-italic"
+          style={{
+            fontFamily: '"Fraunces", serif',
+            fontStyle: 'italic',
+            background: 'linear-gradient(135deg, #2997FF 0%, #C064F0 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent'
+          }}
+        >
+          AI<span className="text-white/40">.</span>
+        </em>
+      </h1>
+      <div
+        className="mt-4 text-white/75 mob-fade-in mob-d-3"
+        style={{
+          fontFamily: '"Inter Tight", system-ui, sans-serif',
+          fontSize: 'clamp(17px, 4.5vw, 22px)',
+          lineHeight: 1.35
+        }}
+      >
+        Cutting through{' '}
+        <em
+          className="not-italic"
+          style={{
+            fontFamily: '"Fraunces", serif',
+            fontStyle: 'italic',
+            background: 'linear-gradient(135deg, #2997FF 0%, #C064F0 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent'
+          }}
+        >
+          the noise
+        </em>
+        .
+      </div>
+
+      {/* Presenters */}
+      <div className="mt-9 flex items-center justify-center gap-8 mob-fade-in mob-d-4">
+        <PresenterPill p={PRESENTERS.romik} />
+        <PresenterPill p={PRESENTERS.jim} />
+      </div>
+
+      {/* Primary CTA */}
+      <div className="mt-10 space-y-3 mob-fade-in mob-d-5">
+        <button
+          onClick={onAsk}
+          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-semibold text-white text-base"
+          style={{
+            background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)',
+            boxShadow: '0 10px 30px -10px rgba(41,151,255,0.5)'
+          }}
+        >
+          <MessageCircleQuestion className="h-5 w-5" />
+          Ask a question
+          <span className="ml-1 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-white/20">
+            Live
+          </span>
+        </button>
+        <button
+          onClick={onChat}
+          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl font-medium text-white/90 text-sm border border-white/15 bg-white/5"
+        >
+          <MessageCircle className="h-4 w-4" />
+          Chat with Claude
+        </button>
+      </div>
+
+      {/* Scroll cue */}
+      <div className="mt-12 text-white/35 text-[11px] uppercase tracking-[0.3em] font-medium flex flex-col items-center gap-1.5">
+        <span>The talk in 5 minutes</span>
+        <ChevronDown className="h-4 w-4" />
+      </div>
+    </section>
+  )
+}
+
+function PresenterPill({ p }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative">
+        <div
+          className="absolute inset-[-3px] rounded-full"
+          style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
+        />
+        <div className="relative h-16 w-16 rounded-full overflow-hidden bg-[#0E0C20] ring-2 ring-[#07060F]">
+          <img
+            src={p.photo}
+            alt={p.name}
+            className="h-full w-full object-cover"
+            style={{ objectPosition: p.id === 'romik' ? 'center 25%' : 'center 30%' }}
+          />
+        </div>
+      </div>
+      <div className="mt-2 text-[13px] font-semibold text-white leading-tight">{p.firstName}</div>
+      <div className="text-[11px] text-white/55 leading-tight">{p.company}</div>
+    </div>
+  )
+}
+
+/* ---------- "What AI Is" ---------- */
+function SectionWhatAIIs() {
+  return (
+    <Section eyebrow="The reality" title={<>What AI <Em>actually</Em> is.</>}>
+      <Card>
+        <div className="text-cyan-300 text-[11px] uppercase tracking-[0.25em] font-bold mb-2">
+          Not magic. Software.
+        </div>
+        <p className="text-white/85 text-[15px] leading-relaxed">
+          A large language model doesn't <em className="text-white">know</em> anything. It predicts
+          the next likely word based on patterns from training data.
+        </p>
+      </Card>
+
+      <Card>
+        <div className="text-amber-300 text-[11px] uppercase tracking-[0.25em] font-bold mb-2">
+          Built to sound confident
+        </div>
+        <p className="text-white/85 text-[15px] leading-relaxed">
+          Not built to be accurate. Using it as a search engine or fact-checker is a liability.
+          It's a powerful tool — but a tool, not an oracle.
+        </p>
+      </Card>
+
+      <Card>
+        <div className="text-purple-300 text-[11px] uppercase tracking-[0.25em] font-bold mb-2">
+          It produces the average
+        </div>
+        <p className="text-white/85 text-[15px] leading-relaxed">
+          Statistically, it generates the middle. If you outsource your voice to AI, your brand
+          becomes generic. <strong className="text-white">Average kills local brands.</strong>
+        </p>
+      </Card>
+    </Section>
+  )
+}
+
+/* ---------- Philosophy ---------- */
+function SectionPhilosophy() {
+  return (
+    <Section eyebrow="Before you adopt" title={<>Write your <Em>AI Philosophy</Em> first.</>}>
+      <Card>
+        <p className="text-white/85 text-[15px] leading-relaxed mb-3">
+          Before any AI tool license, write a one-page document for your team:
+        </p>
+        <ul className="space-y-3 text-white/85 text-[15px] leading-relaxed">
+          <li className="flex gap-3">
+            <span className="text-cyan-300 font-bold shrink-0">→</span>
+            <span><strong className="text-white">What AI is allowed to do</strong> in your business.</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="text-cyan-300 font-bold shrink-0">→</span>
+            <span><strong className="text-white">Where human oversight is mandatory.</strong></span>
+          </li>
+          <li className="flex gap-3">
+            <span className="text-cyan-300 font-bold shrink-0">→</span>
+            <span><strong className="text-white">What you'll never automate</strong> — the customer-facing handshake.</span>
+          </li>
+        </ul>
+      </Card>
+
+      <div className="mt-4 px-4 py-3 rounded-xl bg-cyan-500/8 border border-cyan-500/20 text-cyan-200/90 text-[13px] leading-relaxed">
+        Single highest-leverage thing a small business can do in 2026.
+      </div>
+    </Section>
+  )
+}
+
+/* ---------- AI Models ---------- */
+const MODELS = [
+  { name: 'Claude', tag: 'Anthropic', strength: 'Drafting, contracts, complex reasoning', color: '#D97757' },
+  { name: 'ChatGPT', tag: 'OpenAI', strength: 'Everyday tasks, images, plugins', color: '#10A37F' },
+  { name: 'Gemini', tag: 'Google', strength: 'Docs, Gmail, Sheets integration', color: '#4796FF' },
+  { name: 'Copilot', tag: 'Microsoft', strength: 'Excel, PowerPoint, Outlook', color: '#0078D4' },
+  { name: 'Perplexity', tag: 'Research', strength: 'Fact-checking, sources, market research', color: '#21B8CD' }
+]
+function SectionModels() {
+  return (
+    <Section eyebrow="The major tools" title={<>Meet the <Em>AI models</Em>.</>}>
+      <p className="text-white/65 text-[14px] leading-relaxed mb-5 -mt-2">
+        All do most things. The differences are in personality, integration, and what each is best at.
+      </p>
+      <div className="space-y-3">
+        {MODELS.map(m => (
+          <Card key={m.name}>
+            <div className="flex items-baseline justify-between gap-3 mb-2">
+              <div className="text-white text-[20px] font-bold tracking-tight" style={{ fontFamily: '"Inter Tight", system-ui, sans-serif' }}>
+                {m.name}
+              </div>
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ color: m.color }}>
+                {m.tag}
+              </div>
+            </div>
+            <div className="text-white/70 text-[14px] leading-relaxed">
+              {m.strength}
+            </div>
+          </Card>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
+/* ---------- What AI Can Do ---------- */
+const CATEGORIES = [
+  { icon: MessageSquare, title: 'Talk to customers', tagline: 'Reply with your voice, at machine speed.', color: '#2997FF' },
+  { icon: ImageIcon,    title: 'Make content',       tagline: 'One idea, ten formats.', color: '#F5A623' },
+  { icon: Cpu,          title: 'Run the office',     tagline: 'Less paperwork, more business.', color: '#00C7BE' },
+  { icon: Search,       title: 'Know your market',   tagline: "Read what you don't have time to read.", color: '#5FB6FF' },
+  { icon: Zap,          title: 'Make visuals',       tagline: 'A designer in your pocket.', color: '#C064F0' },
+  { icon: BarChart3,    title: 'Read the numbers',   tagline: 'Patterns you would miss.', color: '#FF375F' }
+]
+function SectionWhatAICanDo() {
+  return (
+    <Section eyebrow="What it actually does" title={<>Six things AI can <Em>do for you</Em>.</>}>
+      <div className="grid grid-cols-1 gap-3">
+        {CATEGORIES.map(c => (
+          <Card key={c.title}>
+            <div className="flex items-start gap-3">
+              <div
+                className="h-10 w-10 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: `${c.color}20`, border: `1px solid ${c.color}40` }}
+              >
+                <c.icon className="h-5 w-5" style={{ color: c.color }} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-white text-[16px] font-semibold leading-snug">{c.title}</div>
+                <div className="text-white/65 text-[14px] leading-relaxed mt-1">{c.tagline}</div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
+/* ---------- Start This Week ---------- */
+const STEPS = [
+  { n: '01', title: 'Pick one tool', body: 'Claude or ChatGPT — commit to one for two weeks.' },
+  { n: '02', title: 'Pick one task', body: 'Something you do every week: emails, social, FAQs.' },
+  { n: '03', title: 'Spend 30 minutes', body: 'One focused session. Show examples, give context, iterate.' },
+  { n: '04', title: 'Save your best prompt', body: "When a prompt works, save it. That's now an asset." },
+  { n: '05', title: 'Add one task per week', body: 'By week six, AI is handling six recurring tasks.', accent: true }
+]
+function SectionStartThisWeek() {
+  return (
+    <Section eyebrow="The plan" title={<>Pick one tool. <Em>Pick one task.</Em></>}>
+      <p className="text-white/65 text-[14px] leading-relaxed mb-5 -mt-2">
+        Don't overhaul everything. Start small, save what works, expand week by week.
+      </p>
+      <div className="relative">
+        {/* Vertical guide line */}
+        <div
+          aria-hidden
+          className="absolute left-[19px] top-3 bottom-3 w-px"
+          style={{ background: 'linear-gradient(180deg, rgba(34,211,238,0.5) 0%, rgba(99,102,241,0.4) 100%)' }}
+        />
+        <div className="space-y-4">
+          {STEPS.map(s => (
+            <div key={s.n} className="relative flex items-start gap-4">
+              <div
+                className={`relative z-10 h-10 w-10 rounded-full flex items-center justify-center font-serif text-[15px] shrink-0 ${
+                  s.accent
+                    ? 'text-white shadow-lg'
+                    : 'bg-[#0E0C20] border border-white/15 text-white/85'
+                }`}
+                style={s.accent ? { background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)' } : undefined}
+              >
+                {s.n}
+              </div>
+              <div className="pt-1.5 flex-1">
+                <div className="text-white text-[15px] font-semibold leading-tight">{s.title}</div>
+                <div className="text-white/65 text-[13px] leading-relaxed mt-1">{s.body}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 text-center">
+        <div
+          className="font-serif italic text-white/95"
+          style={{ fontFamily: '"Fraunces", serif', fontStyle: 'italic', fontSize: 'clamp(20px, 5.2vw, 26px)', lineHeight: 1.3 }}
+        >
+          Six weeks from now, that's
+          <span
+            className="ml-1"
+            style={{
+              background: 'linear-gradient(135deg, #2997FF 0%, #C064F0 100%)',
+              WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'
+            }}
+          >
+            six recurring tasks off your plate.
+          </span>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ---------- Ask + Chat CTA ---------- */
+function SectionAskClaude({ onAsk, onChat }) {
+  return (
+    <section className="px-5 py-12">
+      <div
+        className="rounded-3xl p-7 border border-white/10"
+        style={{
+          background: 'linear-gradient(160deg, rgba(41,151,255,0.10) 0%, rgba(192,100,240,0.08) 100%)'
+        }}
+      >
+        <div className="text-cyan-300 text-[11px] uppercase tracking-[0.32em] font-bold mb-3">
+          Q&amp;A
+        </div>
+        <h2
+          className="text-white font-bold leading-[1.08]"
+          style={{ fontFamily: '"Inter Tight", system-ui, sans-serif', fontSize: 'clamp(28px, 8vw, 42px)', letterSpacing: '-0.02em' }}
+        >
+          Got a{' '}
+          <em
+            className="not-italic"
+            style={{
+              fontFamily: '"Fraunces", serif',
+              fontStyle: 'italic',
+              background: 'linear-gradient(135deg, #2997FF, #C064F0)',
+              WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'
+            }}
+          >
+            question?
+          </em>
+        </h2>
+        <p className="text-white/75 text-[15px] leading-relaxed mt-4 mb-6">
+          Submit it live — we'll get to it. Or chat with Claude directly to explore your specific situation.
+        </p>
+        <button
+          onClick={onAsk}
+          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-semibold text-white text-base mb-3"
+          style={{
+            background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)',
+            boxShadow: '0 8px 24px -8px rgba(41,151,255,0.5)'
+          }}
+        >
+          <MessageCircleQuestion className="h-5 w-5" />
+          Ask the speakers
+        </button>
+        <button
+          onClick={onChat}
+          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl font-medium text-white/90 text-sm border border-white/15 bg-white/5"
+        >
+          <Sparkles className="h-4 w-4" />
+          Chat with Claude
+        </button>
+      </div>
+
+      <div className="mt-8 px-4 py-5 rounded-2xl bg-white/3 border border-white/8 text-center">
+        <div className="text-white/85 italic font-serif" style={{ fontFamily: '"Fraunces", serif', fontStyle: 'italic', fontSize: 'clamp(16px, 4.5vw, 20px)', lineHeight: 1.35 }}>
+          AI won't replace you.{' '}
+          <span style={{
+            background: 'linear-gradient(135deg, #2997FF, #C064F0)',
+            WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', fontStyle: 'normal', fontFamily: '"Inter Tight", system-ui, sans-serif', fontWeight: 700
+          }}>
+            But someone using AI will.
+          </span>
+        </div>
+        <div className="mt-3 text-[11px] uppercase tracking-[0.28em] text-white/40 font-bold">
+          — ChatGPT
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ---------- Closing presenters strip ---------- */
+function ClosingPresenters() {
+  return (
+    <section className="px-5 py-10 border-t border-white/8">
+      <div className="text-[10px] uppercase tracking-[0.32em] text-cyan-300 font-bold text-center mb-5">
+        Presented by
+      </div>
+      <div className="space-y-4">
+        {[PRESENTERS.romik, PRESENTERS.jim].map(p => (
+          <div key={p.id} className="flex items-center gap-4 px-4 py-3 rounded-2xl bg-white/3 border border-white/8">
+            <div className="relative shrink-0">
+              <div
+                className="absolute inset-[-2px] rounded-full"
+                style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
+              />
+              <div className="relative h-12 w-12 rounded-full overflow-hidden bg-[#0E0C20] ring-1 ring-[#07060F]">
+                <img
+                  src={p.photo}
+                  alt={p.name}
+                  className="h-full w-full object-cover"
+                  style={{ objectPosition: p.id === 'romik' ? 'center 25%' : 'center 30%' }}
+                />
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-white text-[15px] font-semibold leading-tight">{p.name}</div>
+              <div className="text-white/55 text-[12px] leading-tight mt-0.5">{p.role} · {p.company}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- Footer ---------- */
+function Footer() {
+  return (
+    <footer className="px-5 py-10 pb-28 text-center border-t border-white/8 mt-4">
+      <div className="text-[11px] uppercase tracking-[0.32em] text-white/35 font-bold">
+        Burbank Chamber · 2026
+      </div>
+      <div className="text-white/55 text-[12px] mt-2">
+        Built by Media City Design.
+      </div>
+    </footer>
+  )
+}
+
+/* ---------- Sticky Ask bar (always-visible CTA) ---------- */
+function StickyAskBar({ onAsk, onChat }) {
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    function update() {
+      // Show after the user has scrolled past the hero
+      setShow(window.scrollY > 400)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+
+  if (!show) return null
+
+  return (
+    <div
+      className="fixed left-3 right-3 z-40 transition-all duration-300"
+      style={{
+        bottom: 'calc(12px + env(safe-area-inset-bottom))',
+        opacity: show ? 1 : 0,
+        transform: show ? 'translateY(0)' : 'translateY(8px)'
+      }}
+    >
+      <div
+        className="rounded-2xl p-1.5 flex gap-1.5 backdrop-blur-md"
+        style={{
+          background: 'rgba(7,6,15,0.85)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          boxShadow: '0 12px 32px -10px rgba(0,0,0,0.6)'
+        }}
+      >
+        <button
+          onClick={onAsk}
+          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
+          style={{ background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)' }}
+        >
+          <MessageCircleQuestion className="h-4 w-4" />
+          Ask
+        </button>
+        <button
+          onClick={onChat}
+          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white/95 font-medium text-sm bg-white/5 border border-white/10"
+        >
+          <Sparkles className="h-4 w-4" />
+          Claude
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ---------- Reusable bits ---------- */
+function Section({ eyebrow, title, children }) {
+  const ref = useReveal()
+  return (
+    <section ref={ref} className="px-5 py-10 border-t border-white/8 mob-reveal">
+      <div className="text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 mob-reveal-child">
+        {eyebrow}
+      </div>
+      <h2
+        className="text-white font-bold leading-[1.08] mb-6 mob-reveal-child"
+        style={{
+          fontFamily: '"Inter Tight", system-ui, sans-serif',
+          fontSize: 'clamp(28px, 7.5vw, 40px)',
+          letterSpacing: '-0.02em'
+        }}
+      >
+        {title}
+      </h2>
+      <div className="space-y-3">{children}</div>
+    </section>
+  )
+}
+
+function Card({ children }) {
+  return (
+    <div className="rounded-2xl px-4 py-4 bg-white/4 border border-white/10 mob-card mob-reveal-child">
+      {children}
+    </div>
+  )
+}
+
+function Em({ children }) {
+  return (
+    <em
+      className="not-italic"
+      style={{
+        fontFamily: '"Fraunces", serif',
+        fontStyle: 'italic',
+        background: 'linear-gradient(135deg, #2997FF 0%, #C064F0 100%)',
+        WebkitBackgroundClip: 'text',
+        backgroundClip: 'text',
+        color: 'transparent'
+      }}
+    >
+      {children}
+    </em>
+  )
+}

@@ -1131,3 +1131,92 @@ h1, h2, h3, h4, h5, h6 { overflow: visible; }
     min-width: 0;
   }
 }
+
+/* ===========================================================================
+   MOBILE EXPERIENCE — buttery animations (GPU-only: transform + opacity)
+   =========================================================================== */
+
+/* Hero fade-in — staggered, runs once on mount */
+@keyframes mobFadeIn {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.mob-fade-in {
+  opacity: 0;
+  animation: mobFadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+.mob-d-1 { animation-delay: 0.05s; }
+.mob-d-2 { animation-delay: 0.18s; }
+.mob-d-3 { animation-delay: 0.36s; }
+.mob-d-4 { animation-delay: 0.55s; }
+.mob-d-5 { animation-delay: 0.72s; }
+
+/* Reveal-on-scroll — IntersectionObserver adds .is-visible.
+   Children stagger automatically via :nth-child delays */
+.mob-reveal .mob-reveal-child {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+.mob-reveal.is-visible .mob-reveal-child {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.mob-reveal.is-visible .mob-reveal-child:nth-child(1) { transition-delay: 0s; }
+.mob-reveal.is-visible .mob-reveal-child:nth-child(2) { transition-delay: 0.08s; }
+.mob-reveal.is-visible .mob-reveal-child:nth-child(3) { transition-delay: 0.16s; }
+.mob-reveal.is-visible .mob-reveal-child:nth-child(4) { transition-delay: 0.24s; }
+.mob-reveal.is-visible .mob-reveal-child:nth-child(5) { transition-delay: 0.32s; }
+.mob-reveal.is-visible .mob-reveal-child:nth-child(6) { transition-delay: 0.40s; }
+
+/* Cards stagger inside reveal (cards live in a wrapping div) */
+.mob-reveal.is-visible .space-y-3 > .mob-card,
+.mob-reveal.is-visible .grid > .mob-card {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  animation: mobFadeIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.mob-reveal.is-visible .space-y-3 > .mob-card:nth-child(1),
+.mob-reveal.is-visible .grid > .mob-card:nth-child(1) { animation-delay: 0.18s; }
+.mob-reveal.is-visible .space-y-3 > .mob-card:nth-child(2),
+.mob-reveal.is-visible .grid > .mob-card:nth-child(2) { animation-delay: 0.26s; }
+.mob-reveal.is-visible .space-y-3 > .mob-card:nth-child(3),
+.mob-reveal.is-visible .grid > .mob-card:nth-child(3) { animation-delay: 0.34s; }
+.mob-reveal.is-visible .space-y-3 > .mob-card:nth-child(4),
+.mob-reveal.is-visible .grid > .mob-card:nth-child(4) { animation-delay: 0.42s; }
+.mob-reveal.is-visible .space-y-3 > .mob-card:nth-child(5),
+.mob-reveal.is-visible .grid > .mob-card:nth-child(5) { animation-delay: 0.50s; }
+.mob-reveal.is-visible .space-y-3 > .mob-card:nth-child(6),
+.mob-reveal.is-visible .grid > .mob-card:nth-child(6) { animation-delay: 0.58s; }
+
+/* Card press feedback — tactile, instant, GPU-only */
+.mob-card {
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.mob-card:active {
+  transform: scale(0.985);
+}
+
+/* Button press feedback */
+.mob-fade-in button:active,
+section button:active {
+  transform: scale(0.97);
+  transition: transform 0.12s ease-out;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .mob-fade-in,
+  .mob-reveal .mob-reveal-child,
+  .mob-reveal.is-visible .space-y-3 > .mob-card,
+  .mob-reveal.is-visible .grid > .mob-card {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
