@@ -302,9 +302,3 @@ function ClaudeWordmark({ role }) {
     </div>
   )
 }
-'0.22em' }}>
-        {role || 'LIVE AI · ANTHROPIC'}
-      </span>
-    </div>
-  )
-}
