@@ -78,19 +78,22 @@ export default function AskQuestion({ open, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-          <motion.div
-            className="absolute inset-0 bg-ink-950/80 backdrop-blur-md"
+          {/* Solid overlay — no backdrop-filter (kills FPS during entry) */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'rgba(5, 4, 12, 0.78)' }}
             onClick={onClose}
           />
 
           <motion.div
-            className="relative glass-strong w-full sm:max-w-xl max-h-[90vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl"
-            initial={{ y: '100%', opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: '100%', opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 30 }}
+            className="relative glass-strong w-full sm:max-w-xl max-h-[90vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl contact-card-perf"
+            style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.98 }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Decorative gradient header */}
             <div className="relative overflow-hidden">

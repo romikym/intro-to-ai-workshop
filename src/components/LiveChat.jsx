@@ -73,19 +73,22 @@ export default function LiveChat({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-          <motion.div
-            className="absolute inset-0 bg-ink-950/85 backdrop-blur-md"
+          {/* Solid overlay — no backdrop-filter (kills FPS during entry) */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'rgba(5, 4, 12, 0.78)' }}
             onClick={onClose}
           />
 
           <motion.div
-            className="relative glass-strong rounded-3xl w-full max-w-5xl h-[92vh] sm:h-auto sm:max-h-[88vh] flex flex-col overflow-hidden"
-            initial={{ scale: 0.94, y: 24, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            exit={{ scale: 0.94, y: 24, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+            className="relative glass-strong rounded-3xl w-full max-w-5xl h-[92vh] sm:h-auto sm:max-h-[88vh] flex flex-col overflow-hidden contact-card-perf"
+            style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.98 }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 sm:px-10 py-5 sm:py-6 border-b border-white/8 shrink-0">
@@ -212,7 +215,8 @@ function EmptyState({ suggestedPrompts, onPick }) {
           <button
             key={i}
             onClick={() => onPick(p)}
-            className="px-5 py-3 rounded-full glass border border-white/10 hover:border-accent-cyan/50 hover:bg-accent-cyan/5 text-base text-white/85 transition text-left"
+            className="px-5 py-3 rounded-ful
+l border border-white/10 hover:border-accent-cyan/40 bg-white/3 hover:bg-white/8 text-white/85 hover:text-white text-sm transition text-left"
           >
             {p}
           </button>

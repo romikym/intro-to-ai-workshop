@@ -14,14 +14,15 @@
 :root {
   color-scheme: dark;
 
-  /* Surface system — cinematic violet-black */
+  /* Surface system — cinematic violet-black.
+     Card opacity bumped ~25% so text is easier to read on the TRON backdrop. */
   --bg-base:           #07060F;
   --bg-deep:           #0A0820;
   --bg-elevated:       #0E0C20;
-  --bg-card:           rgba(255, 255, 255, 0.035);
-  --bg-card-hover:     rgba(255, 255, 255, 0.06);
-  --bg-glass:          rgba(14, 12, 32, 0.55);
-  --bg-glass-strong:   rgba(14, 12, 32, 0.78);
+  --bg-card:           rgba(255, 255, 255, 0.08);
+  --bg-card-hover:     rgba(255, 255, 255, 0.13);
+  --bg-glass:          rgba(14, 12, 32, 0.72);
+  --bg-glass-strong:   rgba(14, 12, 32, 0.88);
 
   /* Text */
   --text-primary:      #FFFFFF;
@@ -1331,3 +1332,27 @@ section button:active {
     transform: none !important;
   }
 }
+
+/* ===========================================================================
+   READABILITY BUMP — make all transparent card backgrounds ~25% less
+   transparent so text stands out clearly against the TRON backdrop.
+   Targets the most common Tailwind opacity-tier classes used as card
+   surfaces across the deck.
+   =========================================================================== */
+.bg-white\/3  { background-color: rgba(255,255,255,0.07) !important; }
+.bg-white\/4  { background-color: rgba(255,255,255,0.09) !important; }
+.bg-white\/5  { background-color: rgba(255,255,255,0.11) !important; }
+.bg-white\/8  { background-color: rgba(255,255,255,0.14) !important; }
+.bg-white\/10 { background-color: rgba(255,255,255,0.16) !important; }
+
+/* Light theme — keep the bump but tilt toward neutral grays */
+.theme-light .bg-white\/3,
+.theme-light .bg-white\/4,
+.theme-light .bg-white\/5  { background-color: rgba(15,23,42,0.05) !important; }
+.theme-light .bg-white\/8  { background-color: rgba(15,23,42,0.08) !important; }
+.theme-light .bg-white\/10 { background-color: rgba(15,23,42,0.10) !important; }
+
+/* Hover states keep their relative bump */
+.hover\:bg-white\/8:hover  { background-color: rgba(255,255,255,0.18) !important; }
+.hover\:bg-white\/10:hover { background-color: rgba(255,255,255,0.20) !important; }
+.hover\:bg-white\/15:hover { background-color: rgba(255,255,255,0.24) !important; }

@@ -104,6 +104,9 @@ export default function PresenterContactCard({ presenter, open, onClose }) {
                     <img
                       src={presenter.photo}
                       alt={presenter.name}
+                      loading="eager"
+                      decoding="sync"
+                      fetchpriority="high"
                       className="h-full w-full object-cover"
                       style={{ objectPosition: presenter.id === 'romik' ? 'center 25%' : 'center 30%' }}
                     />
@@ -120,6 +123,9 @@ export default function PresenterContactCard({ presenter, open, onClose }) {
                     <img
                       src={presenter.logo}
                       alt={presenter.company}
+                      loading="eager"
+                      decoding="sync"
+                      fetchpriority="high"
                       className="object-contain"
                       style={{ maxHeight: '40px', maxWidth: '180px', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))' }}
                     />
