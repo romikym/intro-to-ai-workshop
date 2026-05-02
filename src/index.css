@@ -991,3 +991,105 @@ h1, h2, h3, h4, h5, h6 { overflow: visible; }
     outline: none !important;
   }
 }
+
+/* ===========================================================================
+   MOBILE LAYER 5 — slide 10 (timeline) + global scrollbar hygiene
+   =========================================================================== */
+
+/* === Kill the scrollbar entirely on mobile (scroll still works, just no
+       visible thumb). This was the "phantom scrollbar that pops in/out"
+       issue users saw on slides 7 + 10. === */
+@media (max-width: 640px) {
+  .mobile-deck .elegant-scroll,
+  .mobile-deck > div {
+    scrollbar-width: none !important;       /* Firefox */
+    -ms-overflow-style: none !important;    /* IE/Edge legacy */
+  }
+  .mobile-deck .elegant-scroll::-webkit-scrollbar,
+  .mobile-deck > div::-webkit-scrollbar,
+  .mobile-deck > div > div::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+}
+
+/* === Slide 10 (Start This Week) — Timeline component fixes ===
+   On desktop the Timeline is a 5-column horizontal flow. On mobile it
+   collapses to a single column (vertical stack), but the absolutely-
+   positioned horizontal connector line still tries to draw across the
+   top and looks broken. Hide the connector and add a clean vertical
+   guide instead. */
+@media (max-width: 640px) {
+  /* Hide the original horizontal connector */
+  .mobile-deck .relative.w-full > .absolute.top-\[26px\] {
+    display: none !important;
+  }
+
+  /* Force the steps grid to a vertical stack with comfortable spacing */
+  .mobile-deck .relative.grid.grid-cols-5 {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    position: relative;
+  }
+
+  /* Give each step a left-aligned horizontal layout: circle on left,
+     title + body on the right. More natural on a phone than centered. */
+  .mobile-deck .relative.grid.grid-cols-5 > .relative.flex.flex-col.items-center {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 16px;
+    padding: 0 !important;
+  }
+
+  /* Step number circle stays left-side, doesn't grow */
+  .mobile-deck .relative.grid.grid-cols-5 .h-14.w-14 {
+    height: 48px !important;
+    width: 48px !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0;
+  }
+
+  /* Title + body share the remaining width, left-aligned */
+  .mobile-deck .relative.grid.grid-cols-5 > div > div:not(.h-14):not(.absolute) {
+    text-align: left !important;
+  }
+
+  /* Add a subtle vertical line connecting the steps (replaces the broken
+     horizontal one) */
+  .mobile-deck .relative.grid.grid-cols-5::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 24px;
+    bottom: 24px;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(34, 211, 238, 0.5) 0%, rgba(99, 102, 241, 0.4) 100%);
+    box-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+    z-index: 0;
+  }
+}
+
+/* === The closing line on slide 10 ("Six weeks from now...") gets compact
+       padding on mobile so it doesn't crowd the timeline above it === */
+@media (max-width: 640px) {
+  .mobile-deck .text-center.mt-12 {
+    margin-top: 32px !important;
+    padding: 0 8px;
+  }
+  .mobile-deck .text-center.mt-12 .font-serif {
+    font-size: clamp(20px, 5vw, 28px) !important;
+    line-height: 1.3 !important;
+  }
+}
+
+/* === Body text under headers — keep it concise on mobile === */
+@media (max-width: 640px) {
+  .mobile-deck p.text-white\/65 {
+    font-size: clamp(15px, 4vw, 18px) !important;
+    line-height: 1.5 !important;
+    margin-bottom: 24px !important;
+    margin-top: 0 !important;
+  }
+}
