@@ -1,0 +1,39 @@
+#!/bin/sh
+# Pre-push fail-safe.
+# Runs scripts/preflight.mjs to verify all .js/.jsx in src/ parse cleanly.
+# Aborts the push if any file fails — catches OneDrive sync corruption
+# (duplicate trailing junk past the last valid '}') BEFORE it reaches
+# Netlify.
+
+# Resolve repo root regardless of cwd
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT" || exit 1
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "preflight: node not found in PATH — skipping syntax check"
+  exit 0
+fi
+
+if [ ! -f "scripts/preflight.mjs" ]; then
+  echo "preflight: script not found — skipping syntax check"
+  exit 0
+fi
+
+if [ ! -d "node_modules/@babel/parser" ]; then
+  echo "preflight: @babel/parser not installed — skipping (run 'npm install' to enable)"
+  exit 0
+fi
+
+node scripts/preflight.mjs
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo ""
+  echo "Push aborted because src/ has syntax errors."
+  echo "Fix the file(s) listed above, then 'git add -A && git commit --amend --no-edit && git push' again."
+  echo ""
+  echo "If you absolutely need to push anyway (NOT recommended): git push --no-verify"
+  exit 1
+fi
+
+exit 0
