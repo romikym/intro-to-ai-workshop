@@ -154,12 +154,14 @@ export default function Slide13_Questions() {
               </motion.div>
             </div>
 
-            {/* RIGHT: QR — hidden on mobile (audience is already on their phone, no need to scan) */}
+            {/* RIGHT: QR — hidden on mobile (audience is already on their phone,
+                no need to scan). Aligned to top so it never collides with the
+                live-queue panel that floats in the bottom-right of the slide. */}
             <motion.div
               initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.7, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden lg:flex flex-col items-center"
+              className="hidden lg:flex flex-col items-center lg:self-start lg:pt-2"
             >
               <div className="text-xs uppercase tracking-[0.4em] text-accent-cyan/80 font-semibold mb-5 flex items-center gap-2">
                 <Sparkles className="h-3.5 w-3.5" />
