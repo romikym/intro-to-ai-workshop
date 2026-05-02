@@ -282,9 +282,3 @@ export default function AnswerOverlay({ question, onClose }) {
     </AnimatePresence>
   )
 }
-   </div>
-        </div>
-      </motion.div>
-    </AnimatePresence>
-  )
-}

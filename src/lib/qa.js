@@ -90,21 +90,3 @@ export function createPoller({ intervalMs = 4000, onUpdate, onError }) {
     stop() { stopped = true; if (timer) clearTimeout(timer) }
   }
 }
- await listQuestions()
-      const ser = JSON.stringify(questions.map(q => [q.id, q.answered, q.pinned]))
-      if (ser !== lastSerialized) {
-        lastSerialized = ser
-        onUpdate?.(questions)
-      }
-    } catch (err) {
-      onError?.(err)
-    } finally {
-      if (!stopped) timer = setTimeout(tick, intervalMs)
-    }
-  }
-
-  return {
-    start() { stopped = false; tick() },
-    stop() { stopped = true; if (timer) clearTimeout(timer) }
-  }
-}

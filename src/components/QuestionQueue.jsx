@@ -245,33 +245,3 @@ function formatTimeAgo(timestamp) {
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
   return new Date(timestamp).toLocaleDateString()
 }
-le="Have Claude answer this on screen"
-        >
-          <Sparkles className="h-3 w-3" />
-          Claude
-        </button>
-      </div>
-    </motion.div>
-  )
-}
-
-function EmptyQueueHint() {
-  return (
-    <div className="px-4 py-6 text-center">
-      <div className="text-white/35 text-xs leading-relaxed">
-        Audience questions appear here in real time.
-        <br />
-        <span className="text-white/55">Have them scan the QR.</span>
-      </div>
-    </div>
-  )
-}
-
-function formatTimeAgo(timestamp) {
-  const seconds = Math.floor((Date.now() - timestamp) / 1000)
-  if (seconds < 30) return 'just now'
-  if (seconds < 60) return `${seconds}s ago`
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
-  return new Date(timestamp).toLocaleDateString()
-}
