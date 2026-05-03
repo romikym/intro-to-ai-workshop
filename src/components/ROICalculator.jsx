@@ -130,9 +130,15 @@ Based on this, what is the single highest-leverage task I should automate FIRST 
           />
 
           <motion.div
-            className="relative glass-strong rounded-3xl w-full max-w-2xl flex flex-col overflow-hidden contact-card-perf"
+            className="relative glass-strong rounded-3xl w-full max-w-xl flex flex-col overflow-hidden contact-card-perf"
             data-modal-card="true"
-            style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+            style={{
+              willChange: 'transform, opacity',
+              transform: 'translateZ(0)',
+              // Compact fixed height so the calculator never exceeds the
+              // available slide space; internal scroll handles overflow.
+              height: 'min(620px, calc(100vh - 120px))'
+            }}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
