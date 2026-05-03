@@ -89,23 +89,26 @@ export default function PersonalizedStrategy({ open, onClose }) {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-          <motion.div
-            className="absolute inset-0 bg-ink-950/90 backdrop-blur-md"
+          {/* Solid overlay — no backdrop-filter (kills FPS during entry) */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'rgba(5, 4, 12, 0.78)' }}
             onClick={onClose}
           />
 
           <motion.div
-            className="relative glass-strong rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden"
-            initial={{ scale: 0.95, y: 30, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            exit={{ scale: 0.95, y: 30, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+            className="relative glass-strong rounded-3xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden contact-card-perf"
+            style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.98 }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Header */}
             <div className="relative px-8 py-6 border-b border-white/8 overflow-hidden">
@@ -344,11 +347,11 @@ function SmartMarkdown({ text }) {
           )
         }
         return (
-          <p key={i} dangerouslySetInnerHTML={{
-            __html: p
-              .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>')
-              .replace(/\n/g, '<br />')
-          }} />
+          <p
+            key={i}
+            dangerouslySetInnerHTML={{ __html: p.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>') }}
+            className="text-white/85 leading-relaxed mb-2"
+          />
         )
       })}
     </>

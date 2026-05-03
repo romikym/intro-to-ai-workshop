@@ -153,11 +153,11 @@ export default function AnswerOverlay({ question, onClose }) {
         </div>
 
         {/* Top bar */}
-        <div className="relative flex items-center justify-between px-6 sm:px-12 py-5 border-b border-white/8">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className="relative flex items-center justify-between px-5 sm:px-9 py-3.5 border-b border-white/8 shrink-0">
+          <div className="flex items-center gap-2.5 min-w-0">
             <div className="relative shrink-0">
-              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-accent-cyan to-accent-indigo flex items-center justify-center">
-                <Sparkles className="h-5 w-5 text-white" />
+              <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-accent-cyan to-accent-indigo flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-white" />
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 ring-2 ring-ink-950 animate-pulse" />
             </div>
@@ -193,21 +193,22 @@ export default function AnswerOverlay({ question, onClose }) {
 
         {/* Body */}
         <div className="relative flex-1 overflow-hidden flex flex-col">
-          {/* Question — big, prominent */}
+          {/* Question — big, prominent (sized down 25% so the whole
+              overlay fits comfortably inside the slide window) */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="px-6 sm:px-12 lg:px-20 pt-10 pb-6"
+            className="px-5 sm:px-9 lg:px-14 pt-7 pb-4 shrink-0"
           >
-            <div className="text-[11px] uppercase tracking-[0.3em] text-white/45 font-semibold mb-3">
+            <div className="text-[10px] uppercase tracking-[0.3em] text-white/45 font-semibold mb-2">
               Question
             </div>
             <div
               className="display-serif text-white/95 leading-tight"
               style={{
                 fontStyle: 'italic',
-                fontSize: 'clamp(28px, 3.4vw, 56px)',
+                fontSize: 'clamp(21px, 2.55vw, 42px)',
                 lineHeight: 1.15
               }}
             >
@@ -218,14 +219,16 @@ export default function AnswerOverlay({ question, onClose }) {
           </motion.div>
 
           {/* Divider */}
-          <div className="px-6 sm:px-12 lg:px-20">
+          <div className="px-5 sm:px-9 lg:px-14 shrink-0">
             <div className="h-px bg-gradient-to-r from-transparent via-accent-cyan/30 to-transparent" />
           </div>
 
-          {/* Answer — streaming */}
+          {/* Answer — streaming. The flex-1 + min-h-0 combo lets this
+              area shrink to fit available space and scroll internally
+              instead of pushing the whole overlay past the viewport. */}
           <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto elegant-scroll px-6 sm:px-12 lg:px-20 py-8"
+            className="flex-1 min-h-0 overflow-y-auto elegant-scroll px-5 sm:px-9 lg:px-14 py-6"
           >
             <div className="text-[11px] uppercase tracking-[0.3em] text-accent-cyan font-bold mb-4 flex items-center gap-2">
               <span>Claude</span>
@@ -251,7 +254,7 @@ export default function AnswerOverlay({ question, onClose }) {
               <div
                 className="text-white/92 leading-relaxed max-w-4xl"
                 style={{
-                  fontSize: 'clamp(20px, 1.8vw, 30px)',
+                  fontSize: 'clamp(15px, 1.35vw, 22px)',
                   lineHeight: 1.55
                 }}
               >
@@ -275,7 +278,9 @@ export default function AnswerOverlay({ question, onClose }) {
           </div>
 
           {/* Footer cue */}
-          <div className="px-6 sm:px-12 lg:px-20 py-4 border-t border-white/8 flex items-center justify-between text-[12px] text-white/40">
+
+          {/* Footer cue — also tightened to match the slimmed-down overlay */}
+          <div className="px-5 sm:px-9 lg:px-14 py-2.5 border-t border-white/8 flex items-center justify-between text-[11px] text-white/40 shrink-0">
             <div>
               Press <kbd className="px-1.5 py-0.5 rounded bg-white/8 text-white/65 font-mono text-[10px]">Esc</kbd> or click Done to return.
             </div>
