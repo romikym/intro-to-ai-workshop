@@ -85,7 +85,14 @@ export default function LiveChat({
           <motion.div
             className="relative glass-strong rounded-3xl w-full max-w-3xl flex flex-col overflow-hidden contact-card-perf"
             data-modal-card="true"
-            style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+            style={{
+              willChange: 'transform, opacity',
+              transform: 'translateZ(0)',
+              // Fixed height so the modal stays stable when empty AND
+              // when filled with long messages — internal scroll handles
+              // overflow instead of expanding the modal vertically.
+              height: 'min(700px, calc(100vh - 120px))'
+            }}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -216,8 +223,7 @@ function EmptyState({ suggestedPrompts, onPick }) {
           <button
             key={i}
             onClick={() => onPick(p)}
-            className="px-5 py-3 rounded-ful
-l border border-white/10 hover:border-accent-cyan/40 bg-white/3 hover:bg-white/8 text-white/85 hover:text-white text-sm transition text-left"
+            className="px-5 py-3 rounded-full border border-white/10 hover:border-accent-cyan/40 bg-white/3 hover:bg-white/8 text-white/85 hover:text-white text-sm transition text-left"
           >
             {p}
           </button>

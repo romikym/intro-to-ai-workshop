@@ -52,7 +52,10 @@ export default function ChatThread({
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className={`flex-1 overflow-y-auto elegant-scroll ${padding} ${className}`}
+      // min-h-0 is required so this flex child can shrink below its
+      // content height. Without it, long messages push the parent
+      // modal taller and taller instead of scrolling internally.
+      className={`flex-1 min-h-0 overflow-y-auto elegant-scroll ${padding} ${className}`}
     >
       {isEmpty && emptyState}
 
@@ -174,7 +177,8 @@ function StreamingMessage({ text, onStop }) {
             </button>
           )}
         </div>
-        <div className="font-mono text-base lg:text-[17px] leading-relaxed text-white/95 whitespace-pre-wrap">
+        <div className="font-mono text-base lg:text-[17px] leading-relaxed text-
+white/95 whitespace-pre-wrap">
           {revealed}
           <span className="matrix-scramble">{scramble}</span>
           {<span className="caret"></span>}
