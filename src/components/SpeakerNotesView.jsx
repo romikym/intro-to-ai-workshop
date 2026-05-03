@@ -1,7 +1,10 @@
 import { useEffect, useState, useRef } from 'react'
+import { Plus, Trash2, RotateCcw, Type } from 'lucide-react'
 import { slidesMeta, getSlideMeta, SECTIONS } from '../lib/slides'
 import { broadcastSlide, requestCurrentSlide, subscribe } from '../lib/notesChannel'
 import SlideThumbnail from './SlideThumbnail'
+import { useSlideNotes, useHasNotesOverride, useNotesFontScale } from '../hooks/useNotesStore'
+import * as notesStore from '../lib/notesStore'
 
 /**
  * SpeakerNotesView — standalone window that mirrors the deck's current
@@ -17,6 +20,9 @@ export default function SpeakerNotesView() {
   const [current, setCurrent] = useState(1)
   const total = slidesMeta.length
   const wakeLockRef = useRef(null)
+  const notes = useSlideNotes(current)
+  const hasOverride = useHasNotesOverride(current)
+  const fontScale = useNotesFontScale()
 
   // Listen for slide updates from the main deck.
   useEffect(() => {
@@ -115,8 +121,42 @@ export default function SpeakerNotesView() {
           </div>
         </div>
 
-        <div className="text-[11px] text-white/40 hidden sm:block">
-          ← / → to navigate · stays in sync with the deck
+        <div className="flex items-center gap-2">
+          {/* Font size controls — Jim wanted bigger notes for corner-of-eye reading */}
+          <div className="flex items-center gap-0.5 rounded-lg border border-white/12 overflow-hidden">
+            <button
+              onClick={() => notesStore.bumpFontScale(-1)}
+              className="px-2.5 py-1.5 text-white/65 hover:text-white hover:bg-white/8 transition"
+              title="Smaller text"
+              aria-label="Smaller text"
+            >
+              <Type className="h-3 w-3" />
+            </button>
+            <div className="px-2 text-[11px] text-white/45 font-mono tabular-nums select-none">
+              {Math.round(fontScale * 100)}%
+            </div>
+            <button
+              onClick={() => notesStore.bumpFontScale(1)}
+              className="px-2.5 py-1.5 text-white/65 hover:text-white hover:bg-white/8 transition"
+              title="Bigger text"
+              aria-label="Bigger text"
+            >
+              <Type className="h-4 w-4" />
+            </button>
+          </div>
+          {hasOverride && (
+            <button
+              onClick={() => notesStore.resetNotesForSlide(current)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/12 text-white/65 hover:text-white hover:bg-white/8 transition text-[11px]"
+              title="Revert this slide's notes to the original"
+            >
+              <RotateCcw className="h-3 w-3" />
+              Reset
+            </button>
+          )}
+          <div className="text-[11px] text-white/40 hidden lg:block ml-2">
+            ← / → to navigate
+          </div>
         </div>
       </header>
 
@@ -172,33 +212,28 @@ export default function SpeakerNotesView() {
               {meta.title}
             </h1>
 
-            {/* Speaker notes */}
+            {/* Speaker notes — editable in place. Click any note to edit;
+                blur saves. Use the + at the bottom to add new bullets. */}
             <ol className="space-y-4">
-              {meta.notes?.map((note, i) => (
-                <li key={i} className="flex gap-4">
-                  <span
-                    className="shrink-0 mt-1 h-7 w-7 rounded-full flex items-center justify-center font-mono text-[12px] font-bold tabular-nums"
-                    style={{
-                      background: 'rgba(95,182,255,0.15)',
-                      color: '#5FB6FF',
-                      border: '1px solid rgba(95,182,255,0.35)'
-                    }}
-                  >
-                    {i + 1}
-                  </span>
-                  <span
-                    className="text-white/92 leading-relaxed"
-                    style={{
-                      fontFamily: '"Inter Tight", system-ui, sans-serif',
-                      fontSize: 'clamp(16px, 1.7vw, 20px)',
-                      lineHeight: 1.5
-                    }}
-                  >
-                    {note}
-                  </span>
-                </li>
+              {notes.map((note, i) => (
+                <EditableNote
+                  key={i}
+                  index={i}
+                  text={note}
+                  fontScale={fontScale}
+                  onChange={(t) => notesStore.updateNote(current, i, t)}
+                  onDelete={() => notesStore.deleteNote(current, i)}
+                />
               ))}
             </ol>
+
+            <button
+              onClick={() => notesStore.addNote(current, '')}
+              className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-white/20 text-white/55 hover:text-white hover:border-white/40 hover:bg-white/4 transition text-[13px]"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Add a note
+            </button>
           </>
         ) : (
           <div className="text-white/45 text-center py-20">
@@ -212,5 +247,75 @@ export default function SpeakerNotesView() {
         Notes window · synced with main deck · safe to drag to a second screen
       </footer>
     </div>
+  )
+}
+
+/**
+ * EditableNote — a single note rendered as contenteditable text. Click
+ * to edit, blur to save, hover to reveal the delete button.
+ */
+function EditableNote({ index, text, fontScale, onChange, onDelete }) {
+  const ref = useRef(null)
+
+  // Sync external text changes (e.g., reset, slide change) into the DOM
+  // without overwriting while the user is actively typing.
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (document.activeElement === el) return
+    if (el.innerText !== text) el.innerText = text
+  }, [text])
+
+  function handleBlur() {
+    const next = ref.current?.innerText ?? ''
+    if (next !== text) onChange(next)
+  }
+
+  function handleKeyDown(e) {
+    // Esc to blur (cancel editing); Enter inserts newline as normal in
+    // multi-line contenteditable.
+    if (e.key === 'Escape') ref.current?.blur()
+  }
+
+  // Base size scales with the user's font preference.
+  const baseSize = `clamp(${16 * fontScale}px, ${1.7 * fontScale}vw, ${20 * fontScale}px)`
+
+  return (
+    <li className="group flex gap-4 items-start">
+      <span
+        className="shrink-0 mt-1 h-7 w-7 rounded-full flex items-center justify-center font-mono text-[12px] font-bold tabular-nums select-none"
+        style={{
+          background: 'rgba(95,182,255,0.15)',
+          color: '#5FB6FF',
+          border: '1px solid rgba(95,182,255,0.35)'
+        }}
+      >
+        {index + 1}
+      </span>
+      <div
+        ref={ref}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        className="flex-1 text-white/92 leading-relaxed outline-none px-2 py-1 -mx-2 -my-1 rounded-md focus:bg-white/4 hover:bg-white/3 transition cursor-text"
+        style={{
+          fontFamily: '"Inter Tight", system-ui, sans-serif',
+          fontSize: baseSize,
+          lineHeight: 1.5,
+          whiteSpace: 'pre-wrap'
+        }}
+      >
+        {text}
+      </div>
+      <button
+        onClick={onDelete}
+        className="shrink-0 mt-1 h-7 w-7 rounded-md flex items-center justify-center text-white/30 hover:text-red-300 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition"
+        title="Delete this note"
+        aria-label="Delete note"
+      >
+        <Trash2 className="h-3.5 w-3.5" />
+      </button>
+    </li>
   )
 }

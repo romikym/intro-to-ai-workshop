@@ -15,6 +15,7 @@ import MobileExperience from './components/MobileExperience'
 import SpeakerNotesView from './components/SpeakerNotesView'
 import PresenterHints from './components/PresenterHints'
 import { broadcastSlide, subscribe } from './lib/notesChannel'
+import { useSlideNotes } from './hooks/useNotesStore'
 
 // Lazy-load slides so initial paint is fast
 const Slide01 = lazy(() => import('./components/slides/Slide01_Title'))
@@ -83,6 +84,10 @@ export default function App() {
   const currentRef = useRef(1)
 
   const total = slidesMeta.length
+
+  // Merged notes for the current slide — includes any inline edits made
+  // in the pop-out Speaker Notes window. Same source as that window.
+  const currentNotes = useSlideNotes(current)
 
   // Keep ref in sync so callbacks always have the latest value
   useEffect(() => { currentRef.current = current }, [current])
@@ -289,7 +294,7 @@ export default function App() {
               </button>
             </div>
             <ul className="space-y-2 text-white/85 leading-relaxed text-base sm:text-lg">
-              {meta.notes.map((note, i) => (
+              {currentNotes.map((note, i) => (
                 <li key={i} className="flex gap-3">
                   <span className="text-accent-cyan/60 mt-1.5 shrink-0">•</span>
                   <span>{note}</span>
