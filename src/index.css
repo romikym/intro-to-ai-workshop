@@ -1404,3 +1404,78 @@ input, textarea, [contenteditable] {
 .contact-card-perf a {
   pointer-events: auto;
 }
+
+/* ===========================================================================
+   MATRIX-STYLE TEXT REVEAL — the scrambling head of useMatrixText gets
+   a subtle electric-green glow that fades into the locked text as
+   each character settles in.
+   =========================================================================== */
+.matrix-scramble {
+  color: rgba(95, 255, 180, 0.92);
+  text-shadow:
+    0 0 6px rgba(95, 255, 180, 0.55),
+    0 0 14px rgba(41, 255, 130, 0.25);
+  animation: matrixFlicker 0.35s ease-in-out infinite alternate;
+  will-change: opacity, color;
+}
+@keyframes matrixFlicker {
+  0%   { opacity: 0.78; }
+  100% { opacity: 1; }
+}
+
+/* ===========================================================================
+   MOBILE SECTION SEPARATION — give each section more breathing room and
+   a distinct visual break so the page doesn't feel like one wall of text.
+   =========================================================================== */
+@media (max-width: 640px) {
+  /* More vertical padding around each section */
+  .mobile-deck section {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+
+  /* Replace hairline borders with bigger gradient dividers between sections */
+  .mobile-deck section.border-t {
+    border-top-color: transparent !important;
+    position: relative;
+    margin-top: 8px;
+  }
+  .mobile-deck section.border-t::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(95, 182, 255, 0.35) 50%,
+      transparent 100%
+    );
+  }
+  .mobile-deck section.border-t::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(95, 182, 255, 0.6);
+    box-shadow: 0 0 12px rgba(95, 182, 255, 0.7);
+  }
+
+  /* Background tint subtly alternates per section so the eye distinguishes
+     them as separate "pages" without explicit borders */
+  .mobile-deck section:nth-of-type(even) {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.012) 50%,
+      transparent 100%
+    );
+  }
+}

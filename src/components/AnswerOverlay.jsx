@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Sparkles, RotateCcw } from 'lucide-react'
 import { askClaudeStream } from '../lib/chat'
 import { markAnswered } from '../lib/qa'
-import useSmoothedText from '../hooks/useSmoothedText'
+import useMatrixText from '../hooks/useMatrixText'
 
 const SYSTEM_PROMPT = `You are Claude, answering live audience questions at the Burbank Chamber AI workshop.
 
@@ -33,9 +33,9 @@ export default function AnswerOverlay({ question, onClose }) {
   const [text, setText] = useState('')
   const [error, setError] = useState(null)
   const [done, setDone] = useState(false)
-  // Smooth out Claude's bursty token stream into a constant-rate reveal
-  // so the projector audience sees clean, readable text appearing.
-  const smoothed = useSmoothedText(text, { charsPerFrame: 4 })
+  // Matrix-style decode for the projector — characters cycle through
+  // random glyphs before locking in. Theatrical and on-brand.
+  const { revealed, scramble } = useMatrixText(text, { revealRate: 5, scrambleLength: 8 })
   const abortRef = useRef(null)
   const startedRef = useRef(false)
   const scrollRef = useRef(null)
@@ -48,12 +48,12 @@ export default function AnswerOverlay({ question, onClose }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question?.id])
 
-  // Auto-scroll the answer container as text reveals (driven by smoothed
-  // not raw text — keeps scroll velocity in sync with the visible text).
+  // Auto-scroll as text reveals — track the locked portion so scroll
+  // velocity matches the actual readable text (not the scrambling head).
   useEffect(() => {
     if (!scrollRef.current) return
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-  }, [smoothed])
+  }, [revealed])
 
   // Esc to close
   useEffect(() => {
@@ -255,7 +255,8 @@ export default function AnswerOverlay({ question, onClose }) {
                   lineHeight: 1.55
                 }}
               >
-                {smoothed}
+                {revealed}
+                <span className="matrix-scramble">{scramble}</span>
                 {streaming && (
                   <motion.span
                     animate={{ opacity: [1, 0.2, 1] }}

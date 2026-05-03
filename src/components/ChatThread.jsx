@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, User, Loader2, AlertTriangle, Square } from 'lucide-react'
-import useSmoothedText from '../hooks/useSmoothedText'
+import useMatrixText from '../hooks/useMatrixText'
 
 /**
  * Shared message-thread renderer used by both the LiveChat modal and the
@@ -139,8 +139,10 @@ function Message({ role, content, stopped }) {
 }
 
 function StreamingMessage({ text, onStop }) {
-  // Smooth out the network-jitter feel of Anthropic's bursty token stream.
-  const smoothed = useSmoothedText(text, { charsPerFrame: 4 })
+  // Matrix-style decode: characters scramble through random glyphs
+  // before locking into their real letters. Reveal rate is constant
+  // regardless of network jitter.
+  const { revealed, scramble } = useMatrixText(text, { revealRate: 4, scrambleLength: 6 })
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -173,7 +175,8 @@ function StreamingMessage({ text, onStop }) {
           )}
         </div>
         <div className="font-mono text-base lg:text-[17px] leading-relaxed text-white/95 whitespace-pre-wrap">
-          {smoothed}
+          {revealed}
+          <span className="matrix-scramble">{scramble}</span>
           {<span className="caret"></span>}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { Plus, Trash2, RotateCcw, Type } from 'lucide-react'
+import { Plus, Trash2, RotateCcw, Type, Maximize2, Minimize2 } from 'lucide-react'
 import { slidesMeta, getSlideMeta, SECTIONS } from '../lib/slides'
 import { broadcastSlide, requestCurrentSlide, subscribe } from '../lib/notesChannel'
 import SlideThumbnail from './SlideThumbnail'
@@ -23,6 +23,26 @@ export default function SpeakerNotesView() {
   const notes = useSlideNotes(current)
   const hasOverride = useHasNotesOverride(current)
   const fontScale = useNotesFontScale()
+  // Thumbnail size — small / medium / large. Persists across reloads.
+  const [thumbSize, setThumbSize] = useState(() => {
+    if (typeof window === 'undefined') return 'medium'
+    try {
+      const stored = localStorage.getItem('intro-ai-notes-thumb-size')
+      if (stored === 'small' || stored === 'medium' || stored === 'large') return stored
+    } catch {}
+    return 'medium'
+  })
+  useEffect(() => {
+    try { localStorage.setItem('intro-ai-notes-thumb-size', thumbSize) } catch {}
+  }, [thumbSize])
+  const thumbDims = {
+    small:  { current: 320, next: 170 },
+    medium: { current: 460, next: 240 },
+    large:  { current: 640, next: 340 }
+  }[thumbSize]
+  function cycleThumbSize() {
+    setThumbSize(s => s === 'small' ? 'medium' : s === 'medium' ? 'large' : 'small')
+  }
 
   // Listen for slide updates from the main deck.
   useEffect(() => {
@@ -122,6 +142,16 @@ export default function SpeakerNotesView() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Thumbnail size toggle — cycles small / medium / large */}
+          <button
+            onClick={cycleThumbSize}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/12 text-white/65 hover:text-white hover:bg-white/8 transition text-[11px]"
+            title={`Thumbnail size: ${thumbSize} — click to cycle`}
+            aria-label="Cycle thumbnail size"
+          >
+            {thumbSize === 'large' ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+            <span className="capitalize">{thumbSize}</span>
+          </button>
           {/* Font size controls — Jim wanted bigger notes for corner-of-eye reading */}
           <div className="flex items-center gap-0.5 rounded-lg border border-white/12 overflow-hidden">
             <button
@@ -170,7 +200,7 @@ export default function SpeakerNotesView() {
                 <div className="text-[10px] uppercase tracking-[0.26em] text-cyan-300 font-bold mb-2">
                   Now showing
                 </div>
-                <SlideThumbnail id={current} width={420} />
+                <SlideThumbnail id={current} width={thumbDims.current} />
               </div>
               <div>
                 <div className="text-[10px] uppercase tracking-[0.26em] text-white/45 font-bold mb-2">
@@ -178,7 +208,7 @@ export default function SpeakerNotesView() {
                 </div>
                 {nextMeta ? (
                   <>
-                    <SlideThumbnail id={nextMeta.id} width={220} gridIntensity={0.4} />
+                    <SlideThumbnail id={nextMeta.id} width={thumbDims.next} gridIntensity={0.4} />
                     <div className="mt-2 text-white/70 text-[12px] leading-tight">
                       <span className="text-white/40 font-mono mr-2">
                         {String(nextMeta.id).padStart(2, '0')}
@@ -189,7 +219,11 @@ export default function SpeakerNotesView() {
                 ) : (
                   <div
                     className="rounded-xl border border-white/8 flex items-center justify-center text-white/40 text-[12px] italic"
-                    style={{ width: 220, height: 124, background: 'rgba(255,255,255,0.03)' }}
+                    style={{
+                      width: thumbDims.next,
+                      height: thumbDims.next * (9 / 16),
+                      background: 'rgba(255,255,255,0.03)'
+                    }}
                   >
                     End of deck
                   </div>
@@ -272,8 +306,7 @@ function EditableNote({ index, text, fontScale, onChange, onDelete }) {
   }
 
   function handleKeyDown(e) {
-    // Esc to blur (cancel editing); Enter inserts newline as normal in
-    // multi-line contenteditable.
+    // Esc to blur. Enter inserts newline (default for contenteditable).
     if (e.key === 'Escape') ref.current?.blur()
   }
 
