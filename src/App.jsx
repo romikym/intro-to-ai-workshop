@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Grid3x3, FileText, Eye, EyeOff, Maximize2, MessageCircleQuestion, Sparkles, Calculator } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Grid3x3, FileText, Eye, EyeOff, Maximize2, MessageCircleQuestion, Sparkles, Calculator, ExternalLink } from 'lucide-react'
 import useKeyboard from './hooks/useKeyboard'
 import useViewport from './hooks/useViewport'
 import useTouchSwipe from './hooks/useTouchSwipe'
@@ -12,6 +12,8 @@ import QASpeakerView from './components/QASpeakerView'
 import ROICalculator from './components/ROICalculator'
 import PromptVault, { PromptVaultFAB } from './components/PromptVault'
 import MobileExperience from './components/MobileExperience'
+import SpeakerNotesView from './components/SpeakerNotesView'
+import { broadcastSlide, subscribe } from './lib/notesChannel'
 
 // Lazy-load slides so initial paint is fast
 const Slide01 = lazy(() => import('./components/slides/Slide01_Title'))
@@ -52,7 +54,18 @@ const GRID_CONFIG = {
 const DESIGN_W = 1600
 const DESIGN_H = 900
 
+// Detect ?notes=1 URL param at module load — used to render the
+// pop-out speaker-notes view instead of the deck.
+const NOTES_MODE =
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).get('notes') === '1'
+
 export default function App() {
+  // Pop-out speaker notes window — bypass the entire deck app.
+  if (NOTES_MODE) {
+    return <SpeakerNotesView />
+  }
+
   const viewport = useViewport()
   const [current, setCurrent] = useState(1)
   const [direction, setDirection] = useState(1)
@@ -71,6 +84,27 @@ export default function App() {
 
   // Keep ref in sync so callbacks always have the latest value
   useEffect(() => { currentRef.current = current }, [current])
+
+  // Broadcast every slide change to any pop-out notes window so it stays
+  // in sync with the deck.
+  useEffect(() => { broadcastSlide(current) }, [current])
+
+  // Listen for slide updates FROM the notes window (so its arrow keys
+  // can drive the deck), plus its initial "what slide are you on?" ping.
+  useEffect(() => {
+    const unsub = subscribe((e) => {
+      if (e.data?.type === 'slide' && typeof e.data.current === 'number') {
+        const target = e.data.current
+        if (target !== currentRef.current) {
+          setDirection(target > currentRef.current ? 1 : -1)
+          setCurrent(target)
+        }
+      } else if (e.data?.type === 'request-slide') {
+        broadcastSlide(currentRef.current)
+      }
+    })
+    return unsub
+  }, [])
 
   const goTo = useCallback((n) => {
     const target = Math.max(1, Math.min(total, n))
@@ -110,6 +144,14 @@ export default function App() {
   }, [])
   const toggleQA = useCallback(() => setQaSpeakerOpen(v => !v), [])
   const openAsk = useCallback(() => setAskOpen(true), [])
+  const popOutNotes = useCallback(() => {
+    const url = `${window.location.pathname}?notes=1`
+    window.open(
+      url,
+      'intro-ai-speaker-notes',
+      'width=720,height=900,menubar=no,toolbar=no,location=no,status=no'
+    )
+  }, [])
   const closeAsk = useCallback(() => setAskOpen(false), [])
   const closeQA = useCallback(() => setQaSpeakerOpen(false), [])
 
@@ -144,8 +186,9 @@ export default function App() {
     escape: closeOverlays,
     jumpTo: goTo,
     toggleQA,
-    openAsk
-  }), [next, prev, first, last, toggleNotes, toggleBlackout, toggleOverview, toggleFullscreen, closeOverlays, goTo, toggleQA, openAsk])
+    openAsk,
+    popOutNotes
+  }), [next, prev, first, last, toggleNotes, toggleBlackout, toggleOverview, toggleFullscreen, closeOverlays, goTo, toggleQA, openAsk, popOutNotes])
 
   useKeyboard(handlers)
 
@@ -264,6 +307,7 @@ export default function App() {
           onNext={next}
           onOverview={toggleOverview}
           onNotes={toggleNotes}
+          onPopOutNotes={popOutNotes}
           onHide={() => setShowChrome(false)}
           onFullscreen={toggleFullscreen}
           onToggleQA={toggleQA}
@@ -389,7 +433,7 @@ function MobileSlideStage({ current, direction, SlideComponent }) {
   )
 }
 
-function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onOverview, onNotes, onHide, onFullscreen, onToggleQA, qaActive }) {
+function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onOverview, onNotes, onPopOutNotes, onHide, onFullscreen, onToggleQA, qaActive }) {
   return (
     <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
       {/* Progress bar */}
@@ -431,6 +475,9 @@ function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onO
               </ChromeButton>
               <ChromeButton onClick={onNotes} aria-label="Toggle notes (S)" active={showNotes}>
                 <FileText className="h-4 w-4" />
+              </ChromeButton>
+              <ChromeButton onClick={onPopOutNotes} aria-label="Pop notes out to a new window (N)">
+                <ExternalLink className="h-4 w-4" />
               </ChromeButton>
               {/* ThemeToggle removed — light mode disabled, dark theme only */}
               <ChromeButton onClick={onHide} aria-label="Hide chrome">

@@ -60,6 +60,10 @@ export default function useKeyboard(handlers) {
         case 'A':
           handlers.openAsk?.(e)
           break
+        case 'n':
+        case 'N':
+          handlers.popOutNotes?.(e)
+          break
         default:
           // Number keys 1-9 jump to slide
           if (/^[1-9]$/.test(e.key)) {

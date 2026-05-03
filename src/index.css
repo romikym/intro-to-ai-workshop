@@ -1354,3 +1354,53 @@ section button:active {
 .hover\:bg-white\/8:hover  { background-color: rgba(255,255,255,0.14) !important; }
 .hover\:bg-white\/10:hover { background-color: rgba(255,255,255,0.16) !important; }
 .hover\:bg-white\/15:hover { background-color: rgba(255,255,255,0.20) !important; }
+
+/* ===========================================================================
+   ANDROID + CROSS-PLATFORM MOBILE COMPATIBILITY
+   Android Chrome has different quirks than iOS Safari around viewport
+   units, fixed positioning, and the URL-bar collapse behaviour.
+   =========================================================================== */
+
+/* Use stable viewport height (svh) where available — falls back to dvh
+   then vh on older Chrome. This stops jumpy layouts when the URL bar
+   shows/hides on Android. */
+@supports (height: 100svh) {
+  .mobile-deck { min-height: 100svh; }
+}
+
+/* tap highlight — kill the gray rectangle Android shows on tap */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Android Chrome respects a separate prefers-color-scheme — make sure
+   our dark theme is locked. */
+:root { color-scheme: dark; }
+
+/* Smooth tap response — disable double-tap-to-zoom on interactive elements */
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* iOS Safari + Android Chrome both honor this — prevent accidental
+   text selection on UI chrome (slide nav, sticky bars). */
+.mobile-deck button, .mobile-deck nav, .mobile-deck header,
+.fixed button, [role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Form inputs must allow selection */
+input, textarea, [contenteditable] {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
+/* Android Chrome — restore proper input behavior inside the contact card
+   modal where pointer events sometimes get swallowed by the overlay */
+.contact-card-perf input,
+.contact-card-perf textarea,
+.contact-card-perf button,
+.contact-card-perf a {
+  pointer-events: auto;
+}
