@@ -13,6 +13,7 @@ import ROICalculator from './components/ROICalculator'
 import PromptVault, { PromptVaultFAB } from './components/PromptVault'
 import MobileExperience from './components/MobileExperience'
 import SpeakerNotesView from './components/SpeakerNotesView'
+import PresenterHints from './components/PresenterHints'
 import { broadcastSlide, subscribe } from './lib/notesChannel'
 
 // Lazy-load slides so initial paint is fast
@@ -313,6 +314,11 @@ export default function App() {
           onToggleQA={toggleQA}
           qaActive={qaSpeakerOpen}
         />
+      )}
+
+      {/* Presenter cheat sheet — desktop only, hidden on slide 11 (Live Queue) */}
+      {!viewport.isMobile && !blackout && (
+        <PresenterHints hideForLiveQueue={current === total} />
       )}
 
       {/* Mobile floating "Ask a question" button — always visible on mobile */}
@@ -620,10 +626,10 @@ function MobileSwipeHint() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      transition={{ delay: 1.5, duration: 0.5 }}
+      transition={{ delay:
+ 1.5, duration: 0.5 }}
       onClick={() => setShown(false)}
-      className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 te
-xt-xs text-white/70"
+      className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 text-xs text-white/70"
     >
       ← Swipe to navigate →
     </motion.div>
