@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { slidesMeta, getSlideMeta, SECTIONS } from '../lib/slides'
 import { broadcastSlide, requestCurrentSlide, subscribe } from '../lib/notesChannel'
+import SlideThumbnail from './SlideThumbnail'
 
 /**
  * SpeakerNotesView — standalone window that mirrors the deck's current
@@ -120,28 +121,63 @@ export default function SpeakerNotesView() {
       </header>
 
       {/* Body */}
-      <main className="px-6 sm:px-12 py-8 max-w-4xl mx-auto">
+      <main className="px-6 sm:px-10 py-6 max-w-5xl mx-auto">
         {meta ? (
           <>
-            <div className="text-[12px] uppercase tracking-[0.26em] text-cyan-300 font-bold mb-2">
+            {/* Current + Next slide previews — Apple Keynote style */}
+            <div className="grid grid-cols-[2fr_1fr] gap-5 mb-6">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.26em] text-cyan-300 font-bold mb-2">
+                  Now showing
+                </div>
+                <SlideThumbnail id={current} width={420} />
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.26em] text-white/45 font-bold mb-2">
+                  Up next
+                </div>
+                {nextMeta ? (
+                  <>
+                    <SlideThumbnail id={nextMeta.id} width={220} gridIntensity={0.4} />
+                    <div className="mt-2 text-white/70 text-[12px] leading-tight">
+                      <span className="text-white/40 font-mono mr-2">
+                        {String(nextMeta.id).padStart(2, '0')}
+                      </span>
+                      {nextMeta.title}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className="rounded-xl border border-white/8 flex items-center justify-center text-white/40 text-[12px] italic"
+                    style={{ width: 220, height: 124, background: 'rgba(255,255,255,0.03)' }}
+                  >
+                    End of deck
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Title + presenter attribution */}
+            <div className="text-[12px] uppercase tracking-[0.26em] text-cyan-300 font-bold mb-1">
               {section?.presenter} · {section?.company}
             </div>
             <h1
-              className="font-bold text-white leading-[1.1] mb-8"
+              className="font-bold text-white leading-[1.1] mb-6"
               style={{
                 fontFamily: '"Inter Tight", system-ui, sans-serif',
-                fontSize: 'clamp(34px, 4vw, 52px)',
+                fontSize: 'clamp(28px, 3.4vw, 42px)',
                 letterSpacing: '-0.02em'
               }}
             >
               {meta.title}
             </h1>
 
-            <ol className="space-y-5">
+            {/* Speaker notes */}
+            <ol className="space-y-4">
               {meta.notes?.map((note, i) => (
                 <li key={i} className="flex gap-4">
                   <span
-                    className="shrink-0 mt-2 h-7 w-7 rounded-full flex items-center justify-center font-mono text-[12px] font-bold tabular-nums"
+                    className="shrink-0 mt-1 h-7 w-7 rounded-full flex items-center justify-center font-mono text-[12px] font-bold tabular-nums"
                     style={{
                       background: 'rgba(95,182,255,0.15)',
                       color: '#5FB6FF',
@@ -154,7 +190,7 @@ export default function SpeakerNotesView() {
                     className="text-white/92 leading-relaxed"
                     style={{
                       fontFamily: '"Inter Tight", system-ui, sans-serif',
-                      fontSize: 'clamp(18px, 2vw, 24px)',
+                      fontSize: 'clamp(16px, 1.7vw, 20px)',
                       lineHeight: 1.5
                     }}
                   >
@@ -163,23 +199,6 @@ export default function SpeakerNotesView() {
                 </li>
               ))}
             </ol>
-
-            {nextMeta && (
-              <div
-                className="mt-12 px-5 py-4 rounded-2xl border border-white/8"
-                style={{ background: 'rgba(255,255,255,0.04)' }}
-              >
-                <div className="text-[10px] uppercase tracking-[0.26em] text-white/45 font-bold mb-1.5">
-                  Up next
-                </div>
-                <div className="text-white/85 text-[18px] leading-tight">
-                  <span className="text-white/45 font-mono mr-3">
-                    {String(nextMeta.id).padStart(2, '0')}
-                  </span>
-                  {nextMeta.title}
-                </div>
-              </div>
-            )}
           </>
         ) : (
           <div className="text-white/45 text-center py-20">
