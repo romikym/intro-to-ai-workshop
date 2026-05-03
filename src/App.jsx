@@ -149,11 +149,11 @@ export default function App() {
   const toggleHints = useCallback(() => setHintsOpen(v => !v), [])
   const popOutNotes = useCallback(() => {
     const url = `${window.location.pathname}?notes=1`
-    window.open(
-      url,
-      'intro-ai-speaker-notes',
-      'width=720,height=900,menubar=no,toolbar=no,location=no,status=no'
-    )
+    // Open with size only — no `menubar=no,toolbar=no,...` flags. Those
+    // turn it into a stripped-down popup that Chrome/Edge often render
+    // without a draggable title bar. Plain size gives a normal browser
+    // window the user can drag and resize like any other.
+    window.open(url, 'intro-ai-speaker-notes', 'width=820,height=920')
   }, [])
   const closeAsk = useCallback(() => setAskOpen(false), [])
   const closeQA = useCallback(() => setQaSpeakerOpen(false), [])
