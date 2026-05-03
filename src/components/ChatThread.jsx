@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, User, Loader2, AlertTriangle, Square } from 'lucide-react'
+import useSmoothedText from '../hooks/useSmoothedText'
 
 /**
  * Shared message-thread renderer used by both the LiveChat modal and the
@@ -138,6 +139,8 @@ function Message({ role, content, stopped }) {
 }
 
 function StreamingMessage({ text, onStop }) {
+  // Smooth out the network-jitter feel of Anthropic's bursty token stream.
+  const smoothed = useSmoothedText(text, { charsPerFrame: 4 })
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -170,7 +173,7 @@ function StreamingMessage({ text, onStop }) {
           )}
         </div>
         <div className="font-mono text-base lg:text-[17px] leading-relaxed text-white/95 whitespace-pre-wrap">
-          {text}
+          {smoothed}
           {<span className="caret"></span>}
         </div>
       </div>
