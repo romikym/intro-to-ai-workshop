@@ -14,6 +14,13 @@ const FONT_KEY  = 'intro-ai-notes-font-scale'
 
 const subscribers = new Set()
 
+// Snapshot caches — useSyncExternalStore requires snapshot functions
+// to return stable references when nothing has changed. Without these
+// caches, every read parses JSON anew and returns a fresh array, which
+// React interprets as "store changed" → infinite re-render → error #185.
+const notesCache = new Map()      // slideId -> notes array (frozen reference)
+let fontScaleCache = null         // last-known font scale value
+
 function safeGet(key, fallback) {
   if (typeof window === 'undefined') return fallback
   try {
@@ -29,6 +36,9 @@ function safeSet(key, value) {
 }
 
 function notify() {
+  // Bust caches before notifying so the next snapshot read computes fresh.
+  notesCache.clear()
+  fontScaleCache = null
   for (const fn of subscribers) {
     try { fn() } catch {}
   }
@@ -47,14 +57,21 @@ function sourceNotes(slideId) {
   return meta?.notes ? [...meta.notes] : []
 }
 
-/** Returns merged notes — override if present, otherwise source. */
+/** Returns merged notes — override if present, otherwise source.
+ *  Cached: same array reference is returned across calls until notify()
+ *  clears the cache. Required so useSyncExternalStore doesn't infinite-loop. */
 export function getNotesForSlide(slideId) {
+  if (notesCache.has(slideId)) return notesCache.get(slideId)
   const overrides = safeGet(NOTES_KEY, {})
-  if (Array.isArray(overrides[slideId])) return overrides[slideId]
-  return sourceNotes(slideId)
+  const value = Array.isArray(overrides[slideId])
+    ? overrides[slideId]
+    : sourceNotes(slideId)
+  notesCache.set(slideId, value)
+  return value
 }
 
-/** True if user has saved a custom version (different from source). */
+/** True if user has saved a custom version (different from source).
+ *  Returns a primitive boolean — naturally stable across calls. */
 export function hasOverride(slideId) {
   const overrides = safeGet(NOTES_KEY, {})
   return Array.isArray(overrides[slideId])
@@ -88,6 +105,7 @@ export function updateNote(slideId, index, text) {
   setNotesForSlide(slideId, current)
 }
 
+
 /** Discard the override and revert to the source notes. */
 export function resetNotesForSlide(slideId) {
   const overrides = safeGet(NOTES_KEY, {})
@@ -103,9 +121,12 @@ export function resetNotesForSlide(slideId) {
 const SCALE_STEPS = [0.85, 1.0, 1.2, 1.45, 1.75]
 
 export function getFontScale() {
+  if (fontScaleCache !== null) return fontScaleCache
   const stored = safeGet(FONT_KEY, null)
-  if (typeof stored === 'number' && SCALE_STEPS.includes(stored)) return stored
-  return 1.0
+  fontScaleCache = (typeof stored === 'number' && SCALE_STEPS.includes(stored))
+    ? stored
+    : 1.0
+  return fontScaleCache
 }
 
 export function setFontScale(value) {
