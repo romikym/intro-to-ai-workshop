@@ -77,8 +77,7 @@ export default function useKeyboard(handlers) {
       }
     }
 
-    window.addEventLi
-stener('keydown', onKey)
+    window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [handlers])
 }

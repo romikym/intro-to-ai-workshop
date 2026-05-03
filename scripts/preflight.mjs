@@ -43,15 +43,31 @@ function walk(dir, out = []) {
   return out
 }
 
+// Common identifier suffixes / fragments that, when found alone at the
+// start of a line, almost certainly indicate OneDrive split a real
+// identifier across a newline. Babel parses these as separate
+// statements (no syntax error) but they crash at runtime as
+// ReferenceErrors — exactly the failure mode that took down production.
+const SUSPICIOUS_FRAGMENTS = [
+  // addEventListener / removeEventListener splits
+  'stener', 'tener', 'ener', 'ner',
+  // getElementById / querySelector splits
+  'mentById', 'entById', 'ntById', 'ctor', 'ctorAll',
+  // common React / framer / DOM API fragments
+  'Effect', 'Callback', 'Memo', 'State', 'Ref', 'Context',
+  'Frame', 'Animation', 'Idle', 'Timeout', 'Interval',
+  'Promise', 'olved', 'jected',
+  // CSS / dom prop fragments
+  'Color', 'Width', 'Height', 'Opacity', 'Transform',
+  // Specific library fragments
+  'Async', 'Reducer', 'Store'
+]
+const FRAGMENT_RE = new RegExp(
+  `^\\s*(${SUSPICIOUS_FRAGMENTS.join('|')})\\s*[\\(\\.]`
+)
+
 function checkFile(file) {
   const code = readFileSync(file, 'utf8')
-
-  // Quick heuristic: detect trailing junk after the last top-level '}'.
-  // Pattern: a closing '}' followed by anything that isn't whitespace,
-  // a comment, or another close paren/brace.
-  const trailing = code.match(/}\s*\n([^\s\/].*)/s)
-  // Note: babel parse will catch real syntax errors. The heuristic above
-  // is informational; we rely on parse() for the actual verdict.
 
   try {
     parse(code, {
@@ -59,7 +75,6 @@ function checkFile(file) {
       plugins: ['jsx'],
       errorRecovery: false
     })
-    return { ok: true }
   } catch (err) {
     return {
       ok: false,
@@ -68,10 +83,33 @@ function checkFile(file) {
       column: err.loc?.column
     }
   }
+
+  // After successful parse, scan for the OneDrive split-identifier pattern.
+  // Babel happily parses `window.addEventLi\nstener('keydown', onKey)` as
+  // two valid statements, but the second is a ReferenceError at runtime.
+  const lines = code.split('\n')
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    if (!FRAGMENT_RE.test(line)) continue
+    // Confirm by checking the previous line ends with an identifier-like
+    // token that, joined with this fragment, would form a real identifier.
+    const prev = (lines[i - 1] || '').trimEnd()
+    const prevTail = prev.match(/[A-Za-z_$][A-Za-z0-9_$]*$/)
+    if (!prevTail) continue
+    return {
+      ok: false,
+      message: `Identifier appears split across a newline (likely OneDrive sync corruption). The previous line ends with "${prevTail[0]}" and this line starts with a known fragment — they should probably be one identifier.`,
+      line: i + 1,
+      column: line.indexOf(line.trimStart()) + 1
+    }
+  }
+
+  return { ok: true }
 }
 
 function main() {
-  console.log(`${BOLD}preflight${RESET} ${DIM}— verifying src/ parses${RESET}`)
+  console.log(`${BOLD}
+preflight${RESET} ${DIM}— verifying src/ parses${RESET}`)
   let files
   try {
     files = walk(SRC)
