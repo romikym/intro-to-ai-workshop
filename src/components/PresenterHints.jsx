@@ -67,7 +67,7 @@ export default function PresenterHints({ open, onClose }) {
             <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/10">
               <div className="flex items-center gap-2.5 min-w-0">
                 <Keyboard className="h-4 w-4 text-accent-cyan shrink-0" />
-                <div className="text-[11px] uppercase tracking-[0.22em] text-accent-cyan font-bold">
+                <div className="text-[14px] uppercase tracking-[0.22em] text-accent-cyan font-bold">
                   Presenter cheat sheet
                 </div>
               </div>
@@ -83,22 +83,22 @@ export default function PresenterHints({ open, onClose }) {
             {/* Body */}
             <div className="px-4 py-3 space-y-2">
               {SHORTCUTS.map((s, i) => (
-                <div key={i} className="flex items-center justify-between gap-3 text-[12px]">
+                <div key={i} className="flex items-center justify-between gap-3 text-[15px]">
                   <span className="text-white/70 truncate">{s.label}</span>
                   <div className="flex items-center gap-1 shrink-0">
                     {s.keys.map((k, j) => (
                       <span key={j} className="flex items-center gap-1">
                         {j > 0 && (
-                          <span className="text-white/30 font-mono text-[10px]">
+                          <span className="text-white/30 font-mono text-[13px]">
                             {s.joiner || '+'}
                           </span>
                         )}
                         <kbd
-                          className="font-mono font-bold tabular-nums px-1.5 py-0.5 rounded text-[11px] text-white/90"
+                          className="font-mono font-bold tabular-nums px-2 py-0.5 rounded text-[14px] text-white/90"
                           style={{
                             background: 'rgba(255,255,255,0.10)',
                             border: '1px solid rgba(255,255,255,0.14)',
-                            minWidth: '22px',
+                            minWidth: '26px',
                             textAlign: 'center',
                             lineHeight: 1
                           }}
@@ -113,7 +113,7 @@ export default function PresenterHints({ open, onClose }) {
             </div>
 
             {/* Footer hint */}
-            <div className="px-4 py-3 border-t border-white/10 text-[11px] text-white/50 leading-snug">
+            <div className="px-4 py-3 border-t border-white/10 text-[14px] text-white/50 leading-snug">
               On slide 11, audience questions appear in the Live Queue panel — tap{' '}
               <span className="text-white/85 font-semibold">Claude</span> on any card to stream the answer on the projector.
             </div>
