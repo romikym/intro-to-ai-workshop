@@ -130,7 +130,8 @@ Based on this, what is the single highest-leverage task I should automate FIRST 
           />
 
           <motion.div
-            className="relative glass-strong rounded-3xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden contact-card-perf"
+            className="relative glass-strong rounded-3xl w-full max-w-2xl flex flex-col overflow-hidden contact-card-perf"
+            data-modal-card="true"
             style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

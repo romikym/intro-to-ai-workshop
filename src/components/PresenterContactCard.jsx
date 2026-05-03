@@ -63,7 +63,8 @@ export default function PresenterContactCard({ presenter, open, onClose }) {
           />
 
           <motion.div
-            className="relative w-full sm:max-w-md max-h-[92vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl border border-white/12 contact-card-perf"
+            className="relative w-full sm:max-w-md flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl border border-white/12 contact-card-perf"
+            data-modal-card="true"
             style={{
               background: 'linear-gradient(160deg, #0E0C20 0%, #0A0820 100%)',
               boxShadow: '0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(95,182,255,0.06)',

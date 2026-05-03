@@ -88,7 +88,8 @@ export default function AskQuestion({ open, onClose }) {
           />
 
           <motion.div
-            className="relative glass-strong w-full sm:max-w-xl max-h-[90vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl contact-card-perf"
+            className="relative glass-strong w-full sm:max-w-xl flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl contact-card-perf"
+            data-modal-card="true"
             style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

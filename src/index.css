@@ -1479,3 +1479,32 @@ input, textarea, [contenteditable] {
     );
   }
 }
+
+/* ===========================================================================
+   MODAL HEIGHT CAP — every pop-up card across the deck respects the
+   bottom navigation chrome (~110px reserve). Tagged with
+   data-modal-card="true" on the inner card element.
+   =========================================================================== */
+
+/* Desktop — leave 120px for chrome + breathing room */
+[data-modal-card="true"] {
+  max-height: calc(100vh - 120px) !important;
+}
+
+/* Mobile — leave room for the sticky Ask + Claude bar (~80px) plus
+   safe-area inset on iPhone notch devices */
+@media (max-width: 640px) {
+  [data-modal-card="true"] {
+    max-height: calc(100dvh - 100px - env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* AnswerOverlay — full-takeover but bounded by chrome on desktop */
+@media (min-width: 641px) {
+  /* Slide stage uses transform, which makes fixed children behave as
+     absolute. Cap the overlay height so its footer never tucks under
+     the slide nav chrome bar. */
+  .fixed.z-\[60\].flex.flex-col {
+    max-height: calc(100vh - 100px);
+  }
+}
