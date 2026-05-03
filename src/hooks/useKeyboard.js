@@ -64,6 +64,11 @@ export default function useKeyboard(handlers) {
         case 'N':
           handlers.popOutNotes?.(e)
           break
+        case '?':
+        case 'h':
+        case 'H':
+          handlers.toggleHints?.(e)
+          break
         default:
           // Number keys 1-9 jump to slide
           if (/^[1-9]$/.test(e.key)) {
@@ -72,7 +77,8 @@ export default function useKeyboard(handlers) {
       }
     }
 
-    window.addEventListener('keydown', onKey)
+    window.addEventLi
+stener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [handlers])
 }

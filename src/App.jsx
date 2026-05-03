@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Grid3x3, FileText, Eye, EyeOff, Maximize2, MessageCircleQuestion, Sparkles, Calculator, ExternalLink } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Grid3x3, FileText, Eye, EyeOff, Maximize2, MessageCircleQuestion, Sparkles, Calculator, ExternalLink, Keyboard } from 'lucide-react'
 import useKeyboard from './hooks/useKeyboard'
 import useViewport from './hooks/useViewport'
 import useTouchSwipe from './hooks/useTouchSwipe'
@@ -78,6 +78,7 @@ export default function App() {
   const [qaSpeakerOpen, setQaSpeakerOpen] = useState(false)
   const [roiOpen, setRoiOpen] = useState(false)
   const [vaultOpen, setVaultOpen] = useState(false)
+  const [hintsOpen, setHintsOpen] = useState(false)
   const stageRef = useRef(null)
   const currentRef = useRef(1)
 
@@ -145,6 +146,7 @@ export default function App() {
   }, [])
   const toggleQA = useCallback(() => setQaSpeakerOpen(v => !v), [])
   const openAsk = useCallback(() => setAskOpen(true), [])
+  const toggleHints = useCallback(() => setHintsOpen(v => !v), [])
   const popOutNotes = useCallback(() => {
     const url = `${window.location.pathname}?notes=1`
     window.open(
@@ -162,6 +164,7 @@ export default function App() {
     setBlackout(false)
     setAskOpen(false)
     setQaSpeakerOpen(false)
+    setHintsOpen(false)
   }, [])
 
   // Deep-link: if URL has ?ask=1, auto-open the ask modal (audience scanning QR with that param)
@@ -188,8 +191,9 @@ export default function App() {
     jumpTo: goTo,
     toggleQA,
     openAsk,
-    popOutNotes
-  }), [next, prev, first, last, toggleNotes, toggleBlackout, toggleOverview, toggleFullscreen, closeOverlays, goTo, toggleQA, openAsk, popOutNotes])
+    popOutNotes,
+    toggleHints
+  }), [next, prev, first, last, toggleNotes, toggleBlackout, toggleOverview, toggleFullscreen, closeOverlays, goTo, toggleQA, openAsk, popOutNotes, toggleHints])
 
   useKeyboard(handlers)
 
@@ -313,13 +317,13 @@ export default function App() {
           onFullscreen={toggleFullscreen}
           onToggleQA={toggleQA}
           qaActive={qaSpeakerOpen}
+          onToggleHints={toggleHints}
+          hintsActive={hintsOpen}
         />
       )}
 
-      {/* Presenter cheat sheet — desktop only, hidden on slide 11 (Live Queue) */}
-      {!viewport.isMobile && !blackout && (
-        <PresenterHints hideForLiveQueue={current === total} />
-      )}
+      {/* Presenter cheat sheet — controlled modal triggered by chrome button or `?` key */}
+      <PresenterHints open={hintsOpen} onClose={() => setHintsOpen(false)} />
 
       {/* Mobile floating "Ask a question" button — always visible on mobile */}
       {viewport.isMobile && !blackout && !askOpen && !qaSpeakerOpen && (
@@ -439,7 +443,7 @@ function MobileSlideStage({ current, direction, SlideComponent }) {
   )
 }
 
-function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onOverview, onNotes, onPopOutNotes, onHide, onFullscreen, onToggleQA, qaActive }) {
+function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onOverview, onNotes, onPopOutNotes, onHide, onFullscreen, onToggleQA, qaActive, onToggleHints, hintsActive }) {
   return (
     <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
       {/* Progress bar */}
@@ -484,6 +488,9 @@ function Chrome({ current, total, meta, isMobile, showNotes, onPrev, onNext, onO
               </ChromeButton>
               <ChromeButton onClick={onPopOutNotes} aria-label="Pop notes out to a new window (N)">
                 <ExternalLink className="h-4 w-4" />
+              </ChromeButton>
+              <ChromeButton onClick={onToggleHints} aria-label="Show keyboard shortcuts (?)" active={hintsActive}>
+                <Keyboard className="h-4 w-4" />
               </ChromeButton>
               {/* ThemeToggle removed — light mode disabled, dark theme only */}
               <ChromeButton onClick={onHide} aria-label="Hide chrome">
@@ -626,8 +633,7 @@ function MobileSwipeHint() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      transition={{ delay:
- 1.5, duration: 0.5 }}
+      transition={{ delay: 1.5, duration: 0.5 }}
       onClick={() => setShown(false)}
       className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass border border-white/10 rounded-full px-4 py-2 text-xs text-white/70"
     >
