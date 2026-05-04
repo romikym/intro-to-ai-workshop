@@ -552,204 +552,30 @@ function SectionStartThisWeek() {
 /* ---------- Ask + Chat CTA ---------- */
 function SectionAskClaude({ onAsk, onChat }) {
   return (
-    <section className="px-5 py-12">
+    <section className="relative px-5 pt-14 pb-16">
       <div
-        className="rounded-3xl p-7 border border-white/10"
+        className="absolute top-0 left-0 right-0 h-px"
         style={{
-          background: 'linear-gradient(160deg, rgba(41,151,255,0.10) 0%, rgba(192,100,240,0.08) 100%)'
+          background:
+            'linear-gradient(90deg, transparent 0%, rgba(95,182,255,0.35) 50%, transparent 100%)'
         }}
-      >
-        <div className="text-cyan-300 text-[11px] uppercase tracking-[0.32em] font-bold mb-3">
-          Q&amp;A
-        </div>
-        <h2
-          className="text-white font-bold leading-[1.08]"
-          style={{ fontFamily: '"Inter Tight", system-ui, sans-serif', fontSize: 'clamp(28px, 8vw, 42px)', letterSpacing: '-0.02em' }}
-        >
-          Got a{' '}
-          <em
-            className="not-italic"
-            style={{
-              fontFamily: '"Fraunces", serif',
-              fontStyle: 'italic',
-              background: 'linear-gradient(135deg, #2997FF, #C064F0)',
-              WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'
-            }}
-          >
-            question?
-          </em>
-        </h2>
-        <p className="text-white/75 text-[15px] leading-relaxed mt-4 mb-6">
-          Submit it live — we'll get to it. Or chat with Claude directly to explore your specific situation.
-        </p>
-        <button
-          onClick={onAsk}
-          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-semibold text-white text-base mb-3"
-          style={{
-            background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)',
-            boxShadow: '0 8px 24px -8px rgba(41,151,255,0.5)'
-          }}
-        >
-          <MessageCircleQuestion className="h-5 w-5" />
-          Ask the speakers
-        </button>
-        <button
-          onClick={onChat}
-          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl font-medium text-white/90 text-sm border border-white/15 bg-white/5"
-        >
-          <Sparkles className="h-4 w-4" />
-          Chat with Claude
-        </button>
-      </div>
-
-      <div className="mt-8 px-3 py-5 rounded-2xl bg-white/3 border border-white/8 text-center overflow-hidden">
-        <div
-          className="text-white/85 italic font-serif whitespace-nowrap"
-          style={{
-            fontFamily: '"Fraunces", serif',
-            fontStyle: 'italic',
-            fontSize: 'clamp(11px, 3.2vw, 18px)',
-            lineHeight: 1.35
-          }}
-        >
-          AI won't replace you.{' '}
-          <span style={{
-            background: 'linear-gradient(135deg, #2997FF, #C064F0)',
-            WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', fontStyle: 'normal', fontFamily: '"Inter Tight", system-ui, sans-serif', fontWeight: 700
-          }}>
-            But someone using AI will.
-          </span>
-        </div>
-        <div className="mt-3 text-[11px] uppercase tracking-[0.28em] text-white/40 font-bold">
-          — ChatGPT
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ---------- Closing presenters strip ---------- */
-function ClosingPresenters({ onSelect }) {
-  return (
-    <section className="px-5 py-10 border-t border-white/8">
-      <div className="text-[10px] uppercase tracking-[0.32em] text-cyan-300 font-bold text-center mb-2">
-        Presented by
-      </div>
-      <div className="text-center text-white/45 text-[11px] mb-5">
-        Tap a name to save their contact
-      </div>
-      <div className="space-y-4">
-        {[PRESENTERS.romik, PRESENTERS.jim].map(p => (
-          <button
-            key={p.id}
-            onClick={() => onSelect?.(p)}
-            className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl bg-white/3 border border-white/8 hover:border-accent-cyan/40 hover:bg-white/5 transition text-left"
-          >
-            <div className="relative shrink-0">
-              <div
-                className="absolute inset-[-2px] rounded-full"
-                style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
-              />
-              <div className="relative h-14 w-14 rounded-full overflow-hidden bg-[#0E0C20] ring-1 ring-[#07060F]">
-                <img
-                  src={p.photo}
-                  alt={p.name}
-                  className="h-full w-full object-cover"
-                  style={{ objectPosition: p.id === 'romik' ? 'center 25%' : 'center 30%' }}
-                />
-              </div>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-white text-[16px] font-semibold leading-tight">{p.name}</div>
-              <div className="text-white/55 text-[12px] leading-tight mt-0.5">{p.role} · {p.companyShort}</div>
-            </div>
-            <div
-              className="shrink-0 flex items-center justify-center"
-              style={{ height: '36px', width: '88px' }}
-            >
-              <img
-                src={p.logo}
-                alt=""
-                className="object-contain"
-                style={{
-                  maxHeight: p.id === 'jim' ? '36px' : '24px',
-                  maxWidth: '88px',
-                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))'
-                }}
-              />
-            </div>
-          </button>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-/* ---------- Footer ---------- */
-function Footer() {
-  return (
-    <footer className="px-5 py-10 pb-28 text-center border-t border-white/8 mt-4">
-      <div className="text-[11px] uppercase tracking-[0.32em] text-white/35 font-bold">
-        Burbank Chamber · 2026
-      </div>
-      <div className="text-white/55 text-[12px] mt-2">
-        Built by Media City Design.
-      </div>
-    </footer>
-  )
-}
-
-/* ---------- Sticky Ask bar (always-visible CTA) ----------
-   Now visible from page load — the hero's CTA buttons were removed in
-   favor of instructions, so this bar is the audience's only path to
-   submit a question or chat with Claude. */
-function StickyAskBar({ onAsk, onChat }) {
-  return (
-    <div
-      className="fixed left-3 right-3 z-40 mob-sticky-in"
-      style={{
-        bottom: 'calc(12px + env(safe-area-inset-bottom))'
-      }}
-    >
+      />
+      {/* Soft glow above the eyebrow that visually anchors the start
+          of a new section without adding extra chrome. */}
       <div
-        className="rounded-2xl p-1.5 flex gap-1.5 backdrop-blur-md"
+        className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
         style={{
-          background: 'rgba(7,6,15,0.85)',
-          border: '1px solid rgba(255,255,255,0.12)',
-          boxShadow: '0 12px 32px -10px rgba(0,0,0,0.6)'
+          width: '60%',
+          height: '120px',
+          background:
+            'radial-gradient(ellipse at top, rgba(95,182,255,0.12) 0%, transparent 70%)'
         }}
-      >
-        <button
-          onClick={onAsk}
-          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
-          style={{ background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)' }}
-        >
-          <MessageCircleQuestion className="h-4 w-4" />
-          Ask
-        </button>
-        <button
-          onClick={onChat}
-          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white/95 font-medium text-sm bg-white/5 border border-white/10"
-        >
-          <Sparkles className="h-4 w-4" />
-          Claude
-        </button>
-      </div>
-    </div>
-  )
-}
-
-/* ---------- Reusable bits ---------- */
-function Section({ eyebrow, title, children }) {
-  const ref = useReveal()
-  return (
-    <section ref={ref} classNam
-e="px-5 py-10 border-t border-white/8 mob-reveal">
-      <div className="text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 mob-reveal-child">
+      />
+      <div className="relative text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 mob-reveal-child">
         {eyebrow}
       </div>
       <h2
-        className="text-white font-bold leading-[1.08] mb-6 mob-reveal-child"
+        className="relative text-white font-bold leading-[1.08] mb-6 mob-reveal-child"
         style={{
           fontFamily: '"Inter Tight", system-ui, sans-serif',
           fontSize: 'clamp(28px, 7.5vw, 40px)',
@@ -758,7 +584,7 @@ e="px-5 py-10 border-t border-white/8 mob-reveal">
       >
         {title}
       </h2>
-      <div className="space-y-3">{children}</div>
+      <div className="relative space-y-3">{children}</div>
     </section>
   )
 }

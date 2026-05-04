@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Grid3x3, FileText, Eye, EyeOff, Maximize2, MessageCircleQuestion, Sparkles, Calculator, ExternalLink, Keyboard } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Grid3x3, FileText, Eye, EyeOff, Maximize2, MessageCircleQuestion, Sparkles, ExternalLink, Keyboard } from 'lucide-react'
 import useKeyboard from './hooks/useKeyboard'
 import useViewport from './hooks/useViewport'
 import useTouchSwipe from './hooks/useTouchSwipe'
@@ -9,7 +9,6 @@ import TronGrid from './components/TronGrid'
 import ThemeToggle from './components/ThemeToggle'
 import AskQuestion from './components/AskQuestion'
 import QASpeakerView from './components/QASpeakerView'
-import ROICalculator from './components/ROICalculator'
 import PromptVault, { PromptVaultFAB } from './components/PromptVault'
 import MobileExperience from './components/MobileExperience'
 import SpeakerNotesView from './components/SpeakerNotesView'
@@ -77,7 +76,6 @@ export default function App() {
   const [showChrome, setShowChrome] = useState(true)
   const [askOpen, setAskOpen] = useState(false)
   const [qaSpeakerOpen, setQaSpeakerOpen] = useState(false)
-  const [roiOpen, setRoiOpen] = useState(false)
   const [vaultOpen, setVaultOpen] = useState(false)
   const [hintsOpen, setHintsOpen] = useState(false)
   const stageRef = useRef(null)
@@ -350,9 +348,6 @@ export default function App() {
 
       {/* QA Speaker view — full-screen live feed */}
       <QASpeakerView open={qaSpeakerOpen} onClose={closeQA} />
-
-      {/* AI ROI Calculator — interactive value-prop tool */}
-      <ROICalculator open={roiOpen} onClose={() => setRoiOpen(false)} />
 
       {/* Personal Prompt Vault — take-home prompt library */}
       <PromptVault open={vaultOpen} onClose={() => setVaultOpen(false)} />
@@ -646,3 +641,4 @@ function MobileSwipeHint() {
     </motion.div>
   )
 }
+
