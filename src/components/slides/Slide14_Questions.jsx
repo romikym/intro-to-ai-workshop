@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { MessageCircle, Sparkles, Wand2, MessageCircleQuestion } from 'lucide-react'
+import { MessageCircle, Sparkles, MessageCircleQuestion } from 'lucide-react'
 import LiveChat from '../LiveChat'
 import QRCode from '../effects/QRCode'
 import AmbientParticles from '../effects/AmbientParticles'
 import MagneticButton from '../effects/MagneticButton'
-import PersonalizedStrategy from '../PersonalizedStrategy'
 import AskQuestion from '../AskQuestion'
 import QuestionQueue from '../QuestionQueue'
 import AnswerOverlay from '../AnswerOverlay'
@@ -14,7 +13,6 @@ import { PRESENTERS } from '../../lib/presenters'
 
 export default function Slide13_Questions() {
   const [chatOpen, setChatOpen] = useState(false)
-  const [strategyOpen, setStrategyOpen] = useState(false)
   const [askOpen, setAskOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState(null)
   const [contactPresenter, setContactPresenter] = useState(null)
@@ -95,15 +93,6 @@ export default function Slide13_Questions() {
 
                 {/* Secondary actions row */}
                 <div className="flex flex-wrap gap-3">
-                  <MagneticButton
-                    onClick={() => setStrategyOpen(true)}
-                    strength={0.18}
-                    className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-accent-cyan/40 text-white text-sm font-medium transition"
-                  >
-                    <Wand2 className="h-4 w-4" />
-                    <span>Get your AI playbook</span>
-                  </MagneticButton>
-
                   <MagneticButton
                     onClick={() => setChatOpen(true)}
                     strength={0.18}
@@ -195,11 +184,6 @@ export default function Slide13_Questions() {
           'How do I write an "AI Philosophy" for a 5-person business?'
         ]}
         maxTokens={800}
-      />
-
-      <PersonalizedStrategy
-        open={strategyOpen}
-        onClose={() => setStrategyOpen(false)}
       />
 
       <AskQuestion open={askOpen} onClose={() => setAskOpen(false)} />
