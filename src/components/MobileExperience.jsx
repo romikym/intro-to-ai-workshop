@@ -553,6 +553,7 @@ function SectionStartThisWeek() {
 function SectionAskClaude({ onAsk, onChat }) {
   return (
     <section className="relative px-5 pt-14 pb-16">
+      {/* Top divider — matches the Section helper for consistent rhythm */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
@@ -560,8 +561,6 @@ function SectionAskClaude({ onAsk, onChat }) {
             'linear-gradient(90deg, transparent 0%, rgba(95,182,255,0.35) 50%, transparent 100%)'
         }}
       />
-      {/* Soft glow above the eyebrow that visually anchors the start
-          of a new section without adding extra chrome. */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
         style={{
@@ -571,20 +570,77 @@ function SectionAskClaude({ onAsk, onChat }) {
             'radial-gradient(ellipse at top, rgba(95,182,255,0.12) 0%, transparent 70%)'
         }}
       />
-      <div className="relative text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 mob-reveal-child">
-        {eyebrow}
-      </div>
-      <h2
-        className="relative text-white font-bold leading-[1.08] mb-6 mob-reveal-child"
+      <div
+        className="relative rounded-3xl p-7 border border-white/10"
         style={{
-          fontFamily: '"Inter Tight", system-ui, sans-serif',
-          fontSize: 'clamp(28px, 7.5vw, 40px)',
-          letterSpacing: '-0.02em'
+          background: 'linear-gradient(160deg, rgba(41,151,255,0.10) 0%, rgba(192,100,240,0.08) 100%)'
         }}
       >
-        {title}
-      </h2>
-      <div className="relative space-y-3">{children}</div>
+        <div className="text-cyan-300 text-[11px] uppercase tracking-[0.32em] font-bold mb-3">
+          Q&amp;A
+        </div>
+        <h2
+          className="text-white font-bold leading-[1.08]"
+          style={{ fontFamily: '"Inter Tight", system-ui, sans-serif', fontSize: 'clamp(28px, 8vw, 42px)', letterSpacing: '-0.02em' }}
+        >
+          Got a{' '}
+          <em
+            className="not-italic"
+            style={{
+              fontFamily: '"Fraunces", serif',
+              fontStyle: 'italic',
+              background: 'linear-gradient(135deg, #2997FF, #C064F0)',
+              WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'
+            }}
+          >
+            question?
+          </em>
+        </h2>
+        <p className="text-white/75 text-[15px] leading-relaxed mt-4 mb-6">
+          Submit it live — we'll get to it. Or chat with Claude directly to explore your specific situation.
+        </p>
+        <button
+          onClick={onAsk}
+          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-semibold text-white text-base mb-3"
+          style={{
+            background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)',
+            boxShadow: '0 8px 24px -8px rgba(41,151,255,0.5)'
+          }}
+        >
+          <MessageCircleQuestion className="h-5 w-5" />
+          Ask the speakers
+        </button>
+        <button
+          onClick={onChat}
+          className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl font-medium text-white/90 text-sm border border-white/15 bg-white/5"
+        >
+          <Sparkles className="h-4 w-4" />
+          Chat with Claude
+        </button>
+      </div>
+
+      <div className="relative mt-8 px-3 py-5 rounded-2xl bg-white/3 border border-white/8 text-center overflow-hidden">
+        <div
+          className="text-white/85 italic font-serif whitespace-nowrap"
+          style={{
+            fontFamily: '"Fraunces", serif',
+            fontStyle: 'italic',
+            fontSize: 'clamp(11px, 3.2vw, 18px)',
+            lineHeight: 1.35
+          }}
+        >
+          AI won't replace you.{' '}
+          <span style={{
+            background: 'linear-gradient(135deg, #2997FF, #C064F0)',
+            WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', fontStyle: 'normal', fontFamily: '"Inter Tight", system-ui, sans-serif', fontWeight: 700
+          }}>
+            But someone using AI will.
+          </span>
+        </div>
+        <div className="mt-3 text-[11px] uppercase tracking-[0.28em] text-white/40 font-bold">
+          — ChatGPT
+        </div>
+      </div>
     </section>
   )
 }
