@@ -614,3 +614,118 @@ function Em({ children }) {
     </em>
   )
 }
+
+/* ---------- Closing presenters strip ---------- */
+function ClosingPresenters({ onSelect }) {
+  return (
+    <section className="relative px-5 pt-14 pb-16">
+      <div
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent 0%, rgba(95,182,255,0.35) 50%, transparent 100%)'
+        }}
+      />
+      <div className="text-[10px] uppercase tracking-[0.32em] text-cyan-300 font-bold text-center mb-2">
+        Presented by
+      </div>
+      <div className="text-center text-white/45 text-[11px] mb-5">
+        Tap a name to save their contact
+      </div>
+      <div className="space-y-4">
+        {[PRESENTERS.romik, PRESENTERS.jim].map(p => (
+          <button
+            key={p.id}
+            onClick={() => onSelect?.(p)}
+            className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl bg-white/3 border border-white/8 hover:border-accent-cyan/40 hover:bg-white/5 transition text-left"
+          >
+            <div className="relative shrink-0">
+              <div
+                className="absolute inset-[-2px] rounded-full"
+                style={{ background: 'linear-gradient(135deg, #2997FF, #6366F1)' }}
+              />
+              <div className="relative h-14 w-14 rounded-full overflow-hidden bg-[#0E0C20] ring-1 ring-[#07060F]">
+                <img
+                  src={p.photo}
+                  alt={p.name}
+                  className="h-full w-full object-cover"
+                  style={{ objectPosition: p.id === 'romik' ? 'center 25%' : 'center 30%' }}
+                />
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-white text-[16px] font-semibold leading-tight">{p.name}</div>
+              <div className="text-white/55 text-[12px] leading-tight mt-0.5">{p.role} · {p.companyShort}</div>
+            </div>
+            <div
+              className="shrink-0 flex items-center justify-center"
+              style={{ height: '36px', width: '88px' }}
+            >
+              <img
+                src={p.logo}
+                alt=""
+                className="object-contain"
+                style={{
+                  maxHeight: p.id === 'jim' ? '36px' : '24px',
+                  maxWidth: '88px',
+                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))'
+                }}
+              />
+            </div>
+          </button>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- Footer ---------- */
+function Footer() {
+  return (
+    <footer className="px-5 py-10 pb-28 text-center border-t border-white/8 mt-4">
+      <div className="text-[11px] uppercase tracking-[0.32em] text-white/35 font-bold">
+        Burbank Chamber · 2026
+      </div>
+      <div className="text-white/55 text-[12px] mt-2">
+        Built by Media City Design.
+      </div>
+    </footer>
+  )
+}
+
+/* ---------- Sticky Ask bar (always-visible CTA) ---------- */
+function StickyAskBar({ onAsk, onChat }) {
+  return (
+    <div
+      className="fixed left-3 right-3 z-40 mob-sticky-in"
+      style={{
+        bottom: 'calc(12px + env(safe-area-inset-bottom))'
+      }}
+    >
+      <div
+        className="rounded-2xl p-1.5 flex gap-1.5 backdrop-blur-md"
+        style={{
+          background: 'rgba(7,6,15,0.85)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          boxShadow: '0 12px 32px -10px rgba(0,0,0,0.6)'
+        }}
+      >
+        <button
+          onClick={onAsk}
+          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
+          style={{ background: 'linear-gradient(135deg, #2997FF 0%, #6366F1 100%)' }}
+        >
+          <MessageCircleQuestion className="h-4 w-4" />
+          Ask
+        </button>
+        <button
+          onClick={onChat}
+          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white/95 font-medium text-sm bg-white/5 border border-white/10"
+        >
+          <Sparkles className="h-4 w-4" />
+          Claude
+        </button>
+      </div>
+    </div>
+  )
+}
