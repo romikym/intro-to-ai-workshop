@@ -589,6 +589,50 @@ function SectionAskClaude({ onAsk, onChat }) {
   )
 }
 
+/* ---------- Reusable Section helper ---------- */
+function Section({ eyebrow, title, children }) {
+  const ref = useReveal()
+  return (
+    <section ref={ref} className="relative px-5 pt-14 pb-16 mob-reveal">
+      {/* Top divider — gradient line that fades out on each side so
+          adjacent sections feel deliberately separated rather than
+          mashed together. Stronger than a flat border. */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent 0%, rgba(95,182,255,0.35) 50%, transparent 100%)'
+        }}
+      />
+      {/* Soft cyan glow above the eyebrow that visually anchors the
+          start of a new section without adding extra chrome. */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+        style={{
+          width: '60%',
+          height: '120px',
+          background:
+            'radial-gradient(ellipse at top, rgba(95,182,255,0.12) 0%, transparent 70%)'
+        }}
+      />
+      <div className="relative text-[11px] uppercase tracking-[0.28em] text-cyan-300 font-bold mb-3 mob-reveal-child">
+        {eyebrow}
+      </div>
+      <h2
+        className="relative text-white font-bold leading-[1.08] mb-6 mob-reveal-child"
+        style={{
+          fontFamily: '"Inter Tight", system-ui, sans-serif',
+          fontSize: 'clamp(28px, 7.5vw, 40px)',
+          letterSpacing: '-0.02em'
+        }}
+      >
+        {title}
+      </h2>
+      <div className="relative space-y-3">{children}</div>
+    </section>
+  )
+}
+
 function Card({ children }) {
   return (
     <div className="rounded-2xl px-4 py-4 bg-white/4 border border-white/10 mob-card mob-reveal-child">
