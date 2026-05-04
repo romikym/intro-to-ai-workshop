@@ -130,49 +130,44 @@ Based on this, what is the single highest-leverage task I should automate FIRST 
           />
 
           <motion.div
-            className="relative glass-strong rounded-3xl w-full max-w-xl flex flex-col overflow-hidden contact-card-perf"
+            className="relative glass-strong rounded-3xl w-full max-w-3xl flex flex-col overflow-hidden contact-card-perf"
             data-modal-card="true"
             style={{
               willChange: 'transform, opacity',
               transform: 'translateZ(0)',
-              // Compact fixed height so the calculator never exceeds the
-              // available slide space; internal scroll handles overflow.
-              height: 'min(620px, calc(100vh - 120px))'
+              // Match LiveChat sizing for visual consistency across slide 11 modals.
+              height: 'min(700px, calc(100vh - 120px))'
             }}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Header */}
-            <div className="relative px-6 sm:px-8 py-6 border-b overflow-hidden" style={{ borderColor: 'var(--border-base)' }}>
-              <div
-                className="absolute inset-0 opacity-30 pointer-events-none"
-                style={{
-                  background: 'radial-gradient(ellipse at top right, #10B981 0%, transparent 60%), radial-gradient(ellipse at top left, #22D3EE 0%, transparent 60%)'
-                }}
-              />
-              <div className="relative flex items-start justify-between gap-4">
-                <div>
-                  <div className="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold mb-2 flex items-center gap-2">
-                    <Calculator className="h-3.5 w-3.5" />
+            {/* Header — matches LiveChat structure: avatar + title/subtitle stack + close */}
+            <div className="flex items-center justify-between px-5 sm:px-10 py-5 sm:py-6 border-b border-white/8 shrink-0">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center relative shrink-0">
+                  <Calculator className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                  {streaming && (
+                    <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 animate-pulse ring-2 ring-ink-900" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="font-serif text-xl sm:text-2xl lg:text-3xl tracking-tight text-white truncate">
                     AI ROI Calculator
                   </div>
-                  <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-white leading-tight">
+                  <div className="text-sm sm:text-base text-white/55 mt-0.5 truncate">
                     What's AI worth to your business?
-                  </h3>
-                  <p className="text-white/65 mt-2 text-sm sm:text-base max-w-xl">
-                    Punch in your numbers. See annual hours and dollars reclaimed.
-                  </p>
+                  </div>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition shrink-0"
-                  aria-label="Close"
-                >
-                  <X className="h-5 w-5" />
-                </button>
               </div>
+              <button
+                onClick={onClose}
+                className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition shrink-0"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
 
             {/* Body */}
@@ -338,13 +333,16 @@ Based on this, what is the single highest-leverage task I should automate FIRST 
 
 function SliderInput({ label, icon, value, onChange, min, max, step, formatter, hint }) {
   return (
-    <div className="rounded-2xl border p-4" style={{ borderColor: 'var(--border-base)', backgroundColor: 'var(--bg-card)' }}>
-      <div className="flex items-center justify-between mb-2">
-        <label className="text-xs uppercase tracking-[0.2em] text-white/55 font-semibold flex items-center gap-1.5">
-          {icon}
-          {label}
-        </label>
-        <div className="font-serif text-xl text-white tabular-nums">{formatter(value)}</div>
+    <div className="rounded-2xl border p-4 sm:p-5" style={{ borderColor: 'var(--border-base)', backgroundColor: 'var(--bg-card)' }}>
+      {/* Label on its own row so the value below has full width to breathe.
+          Previous version used flex justify-between with the value inline,
+          which caused the value to collide with the wrapping label text. */}
+      <label className="text-[11px] uppercase tracking-[0.2em] text-white/55 font-semibold flex items-center gap-1.5 mb-2">
+        {icon}
+        {label}
+      </label>
+      <div className="font-serif text-2xl sm:text-3xl text-white tabular-nums leading-none mb-3">
+        {formatter(value)}
       </div>
       <input
         type="range"
@@ -356,7 +354,7 @@ function SliderInput({ label, icon, value, onChange, min, max, step, formatter, 
         className="w-full accent-emerald-400 cursor-pointer"
         style={{ height: '4px' }}
       />
-      {hint && <div className="text-[11px] text-white/40 mt-1.5">{hint}</div>}
+      {hint && <div className="text-[11px] text-white/40 mt-2">{hint}</div>}
     </div>
   )
 }
