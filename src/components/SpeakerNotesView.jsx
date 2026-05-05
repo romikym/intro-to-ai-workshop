@@ -35,10 +35,12 @@ export default function SpeakerNotesView() {
   useEffect(() => {
     try { localStorage.setItem('intro-ai-notes-thumb-size', thumbSize) } catch {}
   }, [thumbSize])
+  // Sidebar-sized thumbnails — smaller than the previous 2-column layout
+  // since the notes column is now dominant.
   const thumbDims = {
-    small:  { current: 320, next: 170 },
-    medium: { current: 460, next: 240 },
-    large:  { current: 640, next: 340 }
+    small:  { current: 240, next: 160 },
+    medium: { current: 340, next: 220 },
+    large:  { current: 460, next: 300 }
   }[thumbSize]
   function cycleThumbSize() {
     setThumbSize(s => s === 'small' ? 'medium' : s === 'medium' ? 'large' : 'small')
@@ -190,12 +192,53 @@ export default function SpeakerNotesView() {
         </div>
       </header>
 
-      {/* Body */}
-      <main className="px-6 sm:px-10 py-6 max-w-5xl mx-auto">
+      {/* Body — notes-first layout. Per co-presenter feedback: words get
+          the dominant left column, slide previews shrink to a sidebar on
+          the right. Stacks vertically on narrow windows. */}
+      <main className="px-6 sm:px-10 py-6 max-w-7xl mx-auto">
         {meta ? (
-          <>
-            {/* Current + Next slide previews — Apple Keynote style */}
-            <div className="grid grid-cols-[2fr_1fr] gap-5 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-10 items-start">
+            {/* LEFT: title + speaker notes (dominant) */}
+            <div className="min-w-0">
+              <div className="text-[12px] uppercase tracking-[0.26em] text-cyan-300 font-bold mb-1">
+                {section?.presenter} · {section?.company}
+              </div>
+              <h1
+                className="font-bold text-white leading-[1.1] mb-6"
+                style={{
+                  fontFamily: '"Inter Tight", system-ui, sans-serif',
+                  fontSize: 'clamp(28px, 3.4vw, 42px)',
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                {meta.title}
+              </h1>
+
+              <ol className="space-y-4">
+                {notes.map((note, i) => (
+                  <EditableNote
+                    key={i}
+                    index={i}
+                    text={note}
+                    fontScale={fontScale}
+                    onChange={(t) => notesStore.updateNote(current, i, t)}
+                    onDelete={() => notesStore.deleteNote(current, i)}
+                  />
+                ))}
+              </ol>
+
+              <button
+                onClick={() => notesStore.addNote(current, '')}
+                className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-white/20 text-white/55 hover:text-white hover:border-white/40 hover:bg-white/4 transition text-[13px]"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Add a note
+              </button>
+            </div>
+
+            {/* RIGHT: slide previews stacked vertically. Sticky so they
+                stay visible as the notes column scrolls. */}
+            <aside className="lg:sticky lg:top-24 space-y-5 shrink-0">
               <div>
                 <div className="text-[10px] uppercase tracking-[0.26em] text-cyan-300 font-bold mb-2">
                   Now showing
@@ -209,7 +252,7 @@ export default function SpeakerNotesView() {
                 {nextMeta ? (
                   <>
                     <SlideThumbnail id={nextMeta.id} width={thumbDims.next} gridIntensity={0.4} />
-                    <div className="mt-2 text-white/70 text-[12px] leading-tight">
+                    <div className="mt-2 text-white/70 text-[12px] leading-tight" style={{ width: thumbDims.next }}>
                       <span className="text-white/40 font-mono mr-2">
                         {String(nextMeta.id).padStart(2, '0')}
                       </span>
@@ -229,46 +272,8 @@ export default function SpeakerNotesView() {
                   </div>
                 )}
               </div>
-            </div>
-
-            {/* Title + presenter attribution */}
-            <div className="text-[12px] uppercase tracking-[0.26em] text-cyan-300 font-bold mb-1">
-              {section?.presenter} · {section?.company}
-            </div>
-            <h1
-              className="font-bold text-white leading-[1.1] mb-6"
-              style={{
-                fontFamily: '"Inter Tight", system-ui, sans-serif',
-                fontSize: 'clamp(28px, 3.4vw, 42px)',
-                letterSpacing: '-0.02em'
-              }}
-            >
-              {meta.title}
-            </h1>
-
-            {/* Speaker notes — editable in place. Click any note to edit;
-                blur saves. Use the + at the bottom to add new bullets. */}
-            <ol className="space-y-4">
-              {notes.map((note, i) => (
-                <EditableNote
-                  key={i}
-                  index={i}
-                  text={note}
-                  fontScale={fontScale}
-                  onChange={(t) => notesStore.updateNote(current, i, t)}
-                  onDelete={() => notesStore.deleteNote(current, i)}
-                />
-              ))}
-            </ol>
-
-            <button
-              onClick={() => notesStore.addNote(current, '')}
-              className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-white/20 text-white/55 hover:text-white hover:border-white/40 hover:bg-white/4 transition text-[13px]"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Add a note
-            </button>
-          </>
+            </aside>
+          </div>
         ) : (
           <div className="text-white/45 text-center py-20">
             No notes for this slide.
