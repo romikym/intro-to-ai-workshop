@@ -3,9 +3,12 @@ import { useEffect } from 'react'
 export default function useKeyboard(handlers) {
   useEffect(() => {
     function onKey(e) {
-      // Don't capture keys when user is typing in inputs/textareas
-      const tag = (e.target?.tagName || '').toLowerCase()
-      if (tag === 'input' || tag === 'textarea') {
+      // Don't capture keys when the user is typing in inputs, textareas,
+      // or any contenteditable region (e.g. inline-edited speaker notes).
+      const t = e.target
+      const tag = (t?.tagName || '').toLowerCase()
+      const isEditing = t?.isContentEditable || tag === 'input' || tag === 'textarea'
+      if (isEditing) {
         // Allow Escape to bubble up regardless
         if (e.key === 'Escape' && handlers.escape) {
           handlers.escape(e)

@@ -61,8 +61,15 @@ export default function SpeakerNotesView() {
   // Keyboard nav so the notes window can also drive the deck.
   // Pressing arrow keys here broadcasts the new slide to the main window
   // (the main window also listens and will move).
+  // IMPORTANT: skip when the user is editing a note, otherwise space and
+  // arrow keys would advance the slide instead of typing/cursor movement.
   useEffect(() => {
     function onKey(e) {
+      const t = e.target
+      const tag = (t?.tagName || '').toLowerCase()
+      const isEditing = t?.isContentEditable || tag === 'input' || tag === 'textarea'
+      if (isEditing) return
+
       if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault()
         const next = Math.min(total, current + 1)
