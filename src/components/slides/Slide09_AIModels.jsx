@@ -5,31 +5,31 @@ const models = [
   {
     company: 'Anthropic',
     name: 'Claude',
-    bestFor: 'Drafting proposals, analyzing contracts, working through complex problems.',
+    bestFor: 'Drafting listing descriptions, analyzing contracts & disclosures, thinking through tricky client situations.',
     accent: 'var(--c-amber)'
   },
   {
     company: 'OpenAI',
     name: 'ChatGPT',
-    bestFor: 'Most everyday tasks, brainstorming, plus DALL-E images and a huge plugin ecosystem.',
+    bestFor: 'Everyday client emails and social captions, brainstorming, plus image generation for listings.',
     accent: 'var(--c-teal)'
   },
   {
     company: 'Google',
     name: 'Gemini',
-    bestFor: 'Drafting in Docs, summarizing Gmail threads, working with Sheets data.',
+    bestFor: 'Drafting in Docs, summarizing client email threads, working your pipeline in Sheets.',
     accent: 'var(--c-electric-soft)'
   },
   {
     company: 'Microsoft',
     name: 'Copilot',
-    bestFor: 'Excel formulas, PowerPoint generation, Outlook replies, Teams meeting recap.',
+    bestFor: 'Excel deal trackers, listing-presentation decks, Outlook replies, Teams meeting recap.',
     accent: 'var(--c-electric)'
   },
   {
     company: 'Perplexity',
     name: 'Perplexity',
-    bestFor: 'Fact-checking, market research, anything where "where did this come from" matters.',
+    bestFor: 'Neighborhood research, market data, fact-checking with sources you can cite.',
     accent: 'var(--c-violet)'
   }
 ]

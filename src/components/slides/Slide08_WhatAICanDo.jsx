@@ -5,12 +5,12 @@ import SlideFrame from '../SlideFrame'
 import { PresenterChip } from '../Presenters'
 
 const categories = [
-  { n: '01', pillLabel: 'Communication', title: 'Talk to customers', tagline: 'Reply with your voice, at machine speed.', items: ['Yelp & review replies', 'Email & FAQ drafts'], accent: 'var(--c-electric)',  examplePrompt: 'Reply to this 2-star Yelp review about a cold pizza, in a warm Burbank-local tone, owner-signed.' },
-  { n: '02', pillLabel: 'Marketing',     title: 'Make content',      tagline: 'One idea, ten formats.',                       items: ['Social & email', 'Ad variations'],     accent: 'var(--c-amber)',     examplePrompt: 'Take this product launch and make: an Instagram post, a LinkedIn post, an email subject line, and 3 ad headlines.' },
-  { n: '03', pillLabel: 'Operations',    title: 'Run the office',    tagline: 'Less paperwork, more business.',                items: ['Meeting recaps', 'Cleaned-up docs'],   accent: 'var(--c-teal)',      examplePrompt: 'Here is my 45-minute meeting transcript. Give me decisions made, action items by owner, and a 3-sentence summary.' },
-  { n: '04', pillLabel: 'Research',      title: 'Know your market',  tagline: "Read what you don't have time to read.",        items: ['Competitor scans', 'Long PDFs digested'], accent: 'var(--c-electric-soft)', examplePrompt: 'Read these 6 competitor websites. What do they all promise? What do they all leave out? Where is the opening?' },
-  { n: '05', pillLabel: 'Design',        title: 'Make visuals',      tagline: 'A designer in your pocket.',                    items: ['Social graphics', 'Quick mockups'],    accent: 'var(--c-violet)',    examplePrompt: 'Generate 4 hero image options for a Burbank dental office homepage — warm, family-friendly, no stock-photo clichés.' },
-  { n: '06', pillLabel: 'Decisions',     title: 'Read the numbers',  tagline: 'Patterns you would otherwise miss.',            items: ['Sales patterns', 'Pricing & bundles'], accent: 'var(--c-coral)',     examplePrompt: 'Here is 12 months of sales data. Which days are dead? What product moves on Tuesdays vs Saturdays? What should I bundle?' }
+  { n: '01', pillLabel: 'Communication', title: 'Talk to clients',   tagline: 'Reply with your voice, at machine speed.', items: ['Lead replies & follow-ups', 'Review & referral responses'], accent: 'var(--c-electric)',  examplePrompt: 'Draft a warm follow-up to a buyer who toured 3 homes last month and went quiet — no pressure, just add value and offer next steps.' },
+  { n: '02', pillLabel: 'Marketing',     title: 'Market a listing',  tagline: 'One property, ten pieces of content.',         items: ['MLS descriptions', 'Just-listed social & email'],     accent: 'var(--c-amber)',     examplePrompt: 'For this 3BR/2BA Burbank craftsman, write: an MLS listing description, an Instagram caption, and a just-listed email to my database.' },
+  { n: '03', pillLabel: 'Operations',    title: 'Run your business', tagline: 'Less paperwork, more closings.',                items: ['Disclosure & inspection recaps', 'Showing notes cleaned up'],   accent: 'var(--c-teal)',      examplePrompt: 'Here is a 38-page inspection report. Give me the 5 things my buyer actually needs to know, and 3 questions to ask the seller.' },
+  { n: '04', pillLabel: 'Research',      title: 'Know your market',  tagline: "Read what you don't have time to read.",        items: ['Neighborhood & comp context', 'Competing agents scanned'], accent: 'var(--c-electric-soft)', examplePrompt: 'Read these 5 competing Burbank agents’ websites. What do they all promise? What do they all leave out? Where is my opening?' },
+  { n: '05', pillLabel: 'Design',        title: 'Make visuals',      tagline: 'A designer in your pocket.',                    items: ['Listing flyers & open-house graphics', 'Staging & social visuals'],    accent: 'var(--c-violet)',    examplePrompt: 'Generate 4 open-house flyer directions for a Burbank craftsman home — warm, upscale, family-friendly, no stock-photo clichés.' },
+  { n: '06', pillLabel: 'Decisions',     title: 'Read the numbers',  tagline: 'Patterns you would otherwise miss.',            items: ['Pricing strategy from comps', 'Lead-source & pipeline patterns'], accent: 'var(--c-coral)',     examplePrompt: 'Here is 12 months of my closings and lead sources. Which sources actually convert? Where should I spend my marketing next quarter?' }
 ]
 
 /**
@@ -19,16 +19,16 @@ const categories = [
  * is annotated with the technique being used.
  */
 const SHOWCASE_PROMPT = {
-  title: 'The Burbank Business Strategy prompt',
+  title: 'The Realtor Growth Strategy prompt',
   subtitle: 'A high-leverage prompt that demonstrates good prompting',
   lines: [
     {
-      text: 'You are an expert business strategist for small businesses in Burbank, CA.',
+      text: 'You are an expert real estate business coach for agents working in Burbank, CA.',
       tag: 'Role + locality',
       color: 'var(--c-electric)'
     },
     {
-      text: 'I run a [TYPE] business with [N] employees. My biggest challenge right now is [CHALLENGE].',
+      text: 'I am a realtor with [N] active listings. My biggest challenge right now is [LEAD GEN / CONVERSION / WINNING LISTINGS].',
       tag: 'Concrete context',
       color: 'var(--c-amber)'
     },

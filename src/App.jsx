@@ -28,10 +28,11 @@ const Slide08 = lazy(() => import('./components/slides/Slide08_WhatAICanDo'))
 const Slide09 = lazy(() => import('./components/slides/Slide09_AIModels'))
 const Slide12 = lazy(() => import('./components/slides/Slide12_StartThisWeek'))
 const Slide14 = lazy(() => import('./components/slides/Slide14_Questions'))
+const Slide15 = lazy(() => import('./components/slides/Slide15_RealEstate'))
 
 const SLIDE_COMPONENTS = [
   Slide01, Slide02, Slide03, Slide04, Slide05, Slide06, Slide07,
-  Slide09, Slide08, Slide12, Slide14
+  Slide09, Slide08, Slide15, Slide12, Slide14
 ]
 
 // Per-slide TRON grid tuning. The atmospheric backdrop is constant
@@ -47,8 +48,9 @@ const GRID_CONFIG = {
   7:  { intensity: 0.95, variant: 'wide'  },
   8:  { intensity: 0.65, variant: 'focus' },
   9:  { intensity: 0.7,  variant: 'focus' },
-  10: { intensity: 0.7,  variant: 'focus' },  // Start This Week
-  11: { intensity: 1.0,  variant: 'wide'  }   // Questions
+  10: { intensity: 0.7,  variant: 'focus' },  // AI in Real Estate (showcase)
+  11: { intensity: 0.7,  variant: 'focus' },  // Start This Week
+  12: { intensity: 1.0,  variant: 'wide'  }   // Questions
 }
 
 // Reference design size — content is laid out for this size, then scaled to fit

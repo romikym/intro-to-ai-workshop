@@ -6,7 +6,23 @@ import { motion } from 'framer-motion'
  */
 export default function Slide01_Title() {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center px-8 sm:px-14 pt-8 lg:pt-10 relative">
+    <div className="w-full h-full flex flex-col items-center justify-center px-8 sm:px-14 pt-4 lg:pt-6 relative">
+      {/* Presenting-partner logo — Burbank AI Alliance */}
+      <motion.img
+        src="/assets/burbank-ai-alliance.png"
+        alt="Burbank AI Alliance"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="z-10 flex-shrink-0"
+        style={{
+          width: 'min(360px, 46vw)',
+          height: 'auto',
+          marginBottom: 'var(--sp-4)',
+          filter: 'drop-shadow(0 4px 22px rgba(0,0,0,0.45))'
+        }}
+      />
+
       {/* Hero text block */}
       <div className="text-center z-10 max-w-[1400px] flex-shrink-0">
         <motion.div
@@ -14,7 +30,7 @@ export default function Slide01_Title() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="text-accent-cyan font-sans uppercase font-bold"
-          style={{ fontSize: '24px', letterSpacing: '0.28em', marginBottom: 'var(--sp-6)' }}
+          style={{ fontSize: '24px', letterSpacing: '0.28em', marginBottom: 'var(--sp-4)' }}
         >
           Burbank Chamber · 2026
         </motion.div>
@@ -24,7 +40,7 @@ export default function Slide01_Title() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.55, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
           className="font-sans display-sans gradient-text-bright"
-          style={{ fontSize: '124px', lineHeight: 0.96, marginBottom: 'var(--sp-5)', paddingBottom: '0.06em' }}
+          style={{ fontSize: '112px', lineHeight: 0.96, marginBottom: 'var(--sp-4)', paddingBottom: '0.06em' }}
         >
           Introduction to{' '}
           <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>
@@ -37,7 +53,7 @@ export default function Slide01_Title() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0, duration: 0.85 }}
           className="font-sans display-sans text-white/95"
-          style={{ fontSize: '40px', lineHeight: 1.15 }}
+          style={{ fontSize: '36px', lineHeight: 1.15 }}
         >
           Cutting through{' '}
           <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>the noise</span>.
@@ -45,13 +61,13 @@ export default function Slide01_Title() {
       </div>
 
       {/* Presenters strip */}
-      <div className="w-full" style={{ marginTop: 'var(--sp-8)' }}>
+      <div className="w-full" style={{ marginTop: 'var(--sp-4)' }}>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 0.6 }}
           className="text-center text-white/65 font-sans uppercase font-bold"
-          style={{ fontSize: '22px', letterSpacing: '0.28em', marginBottom: 'var(--sp-6)' }}
+          style={{ fontSize: '22px', letterSpacing: '0.28em', marginBottom: 'var(--sp-4)' }}
         >
           Presented by
         </motion.div>
@@ -80,7 +96,7 @@ const PRESENTERS = {
     role: 'CEO · Healthe Habits',
     photo: '/assets/jim.jpg',
     logo: '/assets/healthe-logo.png',
-    photoPos: 'center 30%',
+    photoPos: 'center center',
     // Healthe logo is more compact than MCD's wide wordmark — give it
     // more height so it visually matches the cyan logo's presence.
     logoMaxH: 96,
@@ -98,11 +114,11 @@ function PresenterCard({ presenterId, delay = 0 }) {
       className="flex flex-col items-center"
     >
       {/* Headshot */}
-      <div className="relative" style={{ marginBottom: '14px' }}>
+      <div className="relative" style={{ marginBottom: '10px' }}>
         <div className="absolute inset-[-12px] rounded-full bg-gradient-to-br from-accent-cyan/35 to-accent-indigo/25 blur-2xl" />
         <div className="absolute inset-[-3px] rounded-full bg-gradient-to-br from-accent-cyan via-accent-blue to-accent-indigo" />
         <div className="relative rounded-full overflow-hidden bg-ink-800 ring-2 ring-ink-950"
-             style={{ height: '108px', width: '108px' }}>
+             style={{ height: '96px', width: '96px' }}>
           <img
             src={p.photo}
             alt={p.name}
@@ -115,7 +131,7 @@ function PresenterCard({ presenterId, delay = 0 }) {
       {/* Name + role — +2pt */}
       <div className="text-center">
         <div className="font-sans display-sans text-white leading-tight"
-             style={{ fontSize: '30px' }}>
+             style={{ fontSize: '27px' }}>
           {p.name}
         </div>
         <div className="text-white/85" style={{ fontSize: '19px', marginTop: '4px' }}>
@@ -125,7 +141,7 @@ function PresenterCard({ presenterId, delay = 0 }) {
 
       {/* Logo — per-presenter sizing so visual weight matches across brands */}
       <div className="flex items-center justify-center"
-           style={{ height: '100px', width: '300px', marginTop: '14px', overflow: 'visible' }}>
+           style={{ height: '84px', width: '300px', marginTop: '10px', overflow: 'visible' }}>
         <img
           src={p.logo}
           alt=""

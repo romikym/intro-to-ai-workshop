@@ -104,11 +104,11 @@ export const slidesMeta = [
       'DEMO MOMENT — click "Try Live Demo" to actually run a prompt.',
       'These are all chat-based assistants. They can all do most things.',
       'Differences: personality, integration, what each is best at.',
-      'Claude: drafting proposals, analyzing contracts, complex problems.',
-      'ChatGPT: most everyday tasks, plus DALL-E images and plugins.',
-      'Gemini: drafting in Docs, summarizing Gmail, working with Sheets.',
-      'Copilot: Excel formulas, PowerPoint generation, Outlook, Teams recap.',
-      'Perplexity: fact-checking, market research, source attribution.'
+      'Claude: listing descriptions, analyzing contracts & disclosures, tricky client situations.',
+      'ChatGPT: everyday client emails and social captions, plus image generation.',
+      'Gemini: drafting in Docs, summarizing client email threads, pipeline in Sheets.',
+      'Copilot: Excel deal trackers, listing-presentation decks, Outlook, Teams recap.',
+      'Perplexity: neighborhood research, market data, fact-checking with sources.'
     ]
   },
   {
@@ -117,29 +117,43 @@ export const slidesMeta = [
     title: 'What AI Can Do',
     notes: [
       'Six concrete categories. Hover/click each card for examples.',
-      'Customer communication: drafts emails, FAQs, review responses in your voice.',
-      'Marketing & content: turn one idea into ten formats.',
-      'Operations & admin: meeting summaries, note organization, clean documents.',
-      'Research & analysis: competitor scans, market research, summarizing long PDFs.',
-      'Creative & design: images, mockups, social graphics.',
-      'Decision support: read your numbers, suggest pricing, surface patterns.'
+      'Talk to clients: lead replies, follow-ups, review responses in your voice.',
+      'Market a listing: turn one property into an MLS description, social, and email.',
+      'Run your business: disclosure & inspection recaps, showing notes cleaned up.',
+      'Know your market: neighborhood & comp context, competing agents, long PDFs.',
+      'Make visuals: listing flyers, open-house graphics, staging & social visuals.',
+      'Read the numbers: pricing from comps, which lead sources actually convert.'
     ]
   },
   {
     id: 10,
     section: 'PART_2',
+    title: 'AI in Real Estate',
+    notes: [
+      'This is the "show, don\'t tell" slide — six live animations of AI at work in a real estate practice.',
+      'Listing lifecycle: AI helps at every stage — list, market, show, offer, close.',
+      'Market a listing: one property fans out into an MLS description, social posts, an email blast, and a flyer.',
+      'Draft the copy: a bland MLS blurb gets rewritten into polished, on-brand listing copy.',
+      'Price from comps: comparable sales inform a suggested list price.',
+      'Know your market: neighborhood comps and competing listings mapped at a glance.',
+      'Time to close: faster days-on-market → SOLD. Let the visuals breathe; narrate one or two.'
+    ]
+  },
+  {
+    id: 11,
+    section: 'PART_2',
     title: 'Start This Week',
     notes: [
       'Do not try to overhaul everything. Pick one tool, one task, and start.',
       '1. Pick one tool (Claude or ChatGPT — do not compare ten).',
-      '2. Pick one task (something you do every week).',
+      '2. Pick one task (listing descriptions, buyer follow-ups, social posts).',
       '3. Spend 30 focused minutes on it.',
       '4. Save your best prompts — they become assets.',
       '5. Add one new task per week. By week six you have AI handling six recurring tasks.'
     ]
   },
   {
-    id: 11,
+    id: 12,
     section: 'PART_2',
     title: 'Questions',
     notes: [

@@ -11,7 +11,7 @@ const steps = [
   {
     n: '02',
     title: 'Pick one task',
-    body: 'Something you do every week: emails, social, FAQs.'
+    body: 'Something you do every week: listing descriptions, buyer follow-ups, social posts.'
   },
   {
     n: '03',
