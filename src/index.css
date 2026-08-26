@@ -1508,3 +1508,20 @@ input, textarea, [contenteditable] {
     max-height: calc(100vh - 100px);
   }
 }
+
+/* ============================================================
+   Real-estate showcase — elevated / cinematic motion primitives
+   ============================================================ */
+@keyframes reSheen   { 0%{ transform: translateX(-160%) skewX(-20deg); } 55%,100%{ transform: translateX(320%) skewX(-20deg); } }
+@keyframes reFlow    { to { stroke-dashoffset: -240; } }
+@keyframes reFlowRev { to { stroke-dashoffset: 240; } }
+@keyframes reRadar   { to { transform: rotate(360deg); } }
+@keyframes reBreathe { 0%,100%{ opacity:.45; transform:scale(1); } 50%{ opacity:1; transform:scale(1.08); } }
+@keyframes reBeacon  { 0%{ transform:scale(.5); opacity:.75; } 100%{ transform:scale(2.8); opacity:0; } }
+@keyframes reFloat   { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-4px); } }
+@keyframes reSpin    { to { transform: rotate(360deg); } }
+@keyframes reShimmer { 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
+.re-sheen{ position:absolute; top:0; bottom:0; width:42%; pointer-events:none; z-index:3;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.10) 45%, rgba(255,255,255,0.16) 50%, transparent 60%);
+  animation: reSheen 7s cubic-bezier(.5,0,.3,1) infinite; }
+.re-flow{ stroke-dasharray: 5 9; animation: reFlow 1.6s linear infinite; }

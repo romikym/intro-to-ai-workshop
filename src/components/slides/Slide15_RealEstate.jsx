@@ -22,6 +22,21 @@ const TILES = [
   { Viz: DaysOnMarket,      accent: 'var(--c-coral)' }
 ]
 
+/** Glowing L-brackets in each corner of a tile. */
+function CornerBrackets({ color }) {
+  const base = { position: 'absolute', width: '16px', height: '16px', pointerEvents: 'none', opacity: 0.7,
+    filter: `drop-shadow(0 0 4px color-mix(in srgb, ${color} 60%, transparent))` }
+  const stroke = { stroke: color, strokeWidth: 2, fill: 'none', strokeLinecap: 'round' }
+  return (
+    <>
+      <svg style={{ ...base, top: 8, left: 8 }} viewBox="0 0 16 16"><path d="M1 6 V1 H6" style={stroke}/></svg>
+      <svg style={{ ...base, top: 8, right: 8 }} viewBox="0 0 16 16"><path d="M15 6 V1 H10" style={stroke}/></svg>
+      <svg style={{ ...base, bottom: 8, left: 8 }} viewBox="0 0 16 16"><path d="M1 10 V15 H6" style={stroke}/></svg>
+      <svg style={{ ...base, bottom: 8, right: 8 }} viewBox="0 0 16 16"><path d="M15 10 V15 H10" style={stroke}/></svg>
+    </>
+  )
+}
+
 export default function Slide15_RealEstate() {
   return (
     <SlideFrame>
@@ -35,13 +50,23 @@ export default function Slide15_RealEstate() {
         {TILES.map(({ Viz, accent }, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 + i * 0.09, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="deck-card flex flex-col overflow-hidden"
-            style={{ '--card-accent': accent, padding: '16px 18px', minHeight: 0 }}
+            initial={{ opacity: 0, y: 22, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.2 + i * 0.1, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ y: -4 }}
+            className="deck-card relative flex flex-col overflow-hidden"
+            style={{ '--card-accent': accent, padding: '15px 18px', minHeight: 0,
+              boxShadow: `0 18px 44px -22px color-mix(in srgb, ${accent} 55%, transparent)` }}
           >
-            <Viz />
+            {/* bottom accent glow */}
+            <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '40%', pointerEvents: 'none',
+              background: `radial-gradient(ellipse at 50% 120%, color-mix(in srgb, ${accent} 18%, transparent), transparent 70%)` }} />
+            {/* moving sheen */}
+            <span className="re-sheen" style={{ animationDelay: `${i * 0.9}s` }} />
+            <CornerBrackets color={accent} />
+            <div className="relative" style={{ zIndex: 2, height: '100%' }}>
+              <Viz />
+            </div>
           </motion.div>
         ))}
       </div>
