@@ -17,13 +17,13 @@ const models = [
   {
     company: 'Google',
     name: 'Gemini',
-    bestFor: 'Drafting in Docs, summarizing client email threads, working your pipeline in Sheets.',
+    bestFor: 'Helps write your emails, summarizes long message threads, and organizes your spreadsheets.',
     accent: 'var(--c-electric-soft)'
   },
   {
     company: 'Microsoft',
     name: 'Copilot',
-    bestFor: 'Excel deal trackers, listing-presentation decks, Outlook replies, Teams meeting recap.',
+    bestFor: 'Lives inside Excel, PowerPoint, and Outlook — the Microsoft apps you already use.',
     accent: 'var(--c-electric)'
   },
   {
@@ -38,7 +38,7 @@ export default function Slide09_AIModels() {
   return (
     <SlideFrame>
       <SlideHeader
-        eyebrow="Meet the Major AI Models"
+        eyebrow="Meet the AI Assistants"
         title="They all do most things."
         presenter="romik"
       />
@@ -50,7 +50,7 @@ export default function Slide09_AIModels() {
         className="text-white/85 max-w-4xl leading-relaxed"
         style={{ fontSize: 'var(--fs-lead)', marginBottom: 'var(--sp-9)' }}
       >
-        The differences are in personality, integration, and what each is truly best at.
+        They're all smart assistants. The differences are small — mostly what each one does best.
       </motion.p>
 
       {/* Five model cards */}

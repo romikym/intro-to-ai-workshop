@@ -9,7 +9,7 @@ import { PillarFlowAnchor } from '../AnchorVisuals'
  *   Slide 10 → Action (Start This Week)
  */
 const pillars = [
-  { n: '01', title: 'Models',  tagline: 'The major AI tools.',       body: 'Claude, ChatGPT, Gemini, Copilot, Perplexity — what each is best for.',     accent: 'var(--c-electric-soft)' },
+  { n: '01', title: 'The Assistants',  tagline: 'The main AI helpers.',       body: 'Claude, ChatGPT, Gemini, Copilot, Perplexity — what each one is best for.',     accent: 'var(--c-electric-soft)' },
   { n: '02', title: 'Tools',   tagline: 'What AI can actually do.',  body: 'Six concrete categories where small businesses are getting real value today.', accent: 'var(--c-electric)' },
   { n: '03', title: 'Action',  tagline: 'Start this week.',          body: 'A simple 5-step plan to put AI to work in your business by Friday.',        accent: 'var(--c-amber)' }
 ]

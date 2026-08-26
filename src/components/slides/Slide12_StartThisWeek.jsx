@@ -20,8 +20,8 @@ const steps = [
   },
   {
     n: '04',
-    title: 'Save your best prompt',
-    body: 'When a prompt works, save it. That\'s now an asset.'
+    title: 'Save what works',
+    body: 'When something works, keep it — now it\'s yours to reuse.'
   },
   {
     n: '05',

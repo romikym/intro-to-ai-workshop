@@ -99,11 +99,11 @@ export const slidesMeta = [
   {
     id: 8,
     section: 'PART_2',
-    title: 'Meet the Major AI Models',
+    title: 'Meet the AI Assistants',
     notes: [
       'DEMO MOMENT — click "Try Live Demo" to actually run a prompt.',
       'These are all chat-based assistants. They can all do most things.',
-      'Differences: personality, integration, what each is best at.',
+      'Frame them as smart assistants. Differences are small — mostly what each one does best.',
       'Claude: listing descriptions, analyzing contracts & disclosures, tricky client situations.',
       'ChatGPT: everyday client emails and social captions, plus image generation.',
       'Gemini: drafting in Docs, summarizing client email threads, pipeline in Sheets.',

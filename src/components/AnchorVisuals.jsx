@@ -431,7 +431,7 @@ export function TrustCurvesAnchor() {
    SLIDE 7 — PillarFlowAnchor (unchanged)
    ============================================================= */
 const PILLARS = [
-  { label: 'Models',  color: 'var(--c-electric-soft)' },
+  { label: 'Assistants',  color: 'var(--c-electric-soft)' },
   { label: 'Tools',   color: 'var(--c-electric)' },
   { label: 'Action',  color: 'var(--c-amber)' }
 ]

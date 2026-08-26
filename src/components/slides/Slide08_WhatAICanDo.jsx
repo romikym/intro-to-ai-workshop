@@ -19,22 +19,22 @@ const categories = [
  * is annotated with the technique being used.
  */
 const SHOWCASE_PROMPT = {
-  title: 'The Realtor Growth Strategy prompt',
-  subtitle: 'A high-leverage prompt that demonstrates good prompting',
+  title: 'The Realtor Growth Strategy example',
+  subtitle: 'A simple example that shows how to ask well',
   lines: [
     {
       text: 'You are an expert real estate business coach for agents working in Burbank, CA.',
-      tag: 'Role + locality',
+      tag: 'Tell it who to be',
       color: 'var(--c-electric)'
     },
     {
       text: 'I am a realtor with [N] active listings. My biggest challenge right now is [LEAD GEN / CONVERSION / WINNING LISTINGS].',
-      tag: 'Concrete context',
+      tag: 'Give it your details',
       color: 'var(--c-amber)'
     },
     {
       text: "Before answering, ask me 3 questions you'd need to give specific advice — not generic guidance.",
-      tag: 'Make it ask first',
+      tag: 'Have it ask you questions first',
       color: 'var(--c-violet)'
     },
     {
@@ -55,7 +55,7 @@ const SHOWCASE_PROMPT = {
     },
     {
       text: 'Be direct, specific, and skip filler.',
-      tag: 'Tone control',
+      tag: 'Tell it how to sound',
       color: 'var(--c-teal)'
     }
   ]
@@ -127,7 +127,7 @@ export default function Slide08_WhatAICanDo() {
                 </button>
               </div>
               <div className="px-8 py-7">
-                <div className="text-xs uppercase tracking-[0.2em] text-white/65 mb-3 font-bold">Try this prompt</div>
+                <div className="text-xs uppercase tracking-[0.2em] text-white/65 mb-3 font-bold">Try typing this</div>
                 <div className="bg-black/30 border border-white/10 rounded-xl p-5 font-mono text-base text-white/95 leading-relaxed">
                   "{categories[activeIdx].examplePrompt}"
                 </div>
@@ -164,7 +164,7 @@ function SamplePromptButton({ onClick }) {
       }}
     >
       <Sparkles className="h-5 w-5" style={{ color: 'var(--c-electric-soft)' }} />
-      <span>Sample Prompt</span>
+      <span>See an example</span>
       <span className="font-sans uppercase font-bold rounded-full px-2 py-0.5"
             style={{
               fontSize: '10px',
@@ -240,7 +240,7 @@ function ShowcasePromptModal({ open, onClose }) {
                 <div className="min-w-0">
                   <div className="font-sans uppercase font-bold text-white/65"
                        style={{ fontSize: '12px', letterSpacing: '0.22em', marginBottom: '4px' }}>
-                    SAMPLE PROMPT · BURBANK CHAMBER
+                    AN EXAMPLE · BURBANK CHAMBER
                   </div>
                   <h3 className="display-sans text-white leading-tight"
                       style={{ fontSize: '32px' }}>
@@ -263,7 +263,7 @@ function ShowcasePromptModal({ open, onClose }) {
               <div className="font-sans uppercase font-bold text-white/55 flex items-center gap-2"
                    style={{ fontSize: '12px', letterSpacing: '0.22em', marginBottom: 'var(--sp-4)' }}>
                 <BookOpen className="h-3.5 w-3.5" />
-                The prompt
+What you type
               </div>
 
               <div className="font-mono leading-relaxed text-white"
@@ -330,7 +330,7 @@ function ShowcasePromptModal({ open, onClose }) {
                   boxShadow: '0 8px 24px -8px color-mix(in srgb, var(--c-electric) 70%, transparent)'
                 }}
               >
-                <Check className="h-4 w-4" /> Copy prompt
+                <Check className="h-4 w-4" /> Copy it
               </button>
             </motion.div>
           </motion.div>
@@ -404,7 +404,7 @@ function CategoryCard({ n, pillLabel, title, tagline, items, accent, delay, onCl
         onMouseLeave={(e) => { e.currentTarget.style.background = `color-mix(in srgb, ${accent} 12%, transparent)` }}
       >
         <Sparkles className="h-4 w-4" />
-        See example prompt
+        See an example
         <span aria-hidden="true">→</span>
       </button>
     </motion.div>
