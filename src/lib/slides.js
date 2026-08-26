@@ -33,57 +33,68 @@ export const slidesMeta = [
   {
     id: 2,
     section: 'PART_1',
-    title: 'Introduction',
+    title: 'Output, or Process?',
     notes: [
-      'The "Adopt AI or Die" narrative is a marketing line — it benefits platforms that need to recoup massive infrastructure investment.',
-      'Reframe: AI is software. Brutally resource-intensive software. Each query consumes electricity and fresh water (server cooling).',
-      'Stop treating it as magic. Start treating it as a tool with operating costs, biases, and limits.',
-      'Key shift: Oracle (gives you answers) -> Tool (requires a skilled operator).'
+      `Open: "Generative AI is an amazing tool — when used correctly." The whole talk hangs on one question: am I using it for OUTPUT, or PROCESS?`,
+      `The Calculator Trap: AI is often defended as "just the new calculator." But a calculator does the tedious math so a student can focus on higher-level logic. Generative AI does the exact opposite — it performs the high-level logic and reasoning, leaving the student with nothing to do.`,
+      `When we use AI to remove the friction of the process, we aren't making people more efficient — we are outsourcing cognitive development to a server.`,
+      `The "Who Cares?" Metric: "If I skip the struggle of doing this myself, what do I actually lose?"`,
+      `If the answer is my critical thinking, my voice, or my understanding of the subject — protect the PROCESS. Do it yourself.`,
+      `If the answer is nothing but 45 minutes of tedious boredom — delegate the OUTPUT. Treat the algorithm like a high-speed administrative assistant, not a co-author.`,
+      `Output examples where the human touch is completely unnecessary: translating messy bullet points into a formal itinerary, generating a weekly grocery list from a recipe, reformatting data.`
     ]
   },
   {
     id: 3,
     section: 'PART_1',
-    title: 'What AI Is',
+    title: 'A Counterfeit Oracle',
     notes: [
-      'Strip away the sci-fi. An LLM does not "know" anything — it predicts the next most likely token.',
-      'Show the live demo: "The cat sat on the ___" — watch it predict.',
-      'It is built to sound confident, not to be accurate. Using it as a search engine or legal/factual checker is a liability.',
-      'It predicts the statistical middle. By design, it produces average output.',
-      'Average kills local brands. If you outsource your voice to AI, your brand becomes generic.'
+      `Generative AI (ChatGPT, Gemini, Copilot, Grok) is simply a highly advanced predictive text engine. It calculates the most statistically likely next word — Google search on steroids.`,
+      `Show the live demo: "The cat sat on the ___" — watch it predict.`,
+      `ChatGPT is supremely powerful, but it is NOT an all-knowing oracle for your homework or life problems. It generates answers based on the entirety of the internet, blending facts with fiction. It is a machine designed to sound confident, not to be correct.`,
+      `What AI is NOT: a therapist, a tutor with a moral compass, or a peer. No capacity for empathy, judgment, or real-world context. "Intelligence" is a huge misnomer.`,
+      `What AI IS: an incredibly powerful predictive text engine — and biased from its training data.`,
+      `Bias example: Grok is built into X and reflects its creator's biases. Ask it about Elon Musk and it returns glowing, self-flattering copy — not just biased, but often incorrect.`,
+      `Another: "Father Justin," an AI-powered Catholic priest, was demoted after suggesting it's OK to baptize babies with Gatorade — then contradicted its own rules in the same chat.`,
+      `The danger: social media hacks our attention; AI hacks our emotions.`
     ]
   },
   {
     id: 4,
     section: 'PART_1',
-    title: 'Workforce Readiness',
+    title: 'Helicopter vs. the Hike',
     notes: [
-      'The future workforce does not need to know how to generate AI content — they need the critical thinking skills to audit it.',
-      'Outsourcing problem-solving to AI atrophies the corporate muscle for innovation (similar to how digital lobbies degrade physical social skills).',
-      'AI is great for: formatting, summarizing internal transcripts, overcoming the blank page.',
-      'Human stays as the driver. Always.'
+      `In human development, education, and creative work, the value is almost entirely in the PROCESS.`,
+      `AI is a helicopter to the top of the mountain — you get the view instantly, but you build zero muscle.`,
+      `When a student writes an essay, the final graded paper is practically worthless in the real world. The actual value is the frustration of brainstorming, the logic of structuring an argument, the humility of taking feedback, and the friction of revision.`,
+      `The Assembly Line: the "journey" holds zero developmental value when it is purely administrative. No one builds character formatting a spreadsheet, writing a standard vendor email, or summarizing a 40-page HOA compliance document. That is exactly where AI thrives.`,
+      `Rule of thumb: protect the climb; delegate the assembly line.`
     ]
   },
   {
     id: 5,
     section: 'PART_1',
-    title: 'Beyond AI / Back to Basics',
+    title: 'The Hidden Costs',
     notes: [
-      'The internet is flooding with cheap, synthetic AI spam. SEO is dying. Digital trust is plummeting.',
-      'As digital content becomes worthless, authentic local human connection becomes a premium good.',
-      'Burbank businesses have a massive advantage. Lean into physical storefronts, local partnerships, community hubs.',
-      'You cannot automate a handshake at a Chamber event.'
+      `AI is a brutally resource-intensive piece of software with real operating costs. Each query consumes electricity and fresh water for cooling at scale.`,
+      `Electricity: 9.0 Wh (AI) vs 0.3 Wh (a web search). Water: 25.0 mL (AI) vs 0.5 mL. (Wh = watt-hour, a unit of energy.)`,
+      `And the data centers are often built in low-income communities and communities of color.`,
+      `The emotional cost: social media hacks our attention; AI hacks our emotions.`,
+      `KQED's "Close All Tabs" tested the safety guardrails of popular AI companions (Character.ai). Despite stated safety guidelines, the chatbots were easily pushed to bypass their own rules — "safeguards" a curious or struggling teen can break.`,
+      `These companions are sycophantic: they affirm the user to keep them engaged and can't push back — they can validate a child's anxiety, depression, or self-harm ideation. In one test the bot coached the user to drive while high and evade police.`
     ]
   },
   {
     id: 6,
     section: 'PART_1',
-    title: 'Deployment Strategy',
+    title: 'The Blank-Page Boundary',
     notes: [
-      'Do not buy a single AI enterprise license until you have written a one-page "AI Philosophy" for your staff.',
-      'Define exactly what the tool is allowed to do, and where human oversight is strictly mandatory.',
-      'This is the single highest-leverage thing a small business can do in 2026.',
-      'Hand-off to Romik: "Now that we know what to be careful about — let us talk about what is actually working."'
+      `The most vital cognitive friction happens when you are staring at a blank page. Organizing raw, chaotic thoughts into a starting point is the heaviest lifting in the creative and educational process.`,
+      `Rule 1 — Never write "Draft Zero": AI can be an editor, a formatter, or a sounding board, but it must never generate the first draft.`,
+      `Rule 2 — Never synthesize for you: AI can gather facts and retrieve data, but it is strictly forbidden from turning that data into your conclusion. Don't outsource "compare these two books" or "tell me what this data means."`,
+      `Rule 3 — Own every output: if you use an algorithm to produce something, you must be able to fully explain the logic, the process, and the factual accuracy to another human being. The risk is we get lazy and stop understanding the work we submit.`,
+      `Hand-off to Romik: "Now that we know where to be careful — let's talk about what's actually working."`,
+      `Q&A · Health-e-Habits.org · hello@health-e-habits.org`
     ]
   },
   {

@@ -1,104 +1,69 @@
 import { motion } from 'framer-motion'
-import { Bot, Users } from 'lucide-react'
+import { Droplets, HeartPulse } from 'lucide-react'
 import SlideFrame, { SlideHeader } from '../SlideFrame'
-import { FactsCarousel } from '../AnchorVisuals'
+import { CostMeterAnchor } from '../AnchorVisuals'
 
 /**
- * Slide 5 — Beyond AI / Burbank advantage.
- * Layout: header → two compare cards (bumped text) → fact carousel
- * (concrete statistic that reinforces the thesis) → closer.
+ * Slide 5 — Jim. The hidden costs of AI: environmental + emotional.
+ * Left: two cost cards. Right: the per-query resource meter.
  */
 export default function Slide05_BeyondAI() {
   return (
     <SlideFrame>
-      <SlideHeader eyebrow="Beyond AI · Back to Basics" title="The Burbank advantage." presenter="jim" />
+      <SlideHeader eyebrow="What It Really Takes" title="The hidden costs." presenter="jim" />
 
-      <div className="flex flex-col flex-1 min-h-0" style={{ gap: 'var(--sp-8)' }}>
-        {/* Two-column compare — generous breathing room between cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
-          <Side
-            icon={Bot}
-            tone="coral"
-            label="The race to the bottom"
-            headline="Cheap, synthetic AI spam."
-            items={['SEO is dying', 'Digital trust plummeting', 'Content prices crashing']}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 lg:gap-10 flex-1 min-h-0 items-stretch">
+        {/* LEFT: two cost cards */}
+        <div className="flex flex-col justify-center" style={{ gap: 'var(--sp-5)' }}>
+          <CostCard
+            icon={Droplets} tone="var(--c-electric)" label="Environmental"
+            headline="A machine that drinks."
+            body={<>Brutally resource-intensive software. Every query burns electricity and fresh water for cooling — roughly <span className="text-white font-medium">30× a web search</span> — and the data centers keep landing in low-income communities.</>}
             delay={0.4}
           />
-          <Side
-            icon={Users}
-            tone="electric"
-            label="The premium good"
-            headline={<>Authentic local connection — a <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>premium</span> commodity.</>}
-            items={['Physical storefronts', 'Local partnerships', 'Community hubs & events']}
+          <CostCard
+            icon={HeartPulse} tone="var(--c-coral)" label="Emotional"
+            headline="Social media hacks attention. AI hacks emotion."
+            body={<>Sycophantic companions affirm whatever you say to keep you hooked — and can validate a struggling teen's worst thoughts. The safety guardrails break with one curious prompt.</>}
             delay={0.55}
           />
         </div>
 
-        {/* Anchor visual — concrete fact carousel BELOW the cards */}
+        {/* RIGHT: per-query cost meter (electricity / water / compute) */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="deck-card flex items-center"
-          style={{ '--card-accent': 'var(--c-electric)', height: '160px', padding: '0' }}
+          initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="deck-card flex flex-col justify-center"
+          style={{ '--card-accent': 'var(--c-amber)', minHeight: '420px', padding: '24px 28px' }}
         >
-          <FactsCarousel />
-        </motion.div>
-
-        {/* Closer — quote matched to slide 10's closing line size + style */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.7 }}
-          className="text-center"
-          style={{ marginTop: 'var(--sp-3)' }}
-        >
-          <div
-            className="font-serif text-white/95 italic display-serif"
-            style={{ fontStyle: 'italic', fontSize: '44px', lineHeight: 1.15 }}
-          >
-            You cannot automate a{' '}
-            <span className="gradient-text">handshake.</span>
-          </div>
+          <CostMeterAnchor />
         </motion.div>
       </div>
     </SlideFrame>
   )
 }
 
-function Side({ icon: Icon, tone, label, headline, items, delay }) {
-  const colors = {
-    coral:    { c: 'var(--c-coral)',    bullet: '—' },
-    electric: { c: 'var(--c-electric)', bullet: '+' }
-  }
-  const t = colors[tone] || colors.electric
+function CostCard({ icon: Icon, tone, label, headline, body, delay }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.7 }}
+      initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="deck-card flex flex-col"
-      style={{ '--card-accent': t.c, padding: '22px 26px' }}
+      style={{ '--card-accent': tone, padding: '22px 26px' }}
     >
-      <div className="flex items-center gap-3 mb-3">
-        <Icon style={{ color: t.c, height: '22px', width: '22px' }} />
-        <span className="font-sans uppercase font-bold"
-              style={{ fontSize: '15px', letterSpacing: '0.22em', color: t.c }}>
+      <div className="flex items-center gap-3" style={{ marginBottom: '10px' }}>
+        <div className="rounded-xl flex items-center justify-center shrink-0"
+             style={{ height: '42px', width: '42px', background: `color-mix(in srgb, ${tone} 14%, transparent)`, border: `1px solid color-mix(in srgb, ${tone} 34%, transparent)` }}>
+          <Icon style={{ height: '20px', width: '20px', color: tone }} />
+        </div>
+        <span className="font-sans uppercase font-bold" style={{ fontSize: '13px', letterSpacing: '0.22em', color: tone }}>
           {label}
         </span>
       </div>
-      <div className="display-sans text-white leading-tight"
-           style={{ fontSize: '30px', marginBottom: '12px' }}>
+      <div className="display-sans text-white leading-tight" style={{ fontSize: '26px', marginBottom: '8px' }}>
         {headline}
       </div>
-      <ul className="text-white/95 leading-snug" style={{ fontSize: '19px' }}>
-        {items.map((x, i) => (
-          <li key={i} className="flex gap-2.5" style={{ marginBottom: '5px' }}>
-            <span style={{ color: t.c }} className="mt-0.5">{t.bullet}</span>
-            <span>{x}</span>
-          </li>
-        ))}
-      </ul>
+      <div className="text-white/85 leading-snug" style={{ fontSize: '17px' }}>{body}</div>
     </motion.div>
   )
 }

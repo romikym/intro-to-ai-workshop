@@ -6,8 +6,8 @@ export default function Slide03_WhatAIIs() {
   return (
     <SlideFrame>
       <SlideHeader
-        eyebrow="What AI Is"
-        title="It does not know things."
+        eyebrow="What AI Actually Is"
+        title="A counterfeit oracle."
         presenter="jim"
       />
 
@@ -32,15 +32,15 @@ export default function Slide03_WhatAIIs() {
           style={{ gap: 'var(--sp-5)' }}
         >
           <Point delay={0.8}>
-            An <span className="display-serif" style={{ fontStyle: 'italic', color: 'var(--c-electric)' }}>LLM</span> predicts the next most likely word. Built to sound confident — not to be accurate.
+            It's a <span className="display-serif" style={{ fontStyle: 'italic', color: 'var(--c-electric)' }}>predictive text engine</span> — it guesses the statistically likely next word. Google search on steroids.
           </Point>
 
           <Point delay={1.0}>
-            Using it as a search engine or factual checker exposes a small business to <span className="font-medium" style={{ color: 'var(--c-electric)' }}>massive liability</span>.
+            Built to sound <span className="font-medium" style={{ color: 'var(--c-electric)' }}>confident</span>, not to be correct. It blends fact with fiction — and it's biased by whatever it was trained on.
           </Point>
 
           <Point delay={1.2}>
-            It predicts the <span className="display-serif" style={{ fontStyle: 'italic' }}>statistical middle</span>. Therefore AI guarantees <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>average</span> output.
+            It is <span className="display-serif" style={{ fontStyle: 'italic' }}>not</span> a therapist, a tutor with a moral compass, or a peer. No empathy, no judgment, no real-world context.
           </Point>
 
           <motion.div
@@ -51,8 +51,8 @@ export default function Slide03_WhatAIIs() {
             style={{ paddingTop: 'var(--sp-5)', marginTop: 'var(--sp-3)' }}
           >
             <div className="display-sans text-white" style={{ fontSize: 'var(--fs-h4)', lineHeight: 1.05 }}>
-              Average kills{' '}
-              <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>local brands.</span>
+              "Intelligence" is a{' '}
+              <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>misnomer.</span>
             </div>
           </motion.div>
         </motion.div>

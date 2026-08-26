@@ -6,7 +6,7 @@ import { SkillAtrophyAnchor } from '../AnchorVisuals'
 export default function Slide04_WorkforceReadiness() {
   return (
     <SlideFrame>
-      <SlideHeader eyebrow="Workforce Readiness" title="The skill is not generation." presenter="jim" />
+      <SlideHeader eyebrow="Where the Value Lives" title="Helicopter vs. the hike." presenter="jim" />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 lg:gap-10 flex-1 min-h-0 items-center">
         {/* LEFT: anchor visual — auto-cycling score ring */}
@@ -21,16 +21,16 @@ export default function Slide04_WorkforceReadiness() {
             className="display-sans text-white leading-tight"
             style={{ fontSize: 'var(--fs-h4)' }}
           >
-            They don't need to know how to{' '}
-            <span className="display-serif" style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.55)' }}>generate</span>.
-            They need the critical thinking to{' '}
-            <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>audit</span>.
+            AI is a helicopter to the summit — you get the{' '}
+            <span className="display-serif" style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.55)' }}>view</span>{' '}
+            instantly, and build{' '}
+            <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>zero muscle</span>.
           </div>
 
           <div className="flex flex-col" style={{ gap: 'var(--sp-4)' }}>
-            <Bullet icon={Dumbbell} title="Atrophy is real" body="Outsource thinking → the muscle for innovation atrophies." />
-            <Bullet icon={Brain}     title="Where AI shines" body="Formatting, summarizing transcripts, overcoming the blank page." />
-            <Bullet icon={Compass}   title="Human is the driver" body="The human stays in the seat. AI is the engine, not the navigator." />
+            <Bullet icon={Compass} title="The value is the climb" body="Brainstorming, structuring an argument, taking feedback, the friction of revision." />
+            <Bullet icon={Dumbbell} title="Skip it, skip the growth" body="Outsource the struggle and the muscle for real thinking atrophies." />
+            <Bullet icon={Brain}     title="The Assembly Line" body="Spreadsheets, vendor emails, HOA docs — no character built there. That's where AI belongs." />
           </div>
         </div>
       </div>
