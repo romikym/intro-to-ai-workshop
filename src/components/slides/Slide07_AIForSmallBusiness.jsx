@@ -9,9 +9,9 @@ import { PillarFlowAnchor } from '../AnchorVisuals'
  *   Slide 10 → Action (Start This Week)
  */
 const pillars = [
-  { n: '01', title: 'The Assistants',  tagline: 'The main AI helpers.',       body: 'Claude, ChatGPT, Gemini, Copilot, Perplexity — what each one is best for.',     accent: 'var(--c-electric-soft)' },
-  { n: '02', title: 'Tools',   tagline: 'What AI can actually do.',  body: 'Six concrete categories where small businesses are getting real value today.', accent: 'var(--c-electric)' },
-  { n: '03', title: 'Action',  tagline: 'Start this week.',          body: 'A simple 5-step plan to put AI to work in your business by Friday.',        accent: 'var(--c-amber)' }
+  { n: '01', title: 'The Assistants',  tagline: 'The main AI helpers.',       body: 'Claude, ChatGPT, Gemini, Copilot, Perplexity — the best fit for each real estate task.',     accent: 'var(--c-electric-soft)' },
+  { n: '02', title: 'Tools',   tagline: 'What AI can actually do.',  body: 'Six concrete things AI does for a real estate practice today.', accent: 'var(--c-electric)' },
+  { n: '03', title: 'Action',  tagline: 'Start this week.',          body: 'A simple 5-step plan to put AI to work in your real estate business by Friday.',        accent: 'var(--c-amber)' }
 ]
 
 export default function Slide07_AIForSmallBusiness() {
@@ -44,7 +44,7 @@ export default function Slide07_AIForSmallBusiness() {
           >
             AI for{' '}
             <span className="display-serif gradient-electric" style={{ fontStyle: 'italic' }}>
-              Small Business.
+              Real Estate.
             </span>
           </motion.h2>
 
@@ -56,7 +56,7 @@ export default function Slide07_AIForSmallBusiness() {
             className="text-center text-white/85 max-w-3xl mx-auto"
             style={{ fontSize: '24px' }}
           >
-            Where to start, what tools to use, and how to make AI useful by Friday.
+            Where to start, what tools to use, and how to save hours on every listing — by Friday.
           </motion.p>
 
           {/* Anchor visual — 3-node light pulse */}

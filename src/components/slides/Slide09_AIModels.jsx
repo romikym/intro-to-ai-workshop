@@ -17,13 +17,13 @@ const models = [
   {
     company: 'Google',
     name: 'Gemini',
-    bestFor: 'Helps write your emails, summarizes long message threads, and organizes your spreadsheets.',
+    bestFor: 'Writes client emails, summarizes long buyer and seller threads, and keeps your listing spreadsheets organized.',
     accent: 'var(--c-electric-soft)'
   },
   {
     company: 'Microsoft',
     name: 'Copilot',
-    bestFor: 'Lives inside Excel, PowerPoint, and Outlook — the Microsoft apps you already use.',
+    bestFor: 'Lives inside Excel, PowerPoint, and Outlook — great for deal trackers and listing presentations.',
     accent: 'var(--c-electric)'
   },
   {

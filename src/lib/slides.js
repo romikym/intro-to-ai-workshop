@@ -89,7 +89,7 @@ export const slidesMeta = [
   {
     id: 7,
     section: 'PART_2',
-    title: 'AI for Small Business',
+    title: 'AI for Real Estate',
     notes: [
       'This half is the practical playbook.',
       'Four parts: what AI can actually do, the major tools, real use cases by industry, and how to start this week.',

@@ -25,16 +25,6 @@ export default function Slide01_Title() {
 
       {/* Hero text block */}
       <div className="text-center z-10 max-w-[1400px] flex-shrink-0">
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="text-accent-cyan font-sans uppercase font-bold"
-          style={{ fontSize: '24px', letterSpacing: '0.28em', marginBottom: 'var(--sp-4)' }}
-        >
-          Burbank Chamber · 2026
-        </motion.div>
-
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
