@@ -1,10 +1,18 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, MessageCircleQuestion, Check, Loader2 } from 'lucide-react'
+import { X, Send, MessageCircleQuestion, Check, Loader2, Home, Sparkles } from 'lucide-react'
 import { submitQuestion } from '../lib/qa'
 
 const MAX_LENGTH = 500
 const MAX_NAME_LENGTH = 60
+
+// Easter egg 🏡 — "who are the best realtors in burbank?"
+function normalizeQ(s) {
+  return s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
+}
+function isEasterEgg(s) {
+  return /\bbest\s+realtors?\s+in\s+burbank\b/.test(normalizeQ(s))
+}
 
 export default function AskQuestion({ open, onClose }) {
   const [text, setText] = useState('')
@@ -43,6 +51,13 @@ export default function AskQuestion({ open, onClose }) {
   async function handleSubmit() {
     const trimmed = text.trim()
     if (!trimmed || status === 'submitting') return
+
+    // Easter egg — reveal the answer right here instead of queuing it 🏡
+    if (isEasterEgg(trimmed)) {
+      setError(null)
+      setStatus('easter')
+      return
+    }
 
     setStatus('submitting')
     setError(null)
@@ -128,6 +143,8 @@ export default function AskQuestion({ open, onClose }) {
             <div className="flex-1 overflow-y-auto elegant-scroll px-6 sm:px-8 py-6">
               {status === 'success' ? (
                 <SuccessState onAskAnother={() => { setStatus('idle'); setText('') }} onClose={onClose} />
+              ) : status === 'easter' ? (
+                <EasterEggState onAskAnother={() => { setStatus('idle'); setText('') }} onClose={onClose} />
               ) : (
                 <div className="space-y-5">
                   <div>
@@ -203,6 +220,78 @@ export default function AskQuestion({ open, onClose }) {
         </motion.div>
       )}
     </AnimatePresence>
+  )
+}
+
+function EasterEggState({ onAskAnother, onClose }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="text-center py-4"
+    >
+      {/* House badge with a soft glow + orbiting sparkle */}
+      <motion.div
+        initial={{ scale: 0, rotate: -12 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: 'spring', stiffness: 240, damping: 16 }}
+        className="relative mx-auto mb-6"
+        style={{ height: '72px', width: '72px' }}
+      >
+        <div className="absolute inset-[-10px] rounded-2xl blur-2xl"
+             style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.55), transparent 70%)' }} />
+        <div className="relative h-full w-full rounded-2xl flex items-center justify-center"
+             style={{ background: 'linear-gradient(135deg, var(--c-amber), #ff8a3c)', boxShadow: '0 12px 32px -8px rgba(245,166,35,0.6)' }}>
+          <Home className="h-9 w-9 text-white" strokeWidth={2.2} />
+        </div>
+        <motion.div
+          className="absolute -top-1 -right-1"
+          animate={{ scale: [1, 1.25, 1], opacity: [0.8, 1, 0.8] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <Sparkles className="h-5 w-5" style={{ color: 'var(--c-amber)' }} />
+        </motion.div>
+      </motion.div>
+
+      <div className="text-xs uppercase tracking-[0.25em] text-white/45 font-semibold mb-3">
+        Best realtors in Burbank?
+      </div>
+
+      <motion.h3
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="font-serif italic leading-tight mb-3"
+        style={{ fontSize: '30px' }}
+      >
+        <span className="gradient-sunset">The Burbank Association of Realtors</span>
+      </motion.h3>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.55, duration: 0.5 }}
+        className="text-white/60 text-base leading-relaxed mb-6 max-w-sm mx-auto"
+      >
+        Every last one of them. 🏡
+      </motion.p>
+
+      <div className="flex gap-3 justify-center">
+        <button
+          onClick={onAskAnother}
+          className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-cyan/40 text-white text-sm font-medium transition"
+        >
+          Ask a real one
+        </button>
+        <button
+          onClick={onClose}
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-cyan to-accent-indigo text-white text-sm font-medium transition hover:scale-[1.02]"
+        >
+          Done
+        </button>
+      </div>
+    </motion.div>
   )
 }
 
